@@ -101,6 +101,16 @@ module.exports = function(webpackEnv) {
           sourceMap: isEnvProduction && shouldUseSourceMap,
         },
       },
+      {
+        test: /\.less$/,
+        use: [{
+          loader: 'style-loader' // creates style nodes from JS strings
+        }, {
+          loader: 'css-loader' // translates CSS into CommonJS
+        }, {
+          loader: 'less-loader' // compiles Less to CSS
+        }]
+      }
     ].filter(Boolean);
     if (preProcessor) {
       loaders.push({
@@ -265,7 +275,7 @@ module.exports = function(webpackEnv) {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
-        
+
         '@graphql': path.resolve(__dirname, '../src/graphql'),
         '@components': path.resolve(__dirname, '../src/components'),
         '@pages': path.resolve(__dirname, '../src/pages'),
