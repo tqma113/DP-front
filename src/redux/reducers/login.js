@@ -1,34 +1,29 @@
-import {Login} from '../states'
+import { Login } from '../states'
 
 export default (state = {}, action) => {
   switch(action.type) {
     case Login.signIn:
       return {
         ...state,
-        state: true,
+        status: 1,
         sessionKey: action.sessionKey
+      }
+    case Login.setAccount:
+      return {
+        ...state,
+        status: state.status > 0 ? state.status : 0,
+        account: action.account,
+        userInfo: action.userInfo
       }
     case Login.logOut:
       return {
-        state: false,
-        userInfo: null,
-        sessionKey: '',
-        account: ''
+        ...state,
+        status: -1
       }
     case Login.updateSessionKey:
       return {
         ...state,
         sessionKey: action.sessionKey
-      }
-    case Login.setUserInfo:
-      return {
-        ...state,
-        userInfo: action.userInfo
-      }
-    case Login.setAccount:
-      return {
-        ...state,
-        account: action.account
       }
     default:
       return state

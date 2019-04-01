@@ -1,5 +1,5 @@
 export default {
-  state: false,
+  status: -1,
   userInfo: null,
   sessionKey: '',
   account: ''

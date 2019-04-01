@@ -1,5 +1,13 @@
 import {Login} from '../states'
 
+export const getSetAccountAction = (account, userInfo) => {
+  return {
+    type: Login.setAccount,
+    account,
+    userInfo
+  }
+}
+
 export const getSignInAction = (sessionKey) => {
   return {
     type: Login.signIn,
@@ -17,19 +25,5 @@ export const getUpdateSessionKeyAction = (sessionKey) => {
   return {
     type: Login.updateSessionKey,
     sessionKey
-  }
-}
-
-export const getSetAccountAction = (account) => {
-  return {
-    type: Login.setAccount,
-    account
-  }
-}
-
-export const getUserInfoSetAction = (userInfo) => {
-  return {
-    type: Login.setUserInfo,
-    userInfo
   }
 }

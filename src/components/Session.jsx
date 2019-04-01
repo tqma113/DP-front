@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
 
-import map from '@map'
+import { connect } from '@map';
 
-import Loading from '@components/Loading'
-import Animate from '@style/animate.css'
+import Router from '@router/index.jsx';
 
 
 class SessionComponent extends React.Component {
@@ -56,51 +55,55 @@ class SessionComponent extends React.Component {
       }
     }
   }
-  
+
   verifySessionKey = (account ,sessionKey) => {
-    this.props.post('/session', {
+    let postData = {
       account,
       sessionKey
-    }, (res) => {
+    }
+    let success = (res) => {
       this.props.handlers.setAccount(account)
       this.setUserInfo(account)
       this.props.handlers.signIn(res.data.sessionKey ? res.data.sessionKey : sessionKey)
       this.setSession()
-    }, (err) => {
+    }
+    let fail = (err) => {
       this.setUserInfo(account)
       if(this.props.session) {
         this.props.history.push('/sign')
       } else {
         this.setSession()
       }
-    })
+    }
+
+    this.props.post('/session', postData, success, fail)
   }
-  
+
   setUserInfo(account) {
-    this.props.post('/account', {
+    let posData = {
       account: account,
       type: 'userInfo'
-    }, (res) => {
-      this.props.handlers.setUserInfo(res.data.userInfo)
-      this.props.handlers.setAccount(account)
-    }, (err) => {
+    }
+    let success = (res) => {
+      this.props.handlers.setAccount(account, res.data.userInfo)
+    }
+    let fail = (err) => {
       this.props.handlers.logOut()
-    })
+      console.warn(err)
+    }
+
+    this.props.post('/account', posData, success, fail)
   }
 
   render() {
     return (
-      <React.Fragment> 
-        {
-          this.state.session ? this.props.children : null
-        } 
-        <Loading classInner = {
-          this.props.store.loading.state ? Animate.zoomOut : Animate.zoomIn
-        } store={this.props.store}/> 
+      <React.Fragment>
+        {this.state.session && <Router/>}
+        
       </React.Fragment>
     )
   }
 }
 
 
-export default map(SessionComponent)
+export default connect(SessionComponent)

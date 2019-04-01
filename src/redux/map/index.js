@@ -1,8 +1,6 @@
-import { connect } from 'react-redux'
+import { connect as connectNative } from 'react-redux'
 
-import api from '@api'
-
-import {withRouter} from "react-router-dom";
+import { withRouter as withRouteNative } from "react-router-dom";
 
 import CommonStyle from '@style/common.css'
 
@@ -13,7 +11,6 @@ const {
   getLogOutAction,
   getUpdateSessionKeyAction,
   getSetAccountAction,
-  getUserInfoSetAction
 } = actions.login
 
 const {
@@ -25,10 +22,6 @@ const {
 
 const mapStateToProps = (store, ownProps) => ({
   store,
-  get: api.get,
-  post: api.post,
-  put: api.put,
-  delete: api.delete,
   history: ownProps.history,
   CommonStyle
 })
@@ -47,13 +40,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       sessionStorage.setItem('sessionKey', sessionKey)
       dispatch(getUpdateSessionKeyAction(sessionKey))
     },
-    setAccount: (account) => {
+    setAccount: (account, userInfo) => {
       localStorage.setItem('last_user', account)
       sessionStorage.setItem('account', account)
-      dispatch(getSetAccountAction(account))
-    },
-    setUserInfo: (userInfo) => {
-      dispatch(getUserInfoSetAction(userInfo))
+      dispatch(getSetAccountAction(account, userInfo))
     },
     loadingDown: () => {
       dispatch(getLoadingDown())
@@ -61,4 +51,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 })
 
-export default (Component) => withRouter(connect(mapStateToProps, mapDispatchToProps)(Component))
+export default (Component) => withRouteNative(connectNative(mapStateToProps, mapDispatchToProps)(Component))
+
+export const connect = (Component) => connectNative(mapStateToProps, mapDispatchToProps)(Component)
+
+export const withRouter = (Component) => withRouteNative(Component)
