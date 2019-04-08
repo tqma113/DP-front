@@ -7,7 +7,7 @@ module.exports = {
   'react-native': 'react-native-web',
   '@graphql': path.resolve(__dirname, '../src/graphql'),
   '@components': path.resolve(__dirname, '../src/components'),
-  '@pages': path.resolve(__dirname, '../src/pages'),
+  '@containers': path.resolve(__dirname, '../src/containers'),
   '@redux': path.resolve(__dirname, '../src/redux'),
   '@actions': path.resolve(__dirname, '../src/redux/actions'),
   '@map': path.resolve(__dirname, '../src/redux/map'),

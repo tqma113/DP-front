@@ -1,10 +1,10 @@
 import AsyncComponent from '@components/AsyncComponent'
 
-const Index = AsyncComponent(() => import('@pages/Index/index'), true)
-const Sign = AsyncComponent(() => import('@pages/Sign'), true)
-const Register = AsyncComponent(() => import('@pages/Register'), true)
+const Index = AsyncComponent(() => import('@containers/Index/index'), true)
+const Sign = AsyncComponent(() => import('@containers/Sign'), true)
+const Register = AsyncComponent(() => import('@containers/Register'), true)
 
-const NoMatch = AsyncComponent(() => import('@pages/NoMatch'), true)
+const NoMatch = AsyncComponent(() => import('@containers/NoMatch'), true)
 
 export default [
   {

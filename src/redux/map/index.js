@@ -2,8 +2,6 @@ import { connect as connectNative } from 'react-redux'
 
 import { withRouter as withRouteNative } from "react-router-dom";
 
-import CommonStyle from '@style/common.css'
-
 import actions from '../actions'
 
 const {
@@ -23,7 +21,6 @@ const {
 const mapStateToProps = (store, ownProps) => ({
   store,
   history: ownProps.history,
-  CommonStyle
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
