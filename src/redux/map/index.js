@@ -5,15 +5,9 @@ import { withRouter as withRouteNative } from "react-router-dom";
 import actions from '../actions'
 
 const {
-  getSignInAction,
-  getLogOutAction,
-  getUpdateSessionKeyAction,
-  getSetAccountAction,
-} = actions.login
-
-const {
-  getLoadingDown
-} = actions.loading
+  getLoginAction,
+  getLogoutAction,
+} = actions.session
 
 // import actions
 
@@ -25,25 +19,13 @@ const mapStateToProps = (store, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   handlers: {
-    signIn: (sessionKey) => {
-      sessionStorage.setItem('sessionKey', sessionKey)
-      dispatch(getSignInAction(sessionKey))
+    login: ({ sessionInfo, user }) => {
+      sessionStorage.setItem('token', sessionInfo.token)
+      dispatch(getLoginAction(sessionInfo, user))
     },
-    logOut: () => {
+    logout: () => {
       sessionStorage.clear()
-      dispatch(getLogOutAction())
-    },
-    updateSessionKey: (sessionKey) => {
-      sessionStorage.setItem('sessionKey', sessionKey)
-      dispatch(getUpdateSessionKeyAction(sessionKey))
-    },
-    setAccount: (account, userInfo) => {
-      localStorage.setItem('last_user', account)
-      sessionStorage.setItem('account', account)
-      dispatch(getSetAccountAction(account, userInfo))
-    },
-    loadingDown: () => {
-      dispatch(getLoadingDown())
+      dispatch(getLogoutAction())
     }
   }
 })

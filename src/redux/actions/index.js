@@ -1,7 +1,5 @@
-import * as login from './login'
-import * as loading from './loading'
+import * as session from './session'
 
 export default {
-  login,
-  loading
+  session
 }

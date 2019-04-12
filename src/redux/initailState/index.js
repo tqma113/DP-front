@@ -1,8 +1,6 @@
-import login from './login'
-import loading from './loading'
+import session from './session'
 
 export default {
   // init store
-  login,
-  loading
+  session
 }

@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { ApolloProvider, Query } from 'react-apollo'
+import React from 'react'
+import { ApolloProvider } from 'react-apollo'
 import { LocaleProvider } from 'antd'
 import { Provider } from 'react-redux';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
@@ -10,20 +10,18 @@ import store from '@redux';
 
 import Session from '@components/Session';
 
-import './App.css';
+import './App.less';
 
-class App extends Component {
-  render() {
-    return (
-      <LocaleProvider locale={zh_CN}>
-        <Provider store={store}>
-          <ApolloProvider client={client}>
-            <Session />
-          </ApolloProvider>
-        </Provider>
-      </LocaleProvider>
-    );
-  }
+const App = function() {
+  return (
+    <LocaleProvider locale={zh_CN}>
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <Session />
+        </ApolloProvider>
+      </Provider>
+    </LocaleProvider>
+  );
 }
 
 export default App;
