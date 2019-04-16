@@ -3,6 +3,7 @@ import { Drawer } from 'antd'
 import { connect } from '@map'
 
 import { Horologe } from '@components'
+import { Message } from '@containers'
 
 import Less from './index.module.less'
 
@@ -61,7 +62,9 @@ class Controller extends Component {
                 mask={false}
                 visible={messageStatus === 1}
                 onClose={this.handleCloseMessage}
-              >a</Drawer>
+              >
+                <Message />
+              </Drawer>
             </section>
           </section>
           <p className={Less['loading-text']} style={{animation: 'none'}}>{loadStatus === 0 ? 'Loading...' : 'Load success!'}</p>
