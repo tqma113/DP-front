@@ -57,7 +57,7 @@ class Controller extends Component {
               <Horologe />
               <Drawer
                 width={350}
-                title="私信"
+                title="Now - 私信"
                 mask={false}
                 visible={messageStatus === 1}
                 onClose={this.handleCloseMessage}
