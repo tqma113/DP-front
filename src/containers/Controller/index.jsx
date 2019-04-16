@@ -6,7 +6,7 @@ import { Horologe } from '@components'
 
 import Less from './index.module.less'
 
-const classList = ['is-loading', 'load-success', 'login', 'message']
+const classList = ['is-loading', 'load-success', 'login']
 
 class Controller extends Component {
   constructor(props) {
