@@ -15,7 +15,7 @@ const getLogoutAction = () => {
 }
 
 
-export default {
+export {
   getLoginAction,
   getLogoutAction
 }

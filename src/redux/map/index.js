@@ -2,14 +2,21 @@ import { connect as connectNative } from 'react-redux'
 
 import { withRouter as withRouteNative } from "react-router-dom";
 
+// import actions
 import actions from '../actions'
-
 const {
   getLoginAction,
   getLogoutAction,
 } = actions.session
-
-// import actions
+const {
+  getLoadingAction,
+  getOnloadAction,
+  getLoadLoginAction
+} = actions.loadStatus
+const {
+  getOpenMessageAction,
+  getCloseMessageAction,
+} = actions.messageStatus
 
 
 const mapStateToProps = (store, ownProps) => ({
@@ -26,6 +33,21 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     logout: () => {
       sessionStorage.clear()
       dispatch(getLogoutAction())
+    },
+    turnToLogin: () => {
+      dispatch(getLoadLoginAction())
+    },
+    onload: () => {
+      dispatch(getOnloadAction())
+    },
+    reload: () => {
+      dispatch(getLoadingAction())
+    },
+    openMessage: () => {
+      dispatch(getOpenMessageAction())
+    },
+    closeMessage: () => {
+      dispatch(getCloseMessageAction())
     }
   }
 })

@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 
-import map from '@map';
+import { connect } from '@map';
 
-class Nav extends Component {
-  constructor(props) {
-    super(props)
-  }
+import Less from './index.module.less'
+
+class Page extends Component {
 
   componentWillMount() {
   }
@@ -15,11 +14,10 @@ class Nav extends Component {
 
   render() {
     return (
-      <header>
-
-      </header>
+      <section className={Less.page}>
+      </section>
     )
   }
 }
 
-export default map(Nav)
+export default connect(Page)

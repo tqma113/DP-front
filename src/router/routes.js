@@ -1,4 +1,4 @@
-import AsyncComponent from '@components/AsyncComponent'
+import AsyncComponent from './AsyncComponent'
 
 const Index = AsyncComponent(() => import('@containers/Index/index'), true)
 const Sign = AsyncComponent(() => import('@containers/Sign'), true)

@@ -8,7 +8,8 @@ import client from './grapgql/client'
 import store from '@redux';
 // import './plugins/fontAwesome';
 
-import Session from '@components/Session';
+import Router from '@router/index.jsx';
+import { Controller } from '@containers'
 
 import './App.less';
 
@@ -17,7 +18,9 @@ const App = function() {
     <LocaleProvider locale={zh_CN}>
       <Provider store={store}>
         <ApolloProvider client={client}>
-          <Session />
+          <Controller>
+            <Router />
+          </Controller>
         </ApolloProvider>
       </Provider>
     </LocaleProvider>

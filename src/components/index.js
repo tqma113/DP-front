@@ -1,9 +1,5 @@
-import Nav from '../containers/Nav'
-import Footer from '../containers/Footer'
-import Page from './Page'
+import Horologe from './Horologe'
 
 export {
-  Nav,
-  Footer,
-  Page
+  Horologe,
 }
