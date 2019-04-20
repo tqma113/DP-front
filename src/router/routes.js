@@ -1,7 +1,7 @@
 import AsyncComponent from './AsyncComponent'
 
 const Index = AsyncComponent(() => import('@containers/Index/index'), true)
-const Sign = AsyncComponent(() => import('@containers/Sign'), true)
+const Login = AsyncComponent(() => import('@containers/Login'), true, 'Login')
 const Register = AsyncComponent(() => import('@containers/Register'), true)
 
 const NoMatch = AsyncComponent(() => import('@containers/NoMatch'), true)
@@ -14,11 +14,13 @@ export default [
   },
   {
     path: '/login',
-    component: Sign,
+    component: Login,
+    exact: true,
   },
   {
     path: '/register',
-    component: Register
+    component: Register,
+    exact: true,
   },
   {
     path: null,

@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "7.2.2",
+    "@babel/polyfill": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
     "@svgr/webpack": "4.1.0",
     "antd": "^3.16.3",
     "apollo-cache-inmemory": "^1.5.1",
@@ -15,13 +16,16 @@
     "apollo-link-state": "^0.4.2",
     "apollo-link-ws": "^1.0.17",
     "apollo-utilities": "^1.2.1",
+    "babel-cli": "^6.26.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
-    "babel-loader": "8.0.5",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-import": "^1.11.0",
     "babel-plugin-named-asset-import": "^0.3.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react-app": "^7.0.2",
+    "babel-runtime": "^6.26.0",
     "bfj": "6.1.1",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
     "css-loader": "1.0.0",
@@ -131,5 +135,20 @@
       "/Users/matianqi/Projects/DP-front/node_modules/jest-watch-typeahead/filename.js",
       "/Users/matianqi/Projects/DP-front/node_modules/jest-watch-typeahead/testname.js"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-proposal-async-generator-functions": "^7.2.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
+    "@babel/plugin-transform-async-to-generator": "^7.4.0",
+    "@babel/plugin-transform-classes": "^7.4.3",
+    "@babel/plugin-transform-object-assign": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-runtime": "^6.23.0"
   }
 }

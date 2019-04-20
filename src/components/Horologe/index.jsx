@@ -5,12 +5,35 @@ import Less from './index.module.less'
 class Horologe extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      timeout: null,
+      interval: null
+    }
     this.horologe = React.createRef()
   }
 
   componentDidMount() {
-    setTimeout(this.draw)
-    setInterval(this.draw, 1000)
+    try {
+      let timeout = setTimeout(this.draw)
+      let interval = setInterval(this.draw, 1000)
+      this.setState({
+        timeout,
+        interval
+      })
+    } catch(err) {
+      clearInterval(this.state.interval);
+      clearTimeout(this.state.timeout)
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.state.timeout) {
+      clearTimeout(this.state.timeout)
+    }
+
+    if ( this.state.interval) {
+      clearInterval(this.state.interval)
+    }
   }
 
   draw = () => {

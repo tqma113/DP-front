@@ -15,4 +15,4 @@ class Loader extends Component {
   }
 }
 
-export default map(Loader)
+export default map(Loader, 'Loader')

@@ -4,7 +4,7 @@ import { LocaleProvider } from 'antd'
 import { Provider } from 'react-redux';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
-import client from './grapgql/client'
+import client from '@graphql/client'
 import store from '@redux';
 // import './plugins/fontAwesome';
 
@@ -15,15 +15,15 @@ import './App.less';
 
 const App = function() {
   return (
-    <LocaleProvider locale={zh_CN}>
-      <Provider store={store}>
-        <ApolloProvider client={client}>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <LocaleProvider locale={zh_CN}>
           <Controller>
             <Router />
           </Controller>
-        </ApolloProvider>
-      </Provider>
-    </LocaleProvider>
+        </LocaleProvider>
+      </ApolloProvider>
+    </Provider>
   );
 }
 

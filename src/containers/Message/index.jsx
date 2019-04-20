@@ -1,13 +1,15 @@
 import React from 'react'
 
+import map from '@map'
+
 const Message = (props) => {
 
 
   return (
-    <footer>
+    <section>
 
-    </footer>
+    </section>
   )
 }
 
-export default Message
+export default map(Message)

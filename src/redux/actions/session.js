@@ -1,21 +1,14 @@
 import { Session } from '../states'
 
-const getLoginAction =(sessionInfo, user) => {
+const getSetSessionInfo =(sessionInfo, user) => {
   return {
-    type: Session.setAccount,
+    type: Session.setSessionInfo,
     sessionInfo,
     user
   }
 }
 
-const getLogoutAction = () => {
-  return {
-    type: Session.logout
-  }
-}
-
 
 export {
-  getLoginAction,
-  getLogoutAction
+  getSetSessionInfo,
 }
