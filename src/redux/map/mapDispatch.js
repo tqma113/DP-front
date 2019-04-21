@@ -17,7 +17,6 @@ const {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   handlers: {
     login: ({ token, username }) => {
-      const { history } = ownProps
       sessionStorage.setItem('token', token)
       sessionStorage.setItem('username', username)
     },
