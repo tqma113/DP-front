@@ -1,6 +1,6 @@
 import { Session } from '../states'
 
-const getSetSessionInfo =(sessionInfo, user) => {
+const getSetSessionInfoAction = (sessionInfo, user) => {
   return {
     type: Session.setSessionInfo,
     sessionInfo,
@@ -8,7 +8,14 @@ const getSetSessionInfo =(sessionInfo, user) => {
   }
 }
 
+const getClearSessionInfoAction = () => {
+  return {
+    type: Session.clearSessionInfo
+  }
+}
+
 
 export {
-  getSetSessionInfo,
+  getSetSessionInfoAction,
+  getClearSessionInfoAction
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Footer = (props) => {
+const Index = (props) => {
 
 
   return (
@@ -10,4 +10,4 @@ const Footer = (props) => {
   )
 }
 
-export default Footer
+export default Index

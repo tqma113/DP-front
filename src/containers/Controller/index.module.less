@@ -8,21 +8,21 @@
     z-index: 1002;
     text-align: center;
     top: 50%;
-    transition: all 1s ease-in-out 1s;
+    transition: all .5s ease-in-out .5s;
     transform: translateX(-50%) translateY(-50%);
     .loading {
       display: inline-block;
-      transition: all 1s ease-in-out;
+      transition: all .5s ease-in-out;
       .loading-border {
         position: absolute;
         text-align: left;
-        transition: all 1s ease-in-out;
+        transition: all .5s ease-in-out;
         .loading-bg {
           position: absolute;
           height: 100%;
           width: 100%;
           border-radius: 50%;
-          transition: all 2s ease-in-out;
+          transition: all 1s ease-in-out;
           box-sizing: border-box;
           box-shadow: 0px 0px 5px 5px #ddd;
         }
@@ -39,10 +39,10 @@
     position: absolute;
     height: 100%;
     width: 100%;
-    transition: all 1s ease-in-out 1s;
+    transition: all .5s ease-in-out .5s;
   }
   .loading-mask {
-    transition: opacity 1s ease-in-out 1s;
+    transition: opacity .5s ease-in-out .5s;
     transition: z-index 0s liner 1s;
     position: absolute;
     background-color: #fff;
@@ -109,7 +109,7 @@
   .loading-spin {
     left: 25%;
     transform: translateX(-50%) translateY(-50%);
-    transition: all 1s ease-in-out 1s;
+    transition: all .5s ease-in-out .5s;
     .loading {
       height: 400px;
       width: 400px;

@@ -4,8 +4,6 @@ import { QuerySessionState } from '@graphql/querys'
 
 import getCookie from '@utils/getCookie'
 
-console.log(getCookie)
-
 export default {
   Login: [
     graphql(LoginMutation)
@@ -13,8 +11,8 @@ export default {
   Loader: [
     graphql(QuerySessionState, {
       options: ({  }) => {
-        let username = getCookie('username')
-        let token = getCookie('token')
+        let username = getCookie('username') || sessionStorage.getItem('username')
+        let token = getCookie('token') || sessionStorage.getItem('token')
         return {
           variables: {
             username,

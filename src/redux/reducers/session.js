@@ -2,7 +2,7 @@ import { Session } from '../states'
 
 export default (state = {}, action) => {
   switch(action.type) {
-    case Session.login:
+    case Session.setSessionInfo:
       let isValid = action.sessionInfo && action.user;
       if (isValid) {
         return {
@@ -15,7 +15,7 @@ export default (state = {}, action) => {
 
       throw new Error('login fail. data structment is illeagel')
 
-    case Session.logout:
+    case Session.clearSessionInfo:
       return {
         ...state,
         status: false,
