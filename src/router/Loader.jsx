@@ -11,24 +11,7 @@ const Loader = (props) => {
   const { location } = history
   const isLoginPage = location.pathname.indexOf('/login') !== -1
 
-  if (isLoginPage) {
-    const { search = '' } = location
 
-    if (search) {
-      let searchObj = {}
-      search.slice(1).split('&').forEach(item => {
-        let arr = item.split('=')
-        searchObj[arr[0]] = arr[1]
-      })
-      if (searchObj.from) {
-        history.push('/' + searchObj.from)
-      } else {
-        history.push('/')
-      }
-    } else {
-      history.push('/')
-    }
-  }
 
   if (!status) {
     if (isSuccess) {
@@ -36,6 +19,25 @@ const Loader = (props) => {
         sessionInfo,
         user
       })
+
+      if (isLoginPage) {
+        const { search = '' } = location
+
+        if (search) {
+          let searchObj = {}
+          search.slice(1).split('&').forEach(item => {
+            let arr = item.split('=')
+            searchObj[arr[0]] = arr[1]
+          })
+          if (searchObj.from) {
+            history.push('/' + searchObj.from)
+          } else {
+            history.push('/')
+          }
+        } else {
+          history.push('/')
+        }
+      }
     }
   }
 
