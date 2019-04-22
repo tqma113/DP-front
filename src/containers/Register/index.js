@@ -1,7 +1,7 @@
 import React from 'react'
-import { Divider, Form, Input, Row, Col, Select, DatePicker, Button, Tag, Checkbox, Icon, Upload, message } from 'antd'
+import { Divider, Form, Input, Row, Col, Select, DatePicker, Button, Tag, Checkbox, Icon } from 'antd'
 
-import getBase64 from '@utils/getBase64'
+import { SingleUpload } from '@components'
 
 import Less from './index.module.less'
 import './index.less'
@@ -27,41 +27,7 @@ class Register extends React.Component {
     handlers.onload()
   }
 
-  beforeUpload = (file) => {
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    } else {
-      this.setState({
-        ...this.state,
-        image: file
-      })
-      getBase64(file).then(base64 => this.setState({
-        ...this.state,
-        imageBease64: base64
-      }))
-    }
 
-    return false
-  }
-
-  handleUploadChange = ({ fileList }) => {
-
-  }
-
-  handleUploadClick = () => {
-    const { image, imageBease64, uploading } = this.state
-
-    if (uploading) {
-      return
-    }
-
-    this.setState({
-      uploading: true,
-    });
-
-
-  }
 
   render() {
     const { form } = this.props
@@ -237,36 +203,7 @@ class Register extends React.Component {
                 colon={false}
                 required={false}
               >
-                <Upload
-                  accept="image/*"
-                  name="avatar"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  beforeUpload={this.beforeUpload}
-                  onChange={this.handleUploadChange}
-                >
-                  {imageUrl ?
-                    <img className={Less['image']} src={imageUrl} alt="avatar" /> :
-                    imageBease64 ?
-                    <img className={Less['image']} src={imageBease64} alt="avatar" /> :
-                    <div>
-                      <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                      <div className="ant-upload-text">选择图片</div>
-                    </div>
-                  }
-                </Upload>
-              </FormItem>
-              <FormItem>
-              <Button
-                type="primary"
-                onClick={this.handleUpload}
-                disabled={!imageBease64}
-                loading={uploading}
-                style={{ marginTop: 16 }}
-              >
-                {uploading ? '上传中' : '开始上传' }
-              </Button>
+                <SingleUpload />
               </FormItem>
             </Col>
           </Row>

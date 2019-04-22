@@ -16,4 +16,6 @@ export const connect = (Component) => connectNative(mapStateToProps, mapDispatch
 
 export const withRouter = (Component) => withRouteNative(Component)
 
-export const compose = (Component) => composeNative(...graphqlQuery)(Component)
+export const compose = (Component, module) => (module && graphqlQuery[module]) ?
+                                            composeNative(...graphqlQuery[module])(Component) :
+                                            Component

@@ -28,16 +28,33 @@ const RegisterMutation = gql`
     token
     username
     extension {
+      operator
+      errors{
+        path
+        message
+      }
+    }
+  }
+`
+
+const UploadImageMutation = gql`
+  mutation ($image: Upload!) {
+    uploadSingleImage(image: $image) {
+      url
+      isSuccess
+      extension {
         operator
         errors{
           path
           message
         }
       }
+    }
   }
 `
 
 export {
   LoginMutation,
-  RegisterMutation
+  RegisterMutation,
+  UploadImageMutation
 }

@@ -1,5 +1,5 @@
 import { graphql } from 'react-apollo'
-import { LoginMutation } from '@graphql/mutations'
+import { LoginMutation, RegisterMutation, UploadImageMutation } from '@graphql/mutations'
 import { QuerySessionState } from '@graphql/querys'
 
 import getCookie from '@utils/getCookie'
@@ -21,5 +21,11 @@ export default {
         }
       }
     })
+  ],
+  Register: [
+    graphql(RegisterMutation)
+  ],
+  UploadImage: [
+    graphql(UploadImageMutation)
   ]
 }

@@ -4,7 +4,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 // import { withClientState } from 'apollo-link-state';
 // import { ApolloLink, Observable } from 'apollo-link';
-import { createHttpLink } from 'apollo-link-http';
+// import { createHttpLink } from 'apollo-link-http';
+import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from 'apollo-link-context';
 import { getMainDefinition } from 'apollo-utilities';
 
@@ -104,7 +105,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 })
 
-const httpLink = createHttpLink({
+// const httpLink = createHttpLink({
+//   uri: 'http://localhost:4000/graphql'
+// })
+
+const uploadLink = createUploadLink({
   uri: 'http://localhost:4000/graphql'
 })
 
@@ -114,7 +119,7 @@ const link = split(
     return kind === 'OperationDefinition' && operation === 'subscription';
   },
   wsLink,
-  authLink.concat(errorLink.concat(httpLink))
+  authLink.concat(errorLink.concat(uploadLink))
 )
 
 const client = new ApolloClient({
