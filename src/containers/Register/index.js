@@ -359,7 +359,7 @@ class Register extends React.Component {
 
   render() {
     const { form } = this.props
-    const { emailKey, emailSendKey, usernameKeyStatus, emailCodeTimer, interval } = this.state
+    const { emailKey, emailSendKey, usernameKeyStatus, emailCodeTimer } = this.state
     const { getFieldDecorator, getFieldValue } = form
 
     const code = getFieldValue('code') || ''
