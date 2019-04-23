@@ -11,7 +11,6 @@ const Loader = (props) => {
   const { location } = history
   const isLoginPage = location.pathname.indexOf('/login') !== -1
 
-
   if (!status) {
     if (isSuccess) {
       handlers.setSessionInfo({
@@ -20,22 +19,7 @@ const Loader = (props) => {
       })
 
       if (isLoginPage) {
-        const { search = '' } = location
-
-        if (search) {
-          let searchObj = {}
-          search.slice(1).split('&').forEach(item => {
-            let arr = item.split('=')
-            searchObj[arr[0]] = arr[1]
-          })
-          if (searchObj.from) {
-            history.push('/' + searchObj.from)
-          } else {
-            history.push('/')
-          }
-        } else {
-          history.push('/')
-        }
+        handlers.goBack()
       }
     }
   }

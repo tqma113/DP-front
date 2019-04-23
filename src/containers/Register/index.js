@@ -29,13 +29,22 @@ class Register extends React.Component {
       emailKey: '',
       usernameKey: '',
       usernameKeyStatus: 0,
-      imageUrl: ''
+      imageUrl: '',
+      emailCodeTimer: 0,
+      interval: null
     }
   }
 
   componentDidMount() {
     const { handlers } = this.props
     handlers.onload()
+  }
+
+  componentWillUnmount() {
+    const { interval } = this.state
+    if (interval) {
+      clearInterval(interval)
+    }
   }
 
   handleUploadLoad = (image, imageUrl, imageBase64) => {
@@ -258,6 +267,7 @@ class Register extends React.Component {
       this.setState({
         emailSendKey: key
       })
+      this.startCodeTimer()
     } else {
       const { errors = [] } = extension
       const { message = '' } = errors[0]
@@ -309,6 +319,16 @@ class Register extends React.Component {
         token,
         username
       })
+      Modal.success({
+        title: '注册成功',
+        content: '是否前往设置密码(不设置密码可使用邮箱和验证码登录)',
+        onCancel: () => {
+          handlers.goBack()
+        },
+        onOk: () => {
+          handlers.go('/password_setting')
+        }
+      })
     } else {
       handlers.onload()
       const { errors = [] } = extension
@@ -319,9 +339,27 @@ class Register extends React.Component {
     }
   }
 
+  startCodeTimer = () => {
+    let interval = setInterval(()=> {
+      this.setState({
+        emailCodeTimer: this.state.emailCodeTimer - 1
+      })
+      if (this.state.emailCodeTimer === 0) {
+        clearInterval(this.state.usernameKey)
+        this.setState({
+          interval: null
+        })
+      }
+    }, 1000)
+    this.setState({
+      emailCodeTimer: 60,
+      interval
+    })
+  }
+
   render() {
     const { form } = this.props
-    const { emailKey, emailSendKey, usernameKeyStatus } = this.state
+    const { emailKey, emailSendKey, usernameKeyStatus, emailCodeTimer, interval } = this.state
     const { getFieldDecorator, getFieldValue } = form
 
     const code = getFieldValue('code') || ''
@@ -404,8 +442,8 @@ class Register extends React.Component {
                       <Col span={16}>
                         <Input />
                       </Col>
-                      <Col span={6}>
-                        <Button onClick={this.handleSendEmailCodeClick} className={Less['send-email-code-button']}>发送验证码</Button>
+                      <Col span={7}>
+                        <Button disabled={emailCodeTimer > 0} onClick={this.handleSendEmailCodeClick} className={Less['send-email-code-button']}>{emailCodeTimer > 0 && emailCodeTimer} 发送验证码</Button>
                       </Col>
                     </Row>
                   )}
@@ -425,7 +463,7 @@ class Register extends React.Component {
                       <Col span={16}>
                         <Input disabled={isCodeInputDisable} />
                       </Col>
-                      <Col span={6}>
+                      <Col span={7}>
                         <Button onClick={this.handleAckEmailCodeClick} disabled={isCodeButtonDisable} className={Less['send-email-code-button']}>验证</Button>
                       </Col>
                     </Row>
