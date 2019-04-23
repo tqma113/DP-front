@@ -1,6 +1,8 @@
+
+
 const mapStateToProps = (store, ownProps) => ({
   store,
-  history: ownProps.history,
+  history: ownProps.history
 })
 
 export default mapStateToProps

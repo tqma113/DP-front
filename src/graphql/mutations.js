@@ -20,18 +20,33 @@ const LoginMutation = gql`
 const RegisterMutation = gql`
   mutation ($username: String!,
             $nickname: String!,
-            $password: String,
+            $address: String!,
+            $birthday: Date!
             $email: String!,
-            $emialAck: String!,
-            $hdUrl: String) {
-    isSuccess
-    token
-    username
-    extension {
-      operator
-      errors{
-        path
-        message
+            $gender: String!
+            $statement: String!
+            $u_key: String!,
+            $e_key: String!
+            $hd_portrial: String!) {
+    register (username: $username,
+              nickname: $nickname,
+              address: $address,
+              birthday: $birthday,
+              gender: $gender
+              email: $email,
+              statement: $statement,
+              u_key: $u_key,
+              e_key: $e_key,
+              hd_portrial: $hd_portrial) {
+      isSuccess
+      token
+      username
+      extension {
+        operator
+        errors{
+          path
+          message
+        }
       }
     }
   }
@@ -53,8 +68,59 @@ const UploadImageMutation = gql`
   }
 `
 
+const SendEmailCodeMutation = gql`
+  mutation ($email: String!) {
+    sendEmailCode(email: $email) {
+      key
+      isSuccess
+      extension{
+        operator
+        errors{
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
+const AckEmailCodeMutation = gql`
+  mutation ($email: String!, $code: String!, $key: String!) {
+    ackEmail(email: $email, code: $code, key: $key) {
+      key
+      isSuccess
+      extension{
+        operator
+        errors{
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
+const CheckUsernameMutation = gql`
+  mutation ($username: String!) {
+    checkUsername(username: $username) {
+      key
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export {
   LoginMutation,
   RegisterMutation,
-  UploadImageMutation
+  UploadImageMutation,
+  SendEmailCodeMutation,
+  AckEmailCodeMutation,
+  CheckUsernameMutation
 }

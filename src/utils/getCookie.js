@@ -1,6 +1,7 @@
 export default (name) => {
-  let arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-  if(arr=document.cookie.match(reg))
+  let reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+  let arr = document.cookie.match(reg)
+  if(arr)
     return unescape(arr[2]);
   else
     return null;

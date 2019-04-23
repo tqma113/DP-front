@@ -33,11 +33,12 @@ class Controller extends Component {
   }
 
   render() {
-    let {
+    const {
       children,
-      store: { loadStatus, messageStatus }
+      store
     } = this.props;
-    let {
+    const { loadStatus = false, messageStatus= false } = store
+    const {
       spinClass
     } = this.state;
 

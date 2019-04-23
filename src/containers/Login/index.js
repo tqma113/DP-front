@@ -13,42 +13,45 @@ class Login extends React.Component {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll	(async (err, values) => {
       if (!err) {
-        const { username, password } = values;
-        const { handlers } = this.props
-        handlers.reload()
-        try {
-          const res = await this.props.mutate({
-            variables: {
-              username,
-              password
-            }
-          })
-          this.login(res)
-        } catch (err) {
-          Modal.error({
-            title: '请求发送失败'
-          })
-        }
-        handlers.turnToLogin()
+        this.sendLoginQeury(values)
       }
     });
+  }
+
+  sendLoginQeury = async ({ username, password }) => {
+    const { mutations } = this.props
+    const { handlers } = this.props
+    handlers.reload()
+    try {
+      const res = await this.props.client.mutate({
+        mutation: mutations.LoginMutation,
+        variables: {
+          username,
+          password
+        }
+      })
+      this.login(res)
+    } catch (err) {
+      Modal.error({
+        title: '请求发送失败,请重试'
+      })
+    }
+    handlers.turnToLogin()
   }
 
   login = (res) => {
     const { handlers } = this.props
     const { data = {} } = res
     const { login = {} } = data
-    const { isSuccess = false, username = "",  token = "", extension } = login
+    const { isSuccess = false, username = '',  token = '' } = login
     if (isSuccess) {
       handlers.login({
         token,
         username
       })
     } else {
-      const { operator, errors } = extension
       Modal.warning({
-        title: `${errors[0].message}`,
-        content: `${operator} ${errors[0].path}`
+        title: `数据获取失败`,
       })
     }
   }

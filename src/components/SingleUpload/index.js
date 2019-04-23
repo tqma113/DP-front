@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Upload, Button, Icon, message } from 'antd'
-import { compose } from '@map'
+import { connect } from '@map'
 
 import getBase64 from '@utils/getBase64'
 
@@ -8,7 +8,7 @@ import Less from './index.module.less'
 import './index.less'
 
 const SingleUplaod = (props) => {
-  const { className = '', style = {}, uploadStyle = {}, buttonStyle = {}, onLoad, mutate } = props
+  const { className = '', style = {}, uploadStyle = {}, buttonStyle = {}, onLoad, client, mutations = {} } = props
 
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -54,7 +54,8 @@ const SingleUplaod = (props) => {
 
     setUploading(true);
     try {
-      const res = await mutate({
+      const res = await client.mutate({
+        mutation: mutations.UploadImageMutation,
         variables: {
           image
         }
@@ -65,11 +66,13 @@ const SingleUplaod = (props) => {
       if (isSuccess) {
         setImageUrl(url)
         setUploadSuccess(true)
+        if (onLoad) onLoad(image, imageUrl, imageBase64)
         message.success('上传成功!')
       } else {
         message.error('上传失败!')
       }
     } catch (err) {
+      console.log(err)
       message.error('数据发送失败,请重试')
     }
     setUploading(false)
@@ -111,4 +114,4 @@ const SingleUplaod = (props) => {
   )
 }
 
-export default compose(SingleUplaod, 'UploadImage')
+export default connect(SingleUplaod, 'UploadImage')

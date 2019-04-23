@@ -1,16 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import map from '@map'
 
 const Loader = (props) => {
   const { data = {}, handlers = {}, history, store, children } = props
-  const { checkLoginState = {}, loading, error } = data
+  const { checkLoginState = {}, loading } = data
   const { isSuccess = false, user = {}, sessionInfo = false } = checkLoginState
   const { session } = store
   const { status } = session
   const { location } = history
   const isLoginPage = location.pathname.indexOf('/login') !== -1
-
 
 
   if (!status) {
