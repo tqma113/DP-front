@@ -42,6 +42,7 @@ const Login = (props) => {
   }
 
   const handleSendCodeClick = () => {
+    form.setFieldsValue({'code': ''})
     form.validateFieldsAndScroll(['email'],  async (err, values) => {
       if (!err) {
         sendEmailCodeMutation(values)
@@ -59,9 +60,10 @@ const Login = (props) => {
           password
         }
       })
-      login(res)
+      const { data = {} } = res
+      const { login = {} } = data
+      login(login)
     } catch (err) {
-      handlers.turnToLogin()
       Modal.error({
         title: '请求发送失败,请重试'
       })
@@ -87,6 +89,7 @@ const Login = (props) => {
   }
 
   const sendLoginWithEmailMutation = async ({ email = '', code = '' }) => {
+    handlers.reload()
     try {
       const res = await client.mutate({
         mutation: mutations.LoginWithEmailMutation,
@@ -98,9 +101,8 @@ const Login = (props) => {
       })
       const { data = {} } = res
       const { loginWithEmail = {} } = data
-      setEmailCodeKey(loginWithEmail)
+      login(loginWithEmail)
     } catch (err) {
-      console.log(err)
       Modal.error({
         title: '请求发送失败,请重试'
       })
@@ -121,10 +123,7 @@ const Login = (props) => {
     }
   }
 
-  const login = (res) => {
-    const { handlers } = this.props
-    const { data = {} } = res
-    const { login = {} } = data
+  const login = (login) => {
     const { isSuccess = false, username = '',  token = '' } = login
     if (isSuccess) {
       handlers.login({
@@ -195,6 +194,7 @@ const Login = (props) => {
                         type: 'email',
                         message: '邮箱格式不正确,请修改!',
                       }],
+                      initialValue: ''
                     })(
                       <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="邮箱" />
                     )}
@@ -208,6 +208,7 @@ const Login = (props) => {
                         len: 6,
                         message: '请输入正确的验证码(六位)!'
                       }],
+                      initialValue: ''
                     })(
                       <Row type="flex" justify="space-between">
                         <Col span={16}>

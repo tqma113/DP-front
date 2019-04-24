@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Divider, Form, Input, Row, Col, Select, DatePicker, Button, Tag, Checkbox, Icon, message, Modal } from 'antd'
 
 import { SingleUpload } from '@components'
@@ -21,42 +21,39 @@ const genderOptions = [{
   value: 'Female'
 }]
 
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      emailSendKey: '',
-      emailKey: '',
-      usernameKey: '',
-      usernameKeyStatus: 0,
-      imageUrl: '',
-      emailCodeTimer: 0,
-      interval: null
+const Register = (props) => {
+  const [emailSendKey, setEmailSendKey] = useState()
+  const [emailKey, setEmailKey] = useState()
+  const [usernameKey, setUsernameKey] = useState()
+  const [usernameKeyStatus, setUsernameKeyStatus] = useState()
+  const [imageUrl, setImageUrl] = useState()
+  const [emailCodeTimer, setEmailCodeTimer] = useState()
+
+  useEffect((a) => {
+    if (emailCodeTimer > 0) {
+      let timeout = setTimeout(() => {
+        setEmailCodeTimer(emailCodeTimer - 1)
+        clearTimeout(timeout)
+      }, 1000)
     }
+  }, [emailCodeTimer])
+
+  const { handlers = {}, form = {}, client = {}, mutations = {} } = props
+
+
+  const { getFieldDecorator, getFieldValue } = form
+
+  const code = getFieldValue('code') || ''
+  const canCodeInputVision = emailSendKey && !emailKey
+  const isCodeInputDisable = !emailSendKey || !!emailKey
+  const isCodeButtonDisable = !emailSendKey || !!emailKey || !code || code.length !== 6
+
+  const handleUploadLoad = (image, imageUrl, imageBase64) => {
+    setImageUrl(imageUrl)
   }
 
-  componentDidMount() {
-    const { handlers } = this.props
-    handlers.onload()
-  }
-
-  componentWillUnmount() {
-    const { interval } = this.state
-    if (interval) {
-      clearInterval(interval)
-    }
-  }
-
-  handleUploadLoad = (image, imageUrl, imageBase64) => {
-    this.setState({
-      imageUrl
-    })
-  }
-
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    const { emailKey, usernameKey, imageUrl } = this.state
-    const { form } = this.props
     form.validateFields((err, values) => {
       if (err) return
 
@@ -81,28 +78,24 @@ class Register extends React.Component {
         return
       }
 
-      this.registerMutation({...values, emailKey, usernameKey})
+      registerMutation({...values, emailKey, usernameKey})
     })
   }
 
-  handleSendEmailCodeClick = () => {
-    const { form } = this.props
+  const handleSendEmailCodeClick = () => {
     form.validateFieldsAndScroll(['email'], async (err, values) => {
       if (err) {
         message.warn('请完善邮箱格式')
         return
       }
+      setEmailSendKey('')
+      setEmailKey('')
 
-      this.setState({
-        emailKey: '',
-        emailSendKey: ''
-      })
-
-      this.sendEmailCodeMutation(values)
+      sendEmailCodeMutation(values)
     })
   }
 
-  handleAckEmailCodeClick = () => {
+  const handleAckEmailCodeClick = () => {
     const { form } = this.props
     form.validateFieldsAndScroll(['code', 'email'], async (err, values) => {
       if (err) {
@@ -110,32 +103,23 @@ class Register extends React.Component {
         return
       }
 
-      this.setState({
-        emailKey: '',
-      })
+      setEmailKey('')
 
-      this.ackEmailCodeMutation(values)
+      ackEmailCodeMutation(values)
     })
   }
 
-  handleEmailChange = () => {
-    if (this.state.emailKey) {
-      this.setState({
-        emailKey: '',
-      })
+  const handleEmailChange = () => {
+    if (emailKey) {
+      setEmailKey('')
     }
 
-    if (this.state.emailSendKey) {
-      this.setState({
-        emailSendKey: ''
-      })
+    if (emailSendKey) {
+      setEmailSendKey('')
     }
   }
 
-  handleUsernameLeave = () => {
-    const { form } = this.props
-    const { usernameKey, usernameKeyStatus } = this.state
-
+  const handleUsernameLeave = () => {
     if (usernameKey && usernameKeyStatus === 2) return
 
     form.validateFieldsAndScroll(['username'], async (err, values) => {
@@ -144,31 +128,23 @@ class Register extends React.Component {
         return
       }
 
-      this.setState({
-        usernameKeyStatus: 1,
-      })
+      setUsernameKeyStatus(1)
 
-      this.checkUsernameMutation(values)
+      checkUsernameMutation(values)
     })
   }
 
-  handlerUsernameChange = () => {
-    const { usernameKey, usernameKeyStatus } = this.state
+  const handlerUsernameChange = () => {
     if (usernameKey) {
-      this.setState({
-        usernameKey: ''
-      })
+      setUsernameKey('')
     }
 
     if (usernameKeyStatus !== 0) {
-      this.setState({
-        usernameKeyStatus: 0
-      })
+      setUsernameKeyStatus(0)
     }
   }
 
-  sendEmailCodeMutation = async ({ email = '' }) => {
-    const { client, mutations = {} } = this.props
+  const sendEmailCodeMutation = async ({ email = '' }) => {
     try {
       const res = await client.mutate({
         mutation: mutations.SendEmailCodeMutation,
@@ -178,7 +154,7 @@ class Register extends React.Component {
       })
       const { data = {} } = res
       const { sendEmailCode = {} } = data
-      this.setEmailCodeKey(sendEmailCode)
+      setEmailCodeKey(sendEmailCode)
     } catch (err) {
       Modal.error({
         title: '请求发送失败,请重试'
@@ -186,9 +162,7 @@ class Register extends React.Component {
     }
   }
 
-  ackEmailCodeMutation = async ({ code = '', email = '' }) => {
-    const { client, mutations = {} } = this.props
-    const { emailSendKey } = this.state
+  const ackEmailCodeMutation = async ({ code = '', email = '' }) => {
     try {
       const res = await client.mutate({
         mutation: mutations.AckEmailCodeMutation,
@@ -200,7 +174,7 @@ class Register extends React.Component {
       })
       const { data = {} } = res
       const { ackEmail = {} } = data
-      this.setEmailKey(ackEmail)
+      setEmailKeyRes(ackEmail)
     } catch (err) {
       Modal.error({
         title: '请求发送失败,请重试'
@@ -208,7 +182,7 @@ class Register extends React.Component {
     }
   }
 
-  checkUsernameMutation = async ({ username = '' }) => {
+  const checkUsernameMutation = async ({ username = '' }) => {
     const { client, mutations = {} } = this.props
     try {
       const res = await client.mutate({
@@ -219,20 +193,16 @@ class Register extends React.Component {
       })
       const { data = {} } = res
       const { checkUsername = {} } = data
-      this.setUsernameKey(checkUsername)
+      setUsernameKeyRes(checkUsername)
     } catch (err) {
-      this.setState({
-        usernameKeyStatus: 0,
-      })
+      setUsernameKeyStatus(0)
       Modal.error({
         title: '请求发送失败,请重试'
       })
     }
   }
 
-  registerMutation = async ({ username = '', nickname = '', email = '', gender = '', birthday = '', address = '', statement = '' }) => {
-    const { client, mutations = {}, handlers } = this.props
-    const { usernameKey, emailKey, imageUrl } = this.state
+  const registerMutation = async ({ username = '', nickname = '', email = '', gender = '', birthday = '', address = '', statement = '' }) => {
     handlers.reload()
     try {
       const res = await client.mutate({
@@ -252,7 +222,7 @@ class Register extends React.Component {
       })
       const { data = {} } = res
       const { register = {} } = data
-      this.setRegister(register)
+      setRegister(register)
     } catch (err) {
       handlers.onload()
       Modal.error({
@@ -261,13 +231,11 @@ class Register extends React.Component {
     }
   }
 
-  setEmailCodeKey = (res) => {
+  const setEmailCodeKey = (res) => {
     const { isSuccess = false, key = '', extension = {} }  = res
     if (isSuccess) {
-      this.setState({
-        emailSendKey: key
-      })
-      this.startCodeTimer()
+      setEmailSendKey(key)
+      setEmailCodeTimer(60)
     } else {
       const { errors = [] } = extension
       const { message = '' } = errors[0]
@@ -277,12 +245,10 @@ class Register extends React.Component {
     }
   }
 
-  setEmailKey = (res) => {
+  const setEmailKeyRes = (res) => {
     const { isSuccess = false, key = '', extension = {} }  = res
     if (isSuccess) {
-      this.setState({
-        emailKey: key
-      })
+      setEmailKey(key)
     } else {
       const { errors = [] } = extension
       const { message = '' } = errors[0]
@@ -292,27 +258,22 @@ class Register extends React.Component {
     }
   }
 
-  setUsernameKey = (res) => {
+  const setUsernameKeyRes = (res) => {
     const { isSuccess = false, key = '', extension = {} }  = res
     if (isSuccess) {
-      this.setState({
-        usernameKey: key,
-        usernameKeyStatus: 2
-      })
+      setUsernameKey(key)
+      setUsernameKeyStatus(2)
     } else {
       const { errors = [] } = extension
       const { message = '' } = errors[0]
-      this.setState({
-        usernameKeyStatus: 0,
-      })
+      setUsernameKeyStatus(0)
       Modal.error({
         title: message
       })
     }
   }
 
-  setRegister = (res) => {
-    const { handlers } = this.props
+  const setRegister = (res) => {
     const { isSuccess = false, username = '', token = '', extension = {} }  = res
     if (isSuccess) {
       handlers.login({
@@ -339,234 +300,207 @@ class Register extends React.Component {
     }
   }
 
-  startCodeTimer = () => {
-    let interval = setInterval(()=> {
-      this.setState({
-        emailCodeTimer: this.state.emailCodeTimer - 1
-      })
-      if (this.state.emailCodeTimer === 0) {
-        clearInterval(this.state.usernameKey)
-        this.setState({
-          interval: null
-        })
-      }
-    }, 1000)
-    this.setState({
-      emailCodeTimer: 60,
-      interval
-    })
-  }
+  handlers.onload()
 
-  render() {
-    const { form } = this.props
-    const { emailKey, emailSendKey, usernameKeyStatus, emailCodeTimer } = this.state
-    const { getFieldDecorator, getFieldValue } = form
-
-    const code = getFieldValue('code') || ''
-    const canCodeInputVision = emailSendKey && !emailKey
-    const isCodeInputDisable = !emailSendKey || !!emailKey
-    const isCodeButtonDisable = !emailSendKey || !!emailKey || !code || code.length !== 6
-
-    return (
-      <section className={`${Less['register']} register`}>
-        <section className={`${Less['main']} main`}>
-          <h1 className={Less['title']}>Now</h1>
-          <Divider className={Less['divider']} />
-          <Row type="flex" justify="space-between">
-            <Col span={14}>
-              <Form onSubmit={this.handleSubmit}>
-                <FormItem
-                  label={(
-                    <span>
-                      账号
-                      {
-                        usernameKeyStatus === 2 ?
-                        <Tag className={Less['email-alert']} color="green"><Icon type="check-circle" /> 通过验证</Tag> :
-                        usernameKeyStatus === 1 ?
-                        <Tag className={Less['email-alert']} color="blue" ><Icon type="loading" /> 等待验证</Tag>:
-                        <Tag className={Less['email-alert']} color="blue" ><Icon type="exclamation-circle" /> 等待验证</Tag>
-                      }
-                    </span>
-                  )}
-                  colon={false}
-                  required={false}
-                >
-                  {getFieldDecorator('username', {
-                    rules: [{
-                      required: true,
-                      message: '请输入账号'
-                    }]
-                  })(
-                    <Input onChange={this.handlerUsernameChange} onBlur={this.handleUsernameLeave} />
-                  )}
-                </FormItem>
-                <FormItem
-                  label="昵称"
-                  colon={false}
-                  required={false}
-                >
-                  {getFieldDecorator('nickname', {
-                    rules: [{
-                      required: true,
-                      message: '请输入昵称'
-                    }]
-                  })(
-                    <Input />
-                  )}
-                </FormItem>
-                <Divider className={Less['divider-middle']} />
-                <FormItem
-                  label={(
-                    <span>
-                      邮箱
-                      {
-                        emailKey ?
-                        <Tag className={Less['email-alert']} color="green"><Icon type="check-circle" /> 通过验证</Tag> :
-                        <Tag className={Less['email-alert']} color="blue" ><Icon type="exclamation-circle" /> 等待验证</Tag>
-                      }
-                    </span>
-                  )}
-                  colon={false}
-                  required={false}
-                >
-                  {getFieldDecorator('email', {
-                    rules: [{
-                      required: true,
-                      message: '请输入邮箱'
-                    }, {
-                      type: 'email',
-                      message: '邮箱格式不正确,请修改!',
-                    }]
-                  })(
-                    <Row type="flex" justify="space-between">
-                      <Col span={16}>
-                        <Input />
-                      </Col>
-                      <Col span={7}>
-                        <Button disabled={emailCodeTimer > 0} onClick={this.handleSendEmailCodeClick} className={Less['send-email-code-button']}>{emailCodeTimer > 0 && emailCodeTimer} 发送验证码</Button>
-                      </Col>
-                    </Row>
-                  )}
-                </FormItem>
-                {canCodeInputVision && <FormItem
-                  label="验证码"
-                  colon={false}
-                  required={false}
-                >
-                  {getFieldDecorator('code', {
-                    rules: [{
-                      required: true,
-                      message: '请输入验证码'
-                    }, {
-                      len: 6,
-                      message: '请输入正确的验证码(六位)!'
-                    }]
-                  })(
-                    <Row type="flex" justify="space-between">
-                      <Col span={16}>
-                        <Input disabled={isCodeInputDisable} />
-                      </Col>
-                      <Col span={7}>
-                        <Button onClick={this.handleAckEmailCodeClick} disabled={isCodeButtonDisable} className={Less['send-email-code-button']}>验证</Button>
-                      </Col>
-                    </Row>
-                  )}
-                </FormItem>}
-                <Divider className={Less['divider-middle']} />
-                <Row>
-                  <Col span={11}>
-                    <FormItem
-                      label="性别"
-                      colon={false}
-                      required={false}
-                    >
-                      {getFieldDecorator('gender', {
-                        rules: [{
-                          required: true,
-                          message: '请选择性别'
-                        }]
-                      })(
-                        <Select>
-                          {genderOptions.map(o => <Option key={o.key} value={o.value}>{o.title}</Option>)}
-                        </Select>
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={11} offset={2}>
-                    <FormItem
-                      label="出生日期"
-                      colon={false}
-                      required={false}
-                    >
-                      {getFieldDecorator('birthday', {
-                        rules: [{
-                          required: true,
-                          message: '选择出生日期'
-                        }]
-                      })(
-                        <DatePicker placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <FormItem
-                  label="地址"
-                  colon={false}
-                  required={false}
-                >
-                  {getFieldDecorator('address', {
-                    rules: [{
-                      required: true,
-                      message: '请输入地址'
-                    }]
-                  })(
-                    <Input />
-                  )}
-                </FormItem>
-                <FormItem
-                  label="个人说明"
-                  colon={false}
-                  required={false}
-                >
-                  {getFieldDecorator('statement', {
-                    rules: [{
-                      required: true,
-                      message: '请输入个人说明'
-                    }]
-                  })(
-                    <TextArea autosize={{ minRows:4, maxRows: 4 }} />
-                  )}
-                </FormItem>
-                <Form.Item>
-                  {getFieldDecorator('agreement', {
-                    rules: [{
-                      required: true,
-                      message: '请阅读用户协议并勾选'
-                    }],
-                    valuePropName: 'checked',
-                  })(
-                    <Checkbox>我已阅读并同意 <a>用户协议</a></Checkbox>
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  <Button className={Less['register-button']} type="primary" htmlType="submit">注册</Button>
-                </Form.Item>
-              </Form>
-            </Col>
-            <Col span={6}>
+  return (
+    <section className={`${Less['register']} register`}>
+      <section className={`${Less['main']} main`}>
+        <h1 className={Less['title']}>Now</h1>
+        <Divider className={Less['divider']} />
+        <Row type="flex" justify="space-between">
+          <Col span={14}>
+            <Form onSubmit={this.handleSubmit}>
               <FormItem
-                label="头像"
+                label={(
+                  <span>
+                    账号
+                    {
+                      usernameKeyStatus === 2 ?
+                      <Tag className={Less['email-alert']} color="green"><Icon type="check-circle" /> 通过验证</Tag> :
+                      usernameKeyStatus === 1 ?
+                      <Tag className={Less['email-alert']} color="blue" ><Icon type="loading" /> 等待验证</Tag>:
+                      <Tag className={Less['email-alert']} color="blue" ><Icon type="exclamation-circle" /> 等待验证</Tag>
+                    }
+                  </span>
+                )}
                 colon={false}
                 required={false}
               >
-                <SingleUpload onLoad={this.handleUploadLoad} />
+                {getFieldDecorator('username', {
+                  rules: [{
+                    required: true,
+                    message: '请输入账号'
+                  }]
+                })(
+                  <Input onChange={handlerUsernameChange} onBlur={handleUsernameLeave} />
+                )}
               </FormItem>
-            </Col>
-          </Row>
-        </section>
+              <FormItem
+                label="昵称"
+                colon={false}
+                required={false}
+              >
+                {getFieldDecorator('nickname', {
+                  rules: [{
+                    required: true,
+                    message: '请输入昵称'
+                  }]
+                })(
+                  <Input />
+                )}
+              </FormItem>
+              <Divider className={Less['divider-middle']} />
+              <FormItem
+                label={(
+                  <span>
+                    邮箱
+                    {
+                      emailKey ?
+                      <Tag className={Less['email-alert']} color="green"><Icon type="check-circle" /> 通过验证</Tag> :
+                      <Tag className={Less['email-alert']} color="blue" ><Icon type="exclamation-circle" /> 等待验证</Tag>
+                    }
+                  </span>
+                )}
+                colon={false}
+                required={false}
+              >
+                {getFieldDecorator('email', {
+                  rules: [{
+                    required: true,
+                    message: '请输入邮箱'
+                  }, {
+                    type: 'email',
+                    message: '邮箱格式不正确,请修改!',
+                  }]
+                })(
+                  <Row type="flex" justify="space-between">
+                    <Col span={16}>
+                      <Input />
+                    </Col>
+                    <Col span={7}>
+                      <Button disabled={emailCodeTimer > 0} onClick={handleSendEmailCodeClick} className={Less['send-email-code-button']}>{emailCodeTimer > 0 && emailCodeTimer} 发送验证码</Button>
+                    </Col>
+                  </Row>
+                )}
+              </FormItem>
+              {canCodeInputVision && <FormItem
+                label="验证码"
+                colon={false}
+                required={false}
+              >
+                {getFieldDecorator('code', {
+                  rules: [{
+                    required: true,
+                    message: '请输入验证码'
+                  }, {
+                    len: 6,
+                    message: '请输入正确的验证码(六位)!'
+                  }]
+                })(
+                  <Row type="flex" justify="space-between">
+                    <Col span={16}>
+                      <Input disabled={isCodeInputDisable} />
+                    </Col>
+                    <Col span={7}>
+                      <Button onClick={handleAckEmailCodeClick} disabled={isCodeButtonDisable} className={Less['send-email-code-button']}>验证</Button>
+                    </Col>
+                  </Row>
+                )}
+              </FormItem>}
+              <Divider className={Less['divider-middle']} />
+              <Row>
+                <Col span={11}>
+                  <FormItem
+                    label="性别"
+                    colon={false}
+                    required={false}
+                  >
+                    {getFieldDecorator('gender', {
+                      rules: [{
+                        required: true,
+                        message: '请选择性别'
+                      }]
+                    })(
+                      <Select>
+                        {genderOptions.map(o => <Option key={o.key} value={o.value}>{o.title}</Option>)}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={11} offset={2}>
+                  <FormItem
+                    label="出生日期"
+                    colon={false}
+                    required={false}
+                  >
+                    {getFieldDecorator('birthday', {
+                      rules: [{
+                        required: true,
+                        message: '选择出生日期'
+                      }]
+                    })(
+                      <DatePicker placeholder="" />
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <FormItem
+                label="地址"
+                colon={false}
+                required={false}
+              >
+                {getFieldDecorator('address', {
+                  rules: [{
+                    required: true,
+                    message: '请输入地址'
+                  }]
+                })(
+                  <Input />
+                )}
+              </FormItem>
+              <FormItem
+                label="个人说明"
+                colon={false}
+                required={false}
+              >
+                {getFieldDecorator('statement', {
+                  rules: [{
+                    required: true,
+                    message: '请输入个人说明'
+                  }]
+                })(
+                  <TextArea autosize={{ minRows:4, maxRows: 4 }} />
+                )}
+              </FormItem>
+              <Form.Item>
+                {getFieldDecorator('agreement', {
+                  rules: [{
+                    required: true,
+                    message: '请阅读用户协议并勾选'
+                  }],
+                  valuePropName: 'checked',
+                })(
+                  <Checkbox>我已阅读并同意 <a>用户协议</a></Checkbox>
+                )}
+              </Form.Item>
+              <Form.Item>
+                <Button className={Less['register-button']} type="primary" htmlType="submit">注册</Button>
+              </Form.Item>
+            </Form>
+          </Col>
+          <Col span={6}>
+            <FormItem
+              label="头像"
+              colon={false}
+              required={false}
+            >
+              <SingleUpload onLoad={handleUploadLoad} />
+            </FormItem>
+          </Col>
+        </Row>
       </section>
-    )
-  }
+    </section>
+  )
 }
 
 export default Form.create()(Register)
