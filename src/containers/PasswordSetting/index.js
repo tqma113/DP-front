@@ -1,9 +1,279 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { Card, Form, Input, Divider, Row, Col, Button, Modal, message , Tag, Icon} from 'antd'
+
+import Less from './index.module.less'
+import './index.less'
+
+const FormItem = Form.Item
 
 const PasswordSetting = (props) => {
+  const { handlers, form, client, mutations } = props
+  const { getFieldDecorator } = form
+
+  const [emailCodeSendKey, setEmailCodeSendKey] = useState()
+  const [emailCodeKey, setEmailCodeKey] = useState()
+  const [emailCodeTimer, setEmailCodeTimer] = useState()
+
+  useEffect(() => {
+    if (emailCodeTimer > 0) {
+      let timeout = setTimeout(() => {
+        setEmailCodeTimer(emailCodeTimer - 1)
+        clearTimeout(timeout)
+      }, 1000)
+    }
+  }, [emailCodeTimer])
+
+  useEffect(() => {
+    handlers.onload()
+  })
+
+  const handleSendCodeClick = () => {
+    form.validateFields(['email'], (err, values ) => {
+      if (err) return
+
+      sendCodeMutation(values)
+    })
+  }
+
+  const handAckEmailCodeClick = () => {
+    form.validateFields(['email', 'code'], (err, values ) => {
+      if (err) return
+
+      ackCodeMutation(values)
+    })
+  }
+
+  const handleEmailChange = () => {
+    setEmailCodeSendKey('')
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    form.validateFields((err, values) => {
+      if (err) return
+
+      setPasswordMutation(values)
+    })
+  }
+
+  const sendCodeMutation = async ({ email = '' }) => {
+    try {
+      const res = await client.mutate({
+        mutation: mutations.SendEmailLoginCodeMutation,
+        variables: {
+          email
+        }
+      })
+      const { data } = res
+      const { sendEmailLoginCode } = data
+      setEmailCodeSendKeyRes(sendEmailLoginCode)
+    } catch (err) {
+      Modal.error({
+        title: '请求发送失败,请重试'
+      })
+    }
+  }
+
+  const ackCodeMutation = async ({ email = '', code = ''}) => {
+    try {
+      const res = await client.mutate({
+        mutation: mutations.AckEmailCodeMutation,
+        variables: {
+          email,
+          code,
+          key: emailCodeSendKey
+        }
+      })
+      const { data } = res
+      const { ackEmail } = data
+      setEmailCodeKeyRes(ackEmail)
+    } catch (err) {
+      Modal.error({
+        title: '请求发送失败,请重试'
+      })
+    }
+  }
+
+  const setPasswordMutation = async ({ email = '', password = ''}) => {
+    handlers.reload()
+    try {
+      const res = await client.mutate({
+        mutation: mutations.SetPassowordMutation,
+        variables: {
+          email,
+          password,
+          key: emailCodeKey
+        }
+      })
+      const { data } = res
+      const { setPassword } = data
+      setPasswordRes(setPassword)
+    } catch (err) {
+      Modal.error({
+        title: '请求发送失败,请重试'
+      })
+    }
+    handlers.reload()
+  }
+
+  const setEmailCodeSendKeyRes = (res) => {
+    const { isSuccess = false, key = '', extension = {} } = res
+    if (isSuccess) {
+      setEmailCodeTimer(60)
+      setEmailCodeSendKey(key)
+    } else {
+      const { errors = [] } = extension
+      const { message = '' } = errors[0]
+      Modal.error({
+        title: message
+      })
+    }
+  }
+
+  const setEmailCodeKeyRes = (res) => {
+    const { isSuccess = false, key = '', extension = {} } = res
+    if (isSuccess) {
+      setEmailCodeKey(key)
+    } else {
+      const { errors = [] } = extension
+      const { message = '' } = errors[0]
+      Modal.error({
+        title: message
+      })
+    }
+  }
+
+  const setPasswordRes = (res) => {
+    const { isSuccess = false, extension = {} } = res
+    if (isSuccess) {
+      message.success('密码修改成功')
+      handlers.goBack()
+    } else {
+      const { errors = [] } = extension
+      const { message = '' } = errors[0]
+      Modal.error({
+        title: message
+      })
+    }
+  }
+
+  const compareToFirstPassword = (rule, value, callback) => {
+    const form = this.props.form;
+    if (value && value !== form.getFieldValue('password')) {
+      callback('Two passwords that you enter is inconsistent!');
+    } else {
+      callback();
+    }
+  }
+
   return (
-    <div></div>
+    <section className={`${Less['password-setting']} password-setting`}>
+      <section className={Less['main']}>
+        <Card
+          title="Now"
+          headStyle={{fontSize: '36px', textAlign: 'center'}}
+          style={{borderRadius: '0', height: '100%'}}
+        >
+          <Form onSubmit={handleSubmit} style={{width: '350px', margin: 'auto'}} >
+            <FormItem
+              label={(
+                <span>
+                  邮箱
+                  {
+                    emailCodeKey ?
+                    <Tag className={Less['email-alert']} color="green"><Icon type="check-circle" /> 通过验证</Tag> :
+                    <Tag className={Less['email-alert']} color="blue" ><Icon type="exclamation-circle" /> 等待验证</Tag>
+                  }
+                </span>
+              )}
+              required={false}
+              colon={false}
+            >
+              {getFieldDecorator('email', {
+                rules: [{
+                  required: true,
+                  message: '请输入电子邮箱'
+                }, {
+                  type: 'email',
+                  message: '邮箱格式不正确,请修改!'
+                }]
+              })(
+                <Row>
+                  <Col span={24}>
+                    <Input disabled={emailCodeKey} onChange={handleEmailChange} />
+                  </Col>
+                  {!emailCodeKey && <Col className={Less['float-button']}>
+                    <Button disabled={emailCodeTimer > 0} onClick={handleSendCodeClick} style={{width: '100%', textAlign: 'center'}}>{emailCodeTimer > 0 && emailCodeTimer} 发送</Button>
+                  </Col>}
+                </Row>
+              )}
+            </FormItem>
+            {emailCodeSendKey && !emailCodeKey && <FormItem
+              label="验证码"
+              required={false}
+              colon={false}
+            >
+            {getFieldDecorator('code', {
+                rules: [{
+                  required: true,
+                  message: '请输入邮箱验证码'
+                }]
+              })(
+                <Row>
+                  <Col span={24}>
+                    <Input />
+                  </Col>
+                  <Col className={Less['float-button']}>
+                    <Button disabled={!emailCodeSendKey} onClick={handAckEmailCodeClick} style={{width: '100%', textAlign: 'center'}}>验证</Button>
+                  </Col>
+                </Row>
+              )}
+            </FormItem>}
+            <Divider />
+            <FormItem
+              label="密码"
+              required={false}
+              colon={false}
+            >
+              {getFieldDecorator('password', {
+                rules: [{
+                  required: true,
+                  message: '请输入密码'
+                }]
+              })(
+                <Input type="password" />
+              )}
+            </FormItem>
+            <FormItem
+              label="确认密码"
+              required={false}
+              colon={false}
+            >
+              {getFieldDecorator('confirm', {
+                rules: [{
+                  required: true,
+                  message: '请输入确认密码'
+                }],
+                validator: compareToFirstPassword
+              })(
+                <Input type="password" />
+              )}
+            </FormItem>
+            <FormItem>
+              <Row type="flex" justify="space-between">
+                <Col span={6}>
+                  <Button style={{width: '100%', textAlign: 'center'}}>取消</Button>
+                </Col>
+                <Col span={6} offset={1}>
+                  <Button style={{width: '100%', textAlign: 'center'}} type="primary" htmlType="submit">确认</Button>
+                </Col>
+              </Row>
+            </FormItem>
+          </Form>
+        </Card>
+      </section>
+    </section>
   )
 }
 
-export default PasswordSetting
+export default Form.create()(PasswordSetting)

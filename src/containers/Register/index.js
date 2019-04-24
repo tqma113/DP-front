@@ -29,7 +29,7 @@ const Register = (props) => {
   const [imageUrl, setImageUrl] = useState()
   const [emailCodeTimer, setEmailCodeTimer] = useState()
 
-  useEffect((a) => {
+  useEffect(() => {
     if (emailCodeTimer > 0) {
       let timeout = setTimeout(() => {
         setEmailCodeTimer(emailCodeTimer - 1)
@@ -37,6 +37,10 @@ const Register = (props) => {
       }, 1000)
     }
   }, [emailCodeTimer])
+
+  useEffect(() => {
+    handlers.onload()
+  })
 
   const { handlers = {}, form = {}, client = {}, mutations = {} } = props
 
@@ -96,7 +100,6 @@ const Register = (props) => {
   }
 
   const handleAckEmailCodeClick = () => {
-    const { form } = this.props
     form.validateFieldsAndScroll(['code', 'email'], async (err, values) => {
       if (err) {
         message.warn('请完善邮箱格式')
@@ -183,7 +186,6 @@ const Register = (props) => {
   }
 
   const checkUsernameMutation = async ({ username = '' }) => {
-    const { client, mutations = {} } = this.props
     try {
       const res = await client.mutate({
         mutation: mutations.CheckUsernameMutation,
@@ -280,7 +282,7 @@ const Register = (props) => {
         token,
         username
       })
-      Modal.success({
+      Modal.confirm({
         title: '注册成功',
         content: '是否前往设置密码(不设置密码可使用邮箱和验证码登录)',
         onCancel: () => {
@@ -300,8 +302,6 @@ const Register = (props) => {
     }
   }
 
-  handlers.onload()
-
   return (
     <section className={`${Less['register']} register`}>
       <section className={`${Less['main']} main`}>
@@ -309,7 +309,7 @@ const Register = (props) => {
         <Divider className={Less['divider']} />
         <Row type="flex" justify="space-between">
           <Col span={14}>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={handleSubmit}>
               <FormItem
                 label={(
                   <span>
@@ -375,7 +375,7 @@ const Register = (props) => {
                 })(
                   <Row type="flex" justify="space-between">
                     <Col span={16}>
-                      <Input />
+                      <Input onClick={handleEmailChange} />
                     </Col>
                     <Col span={7}>
                       <Button disabled={emailCodeTimer > 0} onClick={handleSendEmailCodeClick} className={Less['send-email-code-button']}>{emailCodeTimer > 0 && emailCodeTimer} 发送验证码</Button>
@@ -422,7 +422,7 @@ const Register = (props) => {
                       }]
                     })(
                       <Select>
-                        {genderOptions.map(o => <Option key={o.key} value={o.value}>{o.title}</Option>)}
+                        {genderOptions.map((o, index) => <Option key={index} value={o.value}>{o.title}</Option>)}
                       </Select>
                     )}
                   </FormItem>

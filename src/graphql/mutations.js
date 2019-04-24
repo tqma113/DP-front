@@ -149,6 +149,21 @@ const CheckUsernameMutation = gql`
   }
 `
 
+const SetPassowordMutation = gql`
+  mutation ($email: String!, $password: String!, $key: String!){
+    setPassword(email: $email, password: $password, key: $key) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export {
   LoginMutation,
   RegisterMutation,
@@ -157,5 +172,6 @@ export {
   AckEmailCodeMutation,
   CheckUsernameMutation,
   SendEmailLoginCodeMutation,
-  LoginWithEmailMutation
+  LoginWithEmailMutation,
+  SetPassowordMutation
 }

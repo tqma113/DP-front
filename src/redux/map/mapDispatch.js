@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     go: (path) => {
       const { history } = ownProps
-      history.go(path)
+      history.push(path)
     }
   }
 })

@@ -10,7 +10,7 @@ const Login = (props) => {
   const [timer, setTimer] = useState(0)
   const [codeKey, setCodeKey] = useState('')
 
-  useEffect((a) => {
+  useEffect(() => {
     if (timer > 0) {
       let timeout = setTimeout(() => {
         setTimer(timer - 1)
@@ -18,6 +18,10 @@ const Login = (props) => {
       }, 1000)
     }
   }, [timer])
+
+  useEffect(() => {
+    handlers.turnToLogin()
+  })
 
   const { handlers, form, mutations, client } = props
   const { getFieldDecorator, getFieldValue } = form;
@@ -137,8 +141,6 @@ const Login = (props) => {
       })
     }
   }
-
-  handlers.turnToLogin()
 
   return (
     <section className={Less['login']}>

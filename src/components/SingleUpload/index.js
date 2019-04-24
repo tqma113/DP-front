@@ -28,6 +28,7 @@ const SingleUplaod = (props) => {
 
     if (!isLt2M) {
       message.error('Image must smaller than 2MB!');
+      setLoading(false)
     } else {
       setImage(file)
       try {
@@ -66,13 +67,12 @@ const SingleUplaod = (props) => {
       if (isSuccess) {
         setImageUrl(url)
         setUploadSuccess(true)
-        if (onLoad) onLoad(image, imageUrl, imageBase64)
+        if (onLoad) onLoad(image, url, imageBase64)
         message.success('上传成功!')
       } else {
         message.error('上传失败!')
       }
     } catch (err) {
-      console.log(err)
       message.error('数据发送失败,请重试')
     }
     setUploading(false)
