@@ -4,9 +4,9 @@ const Footer = (props) => {
 
 
   return (
-    <footer>
-
-    </footer>
+    <section>
+      404
+    </section>
   )
 }
 

@@ -19,9 +19,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     login: ({ token, username }) => {
       localStorage.setItem('token', token)
       localStorage.setItem('username', username)
+      sessionStorage.setItem('token', token)
+      sessionStorage.setItem('username', username)
     },
     logout: () => {
-      localStorage.clear()
+      localStorage.removeItem('token')
+      localStorage.removeItem('username')
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('username')
       dispatch(getClearSessionInfoAction())
     },
     setSessionInfo: ({ sessionInfo, user }) => {

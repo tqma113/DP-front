@@ -15,8 +15,8 @@ export const querys = {
   Loader: [
     graphql(QuerySessionState, {
       options: () => {
-        let username = getCookie('username') || localStorage.getItem('username')
-        let token = getCookie('token') || localStorage.getItem('token')
+        let username = getCookie('username') || sessionStorage.getItem('username') || localStorage.getItem('username')
+        let token = getCookie('token') || sessionStorage.getItem('token') || localStorage.getItem('token')
         return {
           variables: {
             username,
