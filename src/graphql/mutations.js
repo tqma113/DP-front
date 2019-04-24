@@ -17,6 +17,23 @@ const LoginMutation = gql`
   }
 `
 
+const LoginWithEmailMutation = gql`
+  mutation ($email: String!, $code: String!, $key: String!) {
+    loginWithEmail (email: $email, code: $code, key: $key) {
+      token
+      username
+      isSuccess
+      extension {
+        operator
+        errors{
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 const RegisterMutation = gql`
   mutation ($username: String!,
             $nickname: String!,
@@ -84,6 +101,22 @@ const SendEmailCodeMutation = gql`
   }
 `
 
+const SendEmailLoginCodeMutation = gql`
+  mutation ($email: String!) {
+    sendEmailLoginCode(email: $email) {
+      key
+      isSuccess
+      extension{
+        operator
+        errors{
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 const AckEmailCodeMutation = gql`
   mutation ($email: String!, $code: String!, $key: String!) {
     ackEmail(email: $email, code: $code, key: $key) {
@@ -122,5 +155,7 @@ export {
   UploadImageMutation,
   SendEmailCodeMutation,
   AckEmailCodeMutation,
-  CheckUsernameMutation
+  CheckUsernameMutation,
+  SendEmailLoginCodeMutation,
+  LoginWithEmailMutation
 }

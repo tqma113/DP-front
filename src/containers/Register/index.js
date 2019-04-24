@@ -457,6 +457,9 @@ class Register extends React.Component {
                     rules: [{
                       required: true,
                       message: '请输入验证码'
+                    }, {
+                      len: 6,
+                      message: '请输入正确的验证码(六位)!'
                     }]
                   })(
                     <Row type="flex" justify="space-between">

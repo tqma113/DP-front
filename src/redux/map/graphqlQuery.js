@@ -5,7 +5,9 @@ import {
   UploadImageMutation,
   SendEmailCodeMutation,
   AckEmailCodeMutation,
-  CheckUsernameMutation
+  CheckUsernameMutation,
+  SendEmailLoginCodeMutation,
+  LoginWithEmailMutation
 } from '@graphql/mutations'
 import { QuerySessionState } from '@graphql/querys'
 
@@ -30,7 +32,9 @@ export const querys = {
 
 export const mutations = {
   Login: {
-    LoginMutation
+    LoginMutation,
+    LoginWithEmailMutation,
+    SendEmailLoginCodeMutation,
   },
   Register: {
     RegisterMutation,
