@@ -164,6 +164,18 @@ const SetPassowordMutation = gql`
   }
 `
 
+export const names = {
+  LoginMutation: 'login',
+  RegisterMutation: 'register',
+  UploadImageMutation: 'uploadSingleImage',
+  SendEmailCodeMutation: 'sendEmailCode',
+  AckEmailCodeMutation: 'ackEmail',
+  CheckUsernameMutation: 'checkUsername',
+  SendEmailLoginCodeMutation: 'sendEmailLoginCode',
+  LoginWithEmailMutation: 'loginWithEmail',
+  SetPassowordMutation: 'setPassword'
+}
+
 export {
   LoginMutation,
   RegisterMutation,

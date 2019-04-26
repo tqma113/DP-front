@@ -16,17 +16,14 @@ export default [
   {
     path: '/login',
     component: Login,
-    exact: true,
   },
   {
     path: '/register',
     component: Register,
-    exact: true,
   },
   {
     path: '/password_setting',
     component: PasswordSetting,
-    exact: true
   },
   {
     path: null,
