@@ -8,7 +8,7 @@ export default (state = {}, action) => {
       }
 
     case User.clearUser:
-      return undefined
+      return {}
 
     default:
       return state

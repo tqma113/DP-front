@@ -1,7 +1,8 @@
 
 
 const mapStateToProps = (store, ownProps) => ({
-  store
+  store,
+  ...ownProps
 })
 
 export default mapStateToProps

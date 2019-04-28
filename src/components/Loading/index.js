@@ -30,8 +30,7 @@ const Loading = (props) => {
   useEffect(() => {
     let timeout = setTimeout(() => {
       setLoadingClass(Less[classList[loadStatus]])
-    setLoadingStatus(true)
-
+      setLoadingStatus(true)
       clearTimeout(timeout)
     }, 500);
   })

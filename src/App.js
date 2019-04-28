@@ -2,6 +2,7 @@ import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { LocaleProvider } from 'antd'
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
 import client from '@graphql/client'
@@ -18,9 +19,11 @@ const App = function() {
     <Provider store={store}>
       <ApolloProvider client={client}>
         <LocaleProvider locale={zh_CN}>
-          <Controller>
-            <Router />
-          </Controller>
+          <BrowserRouter>
+            <Controller>
+              <Router />
+            </Controller>
+          </BrowserRouter>
         </LocaleProvider>
       </ApolloProvider>
     </Provider>

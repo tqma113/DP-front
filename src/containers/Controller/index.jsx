@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from '@map'
+import map from '@map'
 
 import { Message, Loading } from '@components'
 
@@ -33,4 +33,4 @@ const Controller = (props) => {
   )
 }
 
-export default connect(Controller)
+export default map(Controller)
