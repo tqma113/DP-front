@@ -43,23 +43,31 @@ const Loading = (props) => {
   }
 
   const handlePersonClick = () => {
-    if (username) {
-      handlers.go(`/${username}`)
-    } else {
-      handlers.go('/login')
+    if (loadStatus) {
+      if (username) {
+        handlers.go(`/${username}`)
+      } else {
+        handlers.go('/login')
+      }
     }
   }
 
   const handleMessageClick = () => {
-    handlers.openMessage()
+    if (loadStatus) {
+      handlers.openMessage()
+    }
   }
 
   const handleNewArticleClick = () => {
-    console.log('go to new article')
+    if (loadStatus) {
+      console.log('go to new article')
+    }
   }
 
   const handleLogoutClick = () => {
-    handlers.logout()
+    if (loadStatus) {
+      handlers.logout()
+    }
   }
 
   return (

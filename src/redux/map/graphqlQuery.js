@@ -21,6 +21,12 @@ export const querys = {
 }
 
 export const mutations = {
+  UploadImage: {
+    UploadImageMutation: 'UploadImageMutation'
+  },
+  Auth: {
+    checkUsernameValidMutation: 'checkUsernameValidMutation'
+  },
   Login: {
     LoginMutation: 'LoginMutation',
     LoginWithEmailMutation: 'LoginWithEmailMutation',
@@ -32,12 +38,9 @@ export const mutations = {
     AckEmailCodeMutation: 'AckEmailCodeMutation',
     CheckUsernameMutation: 'CheckUsernameMutation'
   },
-  UploadImage: {
-    UploadImageMutation: 'UploadImageMutation'
-  },
   PasswordSetting: {
     SendEmailLoginCodeMutation: 'SendEmailLoginCodeMutation',
     AckEmailCodeMutation: 'AckEmailCodeMutation',
     SetPassowordMutation: 'SetPassowordMutation'
-  }
+  },
 }

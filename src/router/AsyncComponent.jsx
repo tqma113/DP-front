@@ -12,7 +12,7 @@ import map from '@map'
  * @param {Function} loadComponent e.g: () => import('./component')
  * @param {boolean} store 是否为传入组件增加store
  */
-export default (loadComponent, store = false, module) => {
+export default (loadComponent) => {
   class AsyncComponent extends Component {
     unmount = false
 
@@ -29,9 +29,7 @@ export default (loadComponent, store = false, module) => {
         default: component
       } = await loadComponent()
 
-      if (store) {
-        component = await map(component, module)
-      }
+      component = await map(component, this.props.module)
 
       if (this.unmount) return
 
@@ -48,7 +46,7 @@ export default (loadComponent, store = false, module) => {
       const C = this.state.component
 
       return (
-        C ? <C { ...this.props} > </C> : null
+        C ? <C isSelf={this.props.isSelf}> </C> : null
       )
     }
   }

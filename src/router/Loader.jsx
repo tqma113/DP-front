@@ -1,40 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { message } from 'antd'
 
 import map from '@map'
 
 const Loader = (props) => {
-  const { data = {}, handlers = {}, store, error, children } = props
+  const { data = {}, handlers = {}, error, children } = props
   const { checkLoginState = {} } = data
   const { isSuccess = false, user = {}, sessionInfo = false } = checkLoginState
-  const { loadStatus } = store
+
+  const [loadStatus, setLoadStatus] = useState(false)
 
   if (error) {
     message.error('无法拉取数据')
   }
 
-  if (isSuccess && loadStatus === 0) {
+  if (isSuccess && !loadStatus) {
     handlers.setSessionInfo({
       sessionInfo,
       user
     })
-    handlers.onload()
-  }
-
-  if (!isSuccess) {
-    handlers.onload()
-  }
-
-  if (loadStatus === 0) {
-    return null
+    setLoadStatus(true)
   }
 
   return (
     <React.Fragment>
-      {{...children}}
+      {loadStatus && {...children}}
     </React.Fragment>
   )
-
 }
 
 export default map(Loader, 'Loader')

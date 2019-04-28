@@ -22,6 +22,7 @@ export const mutate = (mutationName, variables, options) => new Promise((resolve
     resolve(data)
   })
   .catch(err => {
+    console.log(err)
     let networwErrorRes = {
       isSuccess: false,
       extension: {

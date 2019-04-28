@@ -164,6 +164,21 @@ const SetPassowordMutation = gql`
   }
 `
 
+const checkUsernameValidMutation = gql`
+  mutation ($username: String!) {
+    checkUsernameValid(username: $username) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export const names = {
   LoginMutation: 'login',
   RegisterMutation: 'register',
@@ -173,7 +188,8 @@ export const names = {
   CheckUsernameMutation: 'checkUsername',
   SendEmailLoginCodeMutation: 'sendEmailLoginCode',
   LoginWithEmailMutation: 'loginWithEmail',
-  SetPassowordMutation: 'setPassword'
+  SetPassowordMutation: 'setPassword',
+  checkUsernameValidMutation: 'checUsernameValid'
 }
 
 export {
@@ -185,5 +201,6 @@ export {
   CheckUsernameMutation,
   SendEmailLoginCodeMutation,
   LoginWithEmailMutation,
-  SetPassowordMutation
+  SetPassowordMutation,
+  checkUsernameValidMutation
 }
