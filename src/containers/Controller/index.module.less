@@ -1,39 +1,15 @@
-.loading-container {
+.controller-container {
   position: absolute;
   width: 100%;
   height: 100%;
   min-width: 1000px;
-  .loading-spin {
+  .controller {
     position: absolute;
     z-index: 1002;
     text-align: center;
     top: 50%;
     transition: all .5s ease-in-out .5s;
     transform: translateX(-50%) translateY(-50%);
-    .loading {
-      display: inline-block;
-      transition: all .5s ease-in-out;
-      .loading-border {
-        position: absolute;
-        text-align: left;
-        transition: all .5s ease-in-out;
-        .loading-bg {
-          position: absolute;
-          height: 100%;
-          width: 100%;
-          border-radius: 50%;
-          transition: all 1s ease-in-out;
-          box-sizing: border-box;
-          box-shadow: 0px 0px 5px 5px #ddd;
-        }
-      }
-    }
-  }
-  .loading-content {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    transition: all .5s ease-in-out .5s;
   }
   .loading-mask {
     transition: opacity .5s ease-in-out .5s;
@@ -44,101 +20,53 @@
     height: 100%;
     z-index: 1001;
   }
+  .controller-content {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transition: all .5s ease-in-out .5s;
+  }
 }
 
 .is-loading {
-  .loading-spin {
+  .controller {
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    .loading {
-      transition: all 1s linear;
-      height: 100px;
-      width: 100px;
-      .loading-border {
-        height: 100px;
-        width: 100px;
-        .loading-bg {
-          border: 2px dashed #111;
-          animation: rotate 3s linear infinite;
-        }
-      }
-    }
   }
   .loading-mask {
     opacity: .7;
   }
-  .loading-content {
-  }
 }
 
 .load-success {
-  .loading-spin {
+  .controller {
     left: 100%;
     transform: translateX(-100%) translateY(-50%);
-    .loading {
-      height: 60px;
-      width: 60px;
-      .loading-border {
-        height: 60px;
-        width: 60px;
-        .loading-bg {
-
-        }
-      }
-    }
   }
   .loading-mask {
     opacity: 0;
-    z-index: -1;
-  }
-  .loading-content {
+    z-index: 0;
   }
 }
 .login {
-  .loading-spin {
+  .controller {
     left: 25%;
     transform: translateX(-50%) translateY(-50%);
     transition: all .5s ease-in-out .5s;
-    .loading {
-      height: 400px;
-      width: 400px;
-      .loading-border {
-        height: 400px;
-        width: 400px;
-        .loading-bg {
-
-        }
-      }
-    }
   }
   .loading-mask {
     z-index: -1;
     opacity: 0;
-  }
-  .loading-content {
   }
 }
 .message {
-  .loading-spin {
+  .controller {
     left: 100%;
     transform: translateX(-100%) translateY(-50%);
-    .loading {
-      height: 60px;
-      width: 60px;
-      .loading-border {
-        height: 60px;
-        width: 60px;
-        .loading-bg {
-
-        }
-      }
-    }
   }
   .loading-mask {
     opacity: 0;
     z-index: -1;
-  }
-  .loading-content {
   }
 }
 
