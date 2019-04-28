@@ -7,6 +7,7 @@
   .loading-border {
     z-index: 50;
     position: absolute;
+    background-color: #fff;
     text-align: left;
     border-radius: 50%;
     transition: all .5s ease-in-out;
@@ -100,8 +101,26 @@
     height: 400px;
     width: 400px;
     .loading-bg {
-
+      border: 2px solid #111;
     }
+  }
+  .operator-ball {
+    transform: translateY(200px) translateX(200px);
+  }
+}
+.login-loading {
+  height: 400px;
+  width: 400px;
+  .loading-border {
+    height: 400px;
+    width: 400px;
+    .loading-bg {
+      border: 10px dashed #111;
+      animation: rotate 3s linear infinite;
+    }
+  }
+  .operator-ball {
+    transform: translateY(200px) translateX(200px);
   }
 }
 .message {

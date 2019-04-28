@@ -54,21 +54,23 @@ const SingleUplaod = (props) => {
     }
 
     setUploading(true);
-    const data = await mutate({
-      mutation: mutations.UploadImageMutation,
-      variables: {
+    const data = await mutate(
+      mutations.UploadImageMutation,
+      {
         image
       }
-    })
+    )
     const { uploadSingleImage } = data
-    const { isSuccess = false, url } = uploadSingleImage
+    const { isSuccess = false, url, extension = {} } = uploadSingleImage
     if (isSuccess) {
       setImageUrl(url)
       setUploadSuccess(true)
       if (onLoad) onLoad(image, url, imageBase64)
       message.success('上传成功!')
     } else {
-      message.error('上传失败!')
+      const { errors = [] } = extension
+      const { message: messStr } = errors[0]
+      message.error(`上传失败: ${messStr}`)
     }
     setUploading(false)
   }

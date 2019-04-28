@@ -1,4 +1,3 @@
-import { message } from 'antd'
 import client from './client'
 
 import { names } from './mutations'
@@ -13,16 +12,26 @@ import {
 } from './subscriptions'
 
 export const mutate = (mutationName, variables, options) => new Promise((resolve, reject) => {
-  try {
-    const res = client.mutate({
-      ...options,
-      mutation: mutations[mutationName],
-      variables
-    })
+  client.mutate({
+    ...options,
+    mutation: mutations[mutationName],
+    variables
+  })
+  .then(res => {
     const { data } = res
     resolve(data)
-  } catch (err) {
-    reject(err)
-    message.error('请求发送失败,请重试')
-  }
+  })
+  .catch(err => {
+    let networwErrorRes = {
+      isSuccess: false,
+      extension: {
+        operator: 'network',
+        errors: [{
+          path: 'network',
+          message: 'network fail'
+        }]
+      }
+    }
+    resolve(networwErrorRes)
+  })
 })

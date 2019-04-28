@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import map from '@map'
 
-import { Message, Loading } from '@components'
+import { Loading } from '@components'
+import { Message } from '@containers'
 
 import Less from './index.module.less'
 
-const classList = ['is-loading', 'load-success', 'login']
+const classList = ['is-loading', 'load-success', 'login', 'login-loading']
 
 const Controller = (props) => {
   const { store, children } = props

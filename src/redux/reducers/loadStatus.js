@@ -8,6 +8,8 @@ export default (state = {}, action) => {
       return 1
     case LoadStatus.login:
       return 2
+    case LoadStatus.loginLoading:
+      return 3
     default:
       return state
   }

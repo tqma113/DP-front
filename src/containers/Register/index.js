@@ -148,45 +148,45 @@ const Register = (props) => {
   }
 
   const sendEmailCodeMutation = async ({ email = '' }) => {
-    const data = await mutate({
-      mutation: mutations.SendEmailCodeMutation,
-      variables: {
+    const data = await mutate(
+      mutations.SendEmailCodeMutation,
+      {
         email
       }
-    })
+    )
     const { sendEmailCode = {} } = data
     setEmailCodeKey(sendEmailCode)
   }
 
   const ackEmailCodeMutation = async ({ code = '', email = '' }) => {
-    const data = await mutate({
-      mutation: mutations.AckEmailCodeMutation,
-      variables: {
+    const data = await mutate(
+      mutations.AckEmailCodeMutation,
+      {
         code,
         email,
         key: emailSendKey
       }
-    })
+    )
     const { ackEmail = {} } = data
     setEmailKeyRes(ackEmail)
   }
 
   const checkUsernameMutation = async ({ username = '' }) => {
-    const data = await mutate({
-      mutation: mutations.CheckUsernameMutation,
-      variables: {
+    const data = await mutate(
+      mutations.CheckUsernameMutation,
+      {
         username
       }
-    })
+    )
     const { checkUsername = {} } = data
     setUsernameKeyRes(checkUsername)
   }
 
   const registerMutation = async ({ username = '', nickname = '', email = '', gender = '', birthday = '', address = '', statement = '' }) => {
     handlers.reload()
-    const data = await mutate({
-      mutation: mutations.RegisterMutation,
-      variables: {
+    const data = await mutate(
+      mutations.RegisterMutation,
+      {
         username,
         nickname,
         address,
@@ -198,7 +198,7 @@ const Register = (props) => {
         e_key: emailKey,
         hd_portrial: imageUrl
       }
-    })
+    )
     const { register = {} } = data
     setRegister(register)
   }
@@ -210,10 +210,8 @@ const Register = (props) => {
       setEmailCodeTimer(60)
     } else {
       const { errors = [] } = extension
-      const { message = '' } = errors[0]
-      Modal.error({
-        title: message
-      })
+      const { message: messStr } = errors[0]
+      message.error(`发送失败: ${messStr}`)
     }
   }
 
@@ -223,10 +221,8 @@ const Register = (props) => {
       setEmailKey(key)
     } else {
       const { errors = [] } = extension
-      const { message = '' } = errors[0]
-      Modal.error({
-        title: message
-      })
+      const { message: messStr } = errors[0]
+      message.error(`验证失败: ${messStr}`)
     }
   }
 
@@ -237,11 +233,9 @@ const Register = (props) => {
       setUsernameKeyStatus(2)
     } else {
       const { errors = [] } = extension
-      const { message = '' } = errors[0]
+      const { message: messStr } = errors[0]
       setUsernameKeyStatus(0)
-      Modal.error({
-        title: message
-      })
+      message.error(`验证失败: ${messStr}`)
     }
   }
 
@@ -265,10 +259,8 @@ const Register = (props) => {
     } else {
       handlers.onload()
       const { errors = [] } = extension
-      const { message = '' } = errors[0]
-      Modal.error({
-        title: message
-      })
+      const { message: messStr } = errors[0]
+      message.error(`注册失败: ${messStr}`)
     }
   }
 

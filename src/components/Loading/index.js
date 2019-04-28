@@ -3,17 +3,17 @@ import { Icon } from 'antd'
 
 import { Horologe } from '@components'
 
-import { connect } from '@map'
+import map from '@map'
 
 import Less from './index.module.less'
 
-const classList = ['is-loading', 'load-success', 'login']
+const classList = ['is-loading', 'load-success', 'login', 'login-loading']
 
-const iconStyle = { 
-  width: '100%', 
-  height: '100%', 
-  fontSize: '20px', 
-  marginTop: '8px', 
+const iconStyle = {
+  width: '100%',
+  height: '100%',
+  fontSize: '20px',
+  marginTop: '8px',
   marginLeft: '1px',
   color: '#555'
 }
@@ -21,7 +21,8 @@ const iconStyle = {
 const Loading = (props) => {
   const { store, handlers } = props
   const { loadStatus = 0, session = {} } = store
-  const { username } = store
+  const { info = {} } = session
+  const { username } = info
 
   const [operatorStatus, setOperatorStatus] = useState()
   const [loadingClass, setLoadingClass] = useState('is-loading');
@@ -85,4 +86,4 @@ const Loading = (props) => {
   )
 }
 
-export default connect(Loading)
+export default map(Loading)

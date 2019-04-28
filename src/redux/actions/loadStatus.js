@@ -18,9 +18,16 @@ const getLoadLoginAction = () => {
   }
 }
 
+const getLoginLoadingAction = () => {
+  return {
+    type: LoadStatus.loginLoading
+  }
+}
+
 
 export {
   getLoadingAction,
   getOnloadAction,
-  getLoadLoginAction
+  getLoadLoginAction,
+  getLoginLoadingAction
 }

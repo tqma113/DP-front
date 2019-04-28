@@ -11,7 +11,8 @@ const {
 const {
   getLoadingAction,
   getOnloadAction,
-  getLoadLoginAction
+  getLoadLoginAction,
+  getLoginLoadingAction
 } = actions.loadStatus
 const {
   getOpenMessageAction,
@@ -27,12 +28,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       sessionStorage.setItem('username', username)
     },
     logout: () => {
+      const { history } = ownProps
       localStorage.removeItem('token')
       localStorage.removeItem('username')
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('username')
       dispatch(getClearSessionInfoAction())
       dispatch(getClearUserAction())
+      history.push('/')
     },
     setSessionInfo: ({ sessionInfo, user }) => {
       dispatch(getSetSessionInfoAction(sessionInfo))
@@ -40,6 +43,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     turnToLogin: () => {
       dispatch(getLoadLoginAction())
+    },
+    turnToLoginLoading: () => {
+      dispatch(getLoginLoadingAction())
     },
     onload: () => {
       dispatch(getOnloadAction())
@@ -54,8 +60,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       dispatch(getCloseMessageAction())
     },
     goBack: () => {
-      const { history } = ownProps
-      const { location } = history
+      const { history = {} } = ownProps
+      const { location = {} } = history
       const { search = '' } = location
 
       if (search) {

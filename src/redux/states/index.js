@@ -12,6 +12,7 @@ export const LoadStatus = {
   reload: 'RELOAD',
   onload: 'ONLOAD',
   login: 'TUEN_TO_LOGIN',
+  loginLoading: 'TURN_TO_LOGIN_LOADING'
 }
 
 

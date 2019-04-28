@@ -7,7 +7,7 @@ import './index.less'
 const FormItem = Form.Item
 
 const PasswordSetting = (props) => {
-  const { handlers, form, client, mutations } = props
+  const { handlers, form, mutate, mutations } = props
   const { getFieldDecorator } = form
 
   const [emailCodeSendKey, setEmailCodeSendKey] = useState()
@@ -57,62 +57,43 @@ const PasswordSetting = (props) => {
   }
 
   const sendCodeMutation = async ({ email = '' }) => {
-    try {
-      const res = await client.mutate({
-        mutation: mutations.SendEmailLoginCodeMutation,
-        variables: {
-          email
-        }
-      })
-      const { data } = res
-      const { sendEmailLoginCode } = data
-      setEmailCodeSendKeyRes(sendEmailLoginCode)
-    } catch (err) {
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+    const data = await mutate(
+      mutations.SendEmailLoginCodeMutation,
+      {
+        email
+      }
+    )
+    const { sendEmailLoginCode } = data
+    setEmailCodeSendKeyRes(sendEmailLoginCode)
   }
 
   const ackCodeMutation = async ({ email = '', code = ''}) => {
-    try {
-      const res = await client.mutate({
-        mutation: mutations.AckEmailCodeMutation,
-        variables: {
-          email,
-          code,
-          key: emailCodeSendKey
-        }
-      })
-      const { data } = res
-      const { ackEmail } = data
-      setEmailCodeKeyRes(ackEmail)
-    } catch (err) {
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+    const data = await mutate({
+      mutation: mutations.AckEmailCodeMutation,
+      variables: {
+        email,
+        code,
+        key: emailCodeSendKey
+      }
+    })
+    const { ackEmail } = data
+    setEmailCodeKeyRes(ackEmail)
   }
 
   const setPasswordMutation = async ({ email = '', password = ''}) => {
     handlers.reload()
-    try {
-      const res = await client.mutate({
-        mutation: mutations.SetPassowordMutation,
-        variables: {
-          email,
-          password,
-          key: emailCodeKey
-        }
-      })
-      const { data } = res
-      const { setPassword } = data
-      setPasswordRes(setPassword)
-    } catch (err) {
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+
+    const data = await mutate(
+      mutations.SetPassowordMutation,
+      {
+        email,
+        password,
+        key: emailCodeKey
+      }
+    )
+    const { setPassword } = data
+    setPasswordRes(setPassword)
+
     handlers.reload()
   }
 
@@ -123,10 +104,8 @@ const PasswordSetting = (props) => {
       setEmailCodeSendKey(key)
     } else {
       const { errors = [] } = extension
-      const { message = '' } = errors[0]
-      Modal.error({
-        title: message
-      })
+      const { message: messStr } = errors[0]
+      message.error(`发送失败: ${messStr}`)
     }
   }
 
@@ -136,10 +115,8 @@ const PasswordSetting = (props) => {
       setEmailCodeKey(key)
     } else {
       const { errors = [] } = extension
-      const { message = '' } = errors[0]
-      Modal.error({
-        title: message
-      })
+      const { message: messStr } = errors[0]
+      message.error(`验证失败: ${messStr}`)
     }
   }
 
@@ -150,10 +127,8 @@ const PasswordSetting = (props) => {
       handlers.goBack()
     } else {
       const { errors = [] } = extension
-      const { message = '' } = errors[0]
-      Modal.error({
-        title: message
-      })
+      const { message: messStr } = errors[0]
+      message.error(`设置失败: ${messStr}`)
     }
   }
 

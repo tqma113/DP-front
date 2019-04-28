@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Form, Icon, Input, Button, Checkbox, Row, Col, Modal, Tabs } from 'antd'
+import { Card, Form, Icon, Input, Button, Checkbox, Row, Col, Modal, Tabs, message } from 'antd'
 
 import Less from './index.module.less'
 
 const TabPane = Tabs.TabPane;
 
 const Login = (props) => {
+  const { handlers, form, mutations, mutate, store } = props
+  const { getFieldDecorator, getFieldValue } = form;
+  const { session } = store
+  const { status } = session
 
   const [timer, setTimer] = useState(0)
   const [codeKey, setCodeKey] = useState('')
+  const [loadStatus, setLoadStatus] = useState(false)
+
+  if (status) {
+    handlers.goBack()
+  }
 
   useEffect(() => {
     if (timer > 0) {
@@ -20,11 +29,12 @@ const Login = (props) => {
   }, [timer])
 
   useEffect(() => {
-    handlers.turnToLogin()
+    if (!loadStatus) {
+      handlers.turnToLogin()
+      setLoadStatus(true)
+    }
   })
 
-  const { handlers, form, mutations, mutate } = props
-  const { getFieldDecorator, getFieldValue } = form;
   const remeber = getFieldValue('remeber')
 
   const handleSubmit = (e) => {
@@ -55,41 +65,41 @@ const Login = (props) => {
   }
 
   const sendLoginMutation = async ({ username, password }) => {
-    handlers.reload()
-    const data = await mutate({
-      mutation: mutations.LoginMutation,
-      variables: {
+    handlers.turnToLoginLoading()
+    const data = await mutate(
+      mutations.LoginMutation,
+      {
         username,
         password
       }
-    })
+    )
     const { login = {} } = data
-    login(login)
+    loginA(login)
   }
 
   const sendEmailCodeMutation = async ({email = ''}) => {
-    const data = await mutate({
-      mutation: mutations.SendEmailLoginCodeMutation,
-      variables: {
+    const data = await mutate(
+      mutations.SendEmailLoginCodeMutation,
+      {
         email
       }
-    })
+    )
     const { sendEmailLoginCode = {} } = data
     setEmailCodeKey(sendEmailLoginCode)
   }
 
   const sendLoginWithEmailMutation = async ({ email = '', code = '' }) => {
     handlers.reload()
-    const data = await mutate({
-      mutation: mutations.LoginWithEmailMutation,
-      variables: {
+    const data = await mutate(
+      mutations.LoginWithEmailMutation,
+      {
         email,
         code,
         key: codeKey
       }
-    })
+    )
     const { loginWithEmail = {} } = data
-    login(loginWithEmail)
+    loginA(loginWithEmail)
   }
 
   const setEmailCodeKey = (res) => {
@@ -99,15 +109,13 @@ const Login = (props) => {
       setTimer(60)
     } else {
       const { errors = [] } = extension
-      const { message = '' } = errors[0]
-      Modal.error({
-        title: message
-      })
+      const { message: messStr } = errors[0]
+      message.error(`发送失败: ${messStr}`)
     }
   }
 
-  const login = (login) => {
-    const { isSuccess = false, username = '',  token = '' } = login
+  const loginA = (login) => {
+    const { isSuccess = false, username = '', token = '', extension = {} } = login
     if (isSuccess) {
       handlers.login({
         token,
@@ -115,9 +123,10 @@ const Login = (props) => {
       })
       handlers.goBack()
     } else {
-      Modal.warning({
-        title: `数据获取失败`,
-      })
+      const { errors = [] } = extension
+      const { message: messStr } = errors[0]
+      message.error(`登录失败: ${messStr}`)
+      handlers.turnToLogin()
     }
   }
 
