@@ -1,10 +1,9 @@
 import { Session } from '../states'
 
-const getSetSessionInfoAction = (sessionInfo, user) => {
+const getSetSessionInfoAction = (sessionInfo) => {
   return {
     type: Session.setSessionInfo,
-    sessionInfo,
-    user
+    sessionInfo
   }
 }
 

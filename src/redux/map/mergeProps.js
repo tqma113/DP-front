@@ -1,10 +1,10 @@
-import client from '@graphql/client'
+import { mutate } from '@graphql'
 import { mutations } from './graphqlQuery'
 
 const getMergeProps = (module) => (stateProps, dispatchProps, ownProps) => {
   return {
     mutations: mutations[module],
-    client,
+    mutate,
     ...stateProps,
     ...dispatchProps,
     ...ownProps

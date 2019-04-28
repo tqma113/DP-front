@@ -23,7 +23,7 @@ const Login = (props) => {
     handlers.turnToLogin()
   })
 
-  const { handlers, form, mutations, client } = props
+  const { handlers, form, mutations, mutate } = props
   const { getFieldDecorator, getFieldValue } = form;
   const remeber = getFieldValue('remeber')
 
@@ -56,61 +56,40 @@ const Login = (props) => {
 
   const sendLoginMutation = async ({ username, password }) => {
     handlers.reload()
-    try {
-      const res = await this.props.client.mutate({
-        mutation: mutations.LoginMutation,
-        variables: {
-          username,
-          password
-        }
-      })
-      const { data = {} } = res
-      const { login = {} } = data
-      login(login)
-    } catch (err) {
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+    const data = await mutate({
+      mutation: mutations.LoginMutation,
+      variables: {
+        username,
+        password
+      }
+    })
+    const { login = {} } = data
+    login(login)
   }
 
   const sendEmailCodeMutation = async ({email = ''}) => {
-    try {
-      const res = await client.mutate({
-        mutation: mutations.SendEmailLoginCodeMutation,
-        variables: {
-          email
-        }
-      })
-      const { data = {} } = res
-      const { sendEmailLoginCode = {} } = data
-      setEmailCodeKey(sendEmailLoginCode)
-    } catch (err) {
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+    const data = await mutate({
+      mutation: mutations.SendEmailLoginCodeMutation,
+      variables: {
+        email
+      }
+    })
+    const { sendEmailLoginCode = {} } = data
+    setEmailCodeKey(sendEmailLoginCode)
   }
 
   const sendLoginWithEmailMutation = async ({ email = '', code = '' }) => {
     handlers.reload()
-    try {
-      const res = await client.mutate({
-        mutation: mutations.LoginWithEmailMutation,
-        variables: {
-          email,
-          code,
-          key: codeKey
-        }
-      })
-      const { data = {} } = res
-      const { loginWithEmail = {} } = data
-      login(loginWithEmail)
-    } catch (err) {
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+    const data = await mutate({
+      mutation: mutations.LoginWithEmailMutation,
+      variables: {
+        email,
+        code,
+        key: codeKey
+      }
+    })
+    const { loginWithEmail = {} } = data
+    login(loginWithEmail)
   }
 
   const setEmailCodeKey = (res) => {

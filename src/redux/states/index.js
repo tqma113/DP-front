@@ -3,6 +3,11 @@ export const Session = {
   clearSessionInfo: 'CLEAR_SESSION_INFO'
 }
 
+export const User = {
+  setUser: 'SET_USER',
+  clearUser: 'CLEAR_USER'
+}
+
 export const LoadStatus = {
   reload: 'RELOAD',
   onload: 'ONLOAD',

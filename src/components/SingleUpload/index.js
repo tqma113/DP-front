@@ -8,7 +8,7 @@ import Less from './index.module.less'
 import './index.less'
 
 const SingleUplaod = (props) => {
-  const { className = '', style = {}, uploadStyle = {}, buttonStyle = {}, onLoad, client, mutations = {} } = props
+  const { className = '', style = {}, uploadStyle = {}, buttonStyle = {}, onLoad, mutate, mutations = {} } = props
 
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -54,26 +54,21 @@ const SingleUplaod = (props) => {
     }
 
     setUploading(true);
-    try {
-      const res = await client.mutate({
-        mutation: mutations.UploadImageMutation,
-        variables: {
-          image
-        }
-      })
-      const { data = {} } = res
-      const { uploadSingleImage } = data
-      const { isSuccess = false, url } = uploadSingleImage
-      if (isSuccess) {
-        setImageUrl(url)
-        setUploadSuccess(true)
-        if (onLoad) onLoad(image, url, imageBase64)
-        message.success('上传成功!')
-      } else {
-        message.error('上传失败!')
+    const data = await mutate({
+      mutation: mutations.UploadImageMutation,
+      variables: {
+        image
       }
-    } catch (err) {
-      message.error('数据发送失败,请重试')
+    })
+    const { uploadSingleImage } = data
+    const { isSuccess = false, url } = uploadSingleImage
+    if (isSuccess) {
+      setImageUrl(url)
+      setUploadSuccess(true)
+      if (onLoad) onLoad(image, url, imageBase64)
+      message.success('上传成功!')
+    } else {
+      message.error('上传失败!')
     }
     setUploading(false)
   }

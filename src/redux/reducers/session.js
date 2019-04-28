@@ -3,13 +3,12 @@ import { Session } from '../states'
 export default (state = {}, action) => {
   switch(action.type) {
     case Session.setSessionInfo:
-      let isValid = action.sessionInfo && action.user;
+      let isValid = action.sessionInfo;
       if (isValid) {
         return {
           ...state,
           status: true,
-          info: action.sessionInfo || {},
-          user: { [action.user.username ]:action.user } || {}
+          info: action.sessionInfo || {}
         }
       }
 
@@ -19,8 +18,7 @@ export default (state = {}, action) => {
       return {
         ...state,
         status: false,
-        info: {},
-        user: {}
+        info: {}
       }
 
     default:

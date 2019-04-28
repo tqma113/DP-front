@@ -1,49 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import Less from './index.module.less'
 
-class Horologe extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      timeout: null,
-      interval: null
-    }
-    this.horologe = React.createRef()
-  }
+const Horologe = (props) => {
+  const horologe = useRef()
 
-  componentDidMount() {
-    try {
-      let timeout = setTimeout(this.draw)
-      let interval = setInterval(this.draw, 1000)
-      this.setState({
-        timeout,
-        interval
-      })
-    } catch(err) {
-      clearInterval(this.state.interval);
-      clearTimeout(this.state.timeout)
-    }
-  }
+  const [time, setTime] = useState()
 
-  componentWillUnmount() {
-    if (this.state.timeout) {
-      clearTimeout(this.state.timeout)
-    }
+  useEffect(() => {
+    let timeout = setTimeout(() => {
+      draw()
+      clearTimeout(timeout)
+    }, 1000)
+  })
 
-    if ( this.state.interval) {
-      clearInterval(this.state.interval)
-    }
-  }
-
-  draw = () => {
+  const draw = () => {
     try {
       let now = new Date()
       let second = now.getSeconds()
       let minute = now.getMinutes()
       let hour = now.getHours()
 
-      const ctx = this.horologe.current.getContext('2d')
+      setTime(`${hour}:${minute}:${second}`)
+
+      const ctx = horologe.current.getContext('2d')
       ctx.clearRect(0, 0, 800, 800);
       ctx.beginPath();
       ctx.lineCap = "round";
@@ -138,16 +118,16 @@ class Horologe extends React.Component {
 
     }
   }
-  render() {
-    const { horologe } = this
-    return (
-      <section className={Less['floating']}>
-        <section className={Less['horologe-container']}>
-          <canvas ref={horologe} className={Less.horologe} width="800" height="800" />
-        </section>
+
+  draw()
+
+  return (
+    <section className={Less['floating']}>
+      <section className={Less['horologe-container']}>
+        <canvas ref={horologe} className={Less.horologe} width="800" height="800" />
       </section>
-    )
-  }
+    </section>
+  )
 }
 
 export default Horologe

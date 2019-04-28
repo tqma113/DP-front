@@ -20,17 +20,9 @@ export const mutate = (mutationName, variables, options) => new Promise((resolve
       variables
     })
     const { data } = res
-    const a = data[names[mutationName]]
-    const { isSuccess = false, extension = {}, ...others } = a
-    if (isSuccess) {
-      resolve(others)
-    } else {
-      const { errors = [] } = extension
-      const { message = '' } = errors[0]
-      message.error(message)
-      reject(message)
-    }
+    resolve(data)
   } catch (err) {
+    reject(err)
     message.error('请求发送失败,请重试')
   }
 })

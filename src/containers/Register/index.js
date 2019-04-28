@@ -42,7 +42,7 @@ const Register = (props) => {
     handlers.onload()
   })
 
-  const { handlers = {}, form = {}, client = {}, mutations = {} } = props
+  const { handlers = {}, form = {}, mutate, mutations = {} } = props
 
 
   const { getFieldDecorator, getFieldValue } = form
@@ -148,89 +148,59 @@ const Register = (props) => {
   }
 
   const sendEmailCodeMutation = async ({ email = '' }) => {
-    try {
-      const res = await client.mutate({
-        mutation: mutations.SendEmailCodeMutation,
-        variables: {
-          email
-        }
-      })
-      const { data = {} } = res
-      const { sendEmailCode = {} } = data
-      setEmailCodeKey(sendEmailCode)
-    } catch (err) {
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+    const data = await mutate({
+      mutation: mutations.SendEmailCodeMutation,
+      variables: {
+        email
+      }
+    })
+    const { sendEmailCode = {} } = data
+    setEmailCodeKey(sendEmailCode)
   }
 
   const ackEmailCodeMutation = async ({ code = '', email = '' }) => {
-    try {
-      const res = await client.mutate({
-        mutation: mutations.AckEmailCodeMutation,
-        variables: {
-          code,
-          email,
-          key: emailSendKey
-        }
-      })
-      const { data = {} } = res
-      const { ackEmail = {} } = data
-      setEmailKeyRes(ackEmail)
-    } catch (err) {
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+    const data = await mutate({
+      mutation: mutations.AckEmailCodeMutation,
+      variables: {
+        code,
+        email,
+        key: emailSendKey
+      }
+    })
+    const { ackEmail = {} } = data
+    setEmailKeyRes(ackEmail)
   }
 
   const checkUsernameMutation = async ({ username = '' }) => {
-    try {
-      const res = await client.mutate({
-        mutation: mutations.CheckUsernameMutation,
-        variables: {
-          username
-        }
-      })
-      const { data = {} } = res
-      const { checkUsername = {} } = data
-      setUsernameKeyRes(checkUsername)
-    } catch (err) {
-      setUsernameKeyStatus(0)
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+    const data = await mutate({
+      mutation: mutations.CheckUsernameMutation,
+      variables: {
+        username
+      }
+    })
+    const { checkUsername = {} } = data
+    setUsernameKeyRes(checkUsername)
   }
 
   const registerMutation = async ({ username = '', nickname = '', email = '', gender = '', birthday = '', address = '', statement = '' }) => {
     handlers.reload()
-    try {
-      const res = await client.mutate({
-        mutation: mutations.RegisterMutation,
-        variables: {
-          username,
-          nickname,
-          address,
-          birthday,
-          gender,
-          email,
-          statement,
-          u_key: usernameKey,
-          e_key: emailKey,
-          hd_portrial: imageUrl
-        }
-      })
-      const { data = {} } = res
-      const { register = {} } = data
-      setRegister(register)
-    } catch (err) {
-      handlers.onload()
-      Modal.error({
-        title: '请求发送失败,请重试'
-      })
-    }
+    const data = await mutate({
+      mutation: mutations.RegisterMutation,
+      variables: {
+        username,
+        nickname,
+        address,
+        birthday,
+        gender,
+        email,
+        statement,
+        u_key: usernameKey,
+        e_key: emailKey,
+        hd_portrial: imageUrl
+      }
+    })
+    const { register = {} } = data
+    setRegister(register)
   }
 
   const setEmailCodeKey = (res) => {
