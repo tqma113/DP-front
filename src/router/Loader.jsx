@@ -14,13 +14,9 @@ const Loader = (props) => {
   const [categorys, setCategorys] = useState()
 
   let variables = {}
-  let skip = false
 
-  let username = getCookie('username') || sessionStorage.getItem('username') || localStorage.getItem('username')
-  let token = getCookie('token') || sessionStorage.getItem('token') || localStorage.getItem('token')
-  if (!username || !token) {
-    skip = true
-  }
+  let username = getCookie('username') || sessionStorage.getItem('username') || localStorage.getItem('username') || ''
+  let token = getCookie('token') || sessionStorage.getItem('token') || localStorage.getItem('token') || ''
 
   variables = {
     username,
@@ -56,9 +52,8 @@ const Loader = (props) => {
     <Query
       query={QueryInitData}
       variables={variables}
-      skip={skip}
     >
-      {({ loading, error, data, refetch, networkStatus}) => {
+      {({ loading, error, data = {}, refetch, networkStatus}) => {
         if (networkStatus === 4) return null;
         if (loading) return null;
         if (error) {
