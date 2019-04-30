@@ -10,13 +10,13 @@ const classList = ['is-loading', 'load-success', 'login', 'login-loading']
 
 const Controller = (props) => {
   const { store, children } = props
-  const { loadStatus = 0 } = store
+  const { floatStatus = 0 } = store
 
   const [spinClass, setSpinClass] = useState()
 
   useEffect(() => {
     let timeout = setTimeout(() => {
-      setSpinClass(Less[classList[loadStatus]])
+      setSpinClass(Less[classList[floatStatus]])
       clearTimeout(timeout)
     }, 500);
   })

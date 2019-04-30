@@ -7,8 +7,9 @@ import './index.less'
 const FormItem = Form.Item
 
 const PasswordSetting = (props) => {
-  const { handlers, form, mutate, mutations } = props
+  const { handlers, form, mutate, mutations, store = {} } = props
   const { getFieldDecorator } = form
+  const { loadStatus } = store
 
   const [emailCodeSendKey, setEmailCodeSendKey] = useState()
   const [emailCodeKey, setEmailCodeKey] = useState()
@@ -24,7 +25,7 @@ const PasswordSetting = (props) => {
   }, [emailCodeTimer])
 
   useEffect(() => {
-    handlers.onload()
+    handlers.onload({ loadStatus })
   })
 
   const handleSendCodeClick = () => {

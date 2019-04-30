@@ -1,33 +1,26 @@
 import { LoadStatus } from '../states'
 
-const getLoadingAction = () => {
+const getInitAction = () => {
   return {
-    type: LoadStatus.reload
+    type: LoadStatus.init
   }
 }
 
-const getOnloadAction = () => {
+const getAuthAction = () => {
   return {
-    type: LoadStatus.onload
+    type: LoadStatus.auth
   }
 }
 
-const getLoadLoginAction = () => {
+const getLoadAction = () => {
   return {
-    type: LoadStatus.login
-  }
-}
-
-const getLoginLoadingAction = () => {
-  return {
-    type: LoadStatus.loginLoading
+    type: LoadStatus.load
   }
 }
 
 
 export {
-  getLoadingAction,
-  getOnloadAction,
-  getLoadLoginAction,
-  getLoginLoadingAction
+  getInitAction,
+  getAuthAction,
+  getLoadAction
 }

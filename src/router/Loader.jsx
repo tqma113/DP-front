@@ -3,13 +3,15 @@ import { Query } from 'react-apollo'
 import { message } from 'antd'
 
 import getCookie from '@utils/getCookie'
-import { QuerySessionState } from '@graphql/querys'
+import { QueryInitData } from '@graphql/querys'
 
 import map from '@map'
 
 const Loader = (props) => {
   const { children, handlers, store } = props
-  const { session: { status } } = store
+  const { session: { status }, loadStatus } = store
+
+  const [categorys, setCategorys] = useState()
 
   let variables = {}
   let skip = false
@@ -32,9 +34,27 @@ const Loader = (props) => {
     })
   }
 
+  const setLoginState = (data) => {
+    const { isSuccess, sessionInfo, user } = data
+    if (isSuccess && !status) {
+      handleLoad(user, sessionInfo)
+    }
+  }
+
+  const setCategorysData = (data) => {
+    const { isSuccess, categorys } = data
+    if (isSuccess) {
+      setCategorys(categorys)
+    }
+  }
+
+  const setInit = () => {
+    handlers.init({ categorys, loadStatus })
+  }
+
   return (
     <Query
-      query={QuerySessionState}
+      query={QueryInitData}
       variables={variables}
       skip={skip}
     >
@@ -46,15 +66,14 @@ const Loader = (props) => {
           return null;
         }
 
-        const { checkLoginState } = data
-        const { isSuccess, sessionInfo, user } = checkLoginState
-        if (isSuccess && !status) {
-          handleLoad(user, sessionInfo)
-        }
+        const { checkLoginState, categorys } = data
+        setLoginState(checkLoginState)
 
-        return (
-          {...children}
-        )
+        setCategorysData(categorys)
+
+        setInit()
+
+        return loadStatus > 0 ? ({...children}) : null
       }}
     </Query>
   )

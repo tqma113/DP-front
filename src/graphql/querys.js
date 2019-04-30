@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-const QuerySessionState = gql`
+const QueryInitData = gql`
   query ($username: ID!, $token: String!) {
     checkLoginState (username: $username, token: $token) {
       sessionInfo {
@@ -8,7 +8,7 @@ const QuerySessionState = gql`
         username
         isRefresh
       }
-      user{
+      user {
         id
         username
         nickname
@@ -52,6 +52,21 @@ const QuerySessionState = gql`
         }
       }
       isSuccess
+      extension {
+        operator
+        errors{
+          path
+          message
+        }
+      }
+    }
+    categorys {
+      isSuccess
+      categorys {
+        id
+        subject
+        description
+      }
       extension {
         operator
         errors{
@@ -121,6 +136,6 @@ const QueryUsers = gql`
 `
 
 export {
-  QuerySessionState,
+  QueryInitData,
   QueryUsers
 }

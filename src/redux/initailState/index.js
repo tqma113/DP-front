@@ -2,8 +2,11 @@ import session from './session'
 
 export default {
   // init store
-  users: {},
   session,
   loadStatus: 0,
-  messageStatus: 0
+  floatStatus: 0,
+  messageStatus: 0,
+
+  users: {},
+  categorys: []
 }

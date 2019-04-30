@@ -6,12 +6,12 @@ import Less from './index.module.less'
 const TabPane = Tabs.TabPane;
 
 const Login = (props) => {
-  const { handlers, form, mutations, mutate } = props
+  const { handlers = {}, form = {}, mutations = {}, mutate, store = {} } = props
   const { getFieldDecorator, getFieldValue } = form;
+  const { loadStatus } = store
 
   const [timer, setTimer] = useState(0)
   const [codeKey, setCodeKey] = useState('')
-  const [loadStatus, setLoadStatus] = useState(false)
 
   useEffect(() => {
     if (timer > 0) {
@@ -24,8 +24,8 @@ const Login = (props) => {
 
   useEffect(() => {
     if (!loadStatus) {
+      handlers.onload({ loadStatus })
       handlers.turnToLogin()
-      setLoadStatus(true)
     }
   })
 

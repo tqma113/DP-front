@@ -2,13 +2,11 @@ import { LoadStatus } from '../states'
 
 export default (state = {}, action) => {
   switch(action.type) {
-    case LoadStatus.reload:
-      return 0
-    case LoadStatus.onload:
+    case LoadStatus.init:
       return 1
-    case LoadStatus.login:
+    case LoadStatus.auth:
       return 2
-    case LoadStatus.loginLoading:
+    case LoadStatus.load:
       return 3
     default:
       return state

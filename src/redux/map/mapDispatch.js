@@ -8,15 +8,23 @@ const {
   getClearSessionInfoAction
 } = actions.session
 const {
-  getLoadingAction,
-  getOnloadAction,
-  getLoadLoginAction,
-  getLoginLoadingAction
+  getInitAction,
+  getAuthAction,
+  getLoadAction
 } = actions.loadStatus
+const {
+  getFloatLoadingAction,
+  getFloatOnloadAction,
+  getFloatLoadLoginAction,
+  getFloatLoginLoadingAction
+} = actions.floatStatus
 const {
   getOpenMessageAction,
   getCloseMessageAction,
 } = actions.messageStatus
+const {
+  getSetCategorysAction
+} = actions.categorys
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   handlers: {
@@ -35,24 +43,44 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       dispatch(getClearSessionInfoAction())
       history.push('/')
     },
-    setSessionInfo: ({ sessionInfo, user }) => {
+    setSessionInfo: ({ sessionInfo = {}, user = {} } = {}) => {
       dispatch(getSetSessionInfoAction(sessionInfo))
       dispatch(getSetUsersAction([user]))
     },
-    setUsers: ({ users }) => {
+    setUsers: ({ users = [] } = {}) => {
       dispatch(getSetUsersAction(users))
     },
-    turnToLogin: () => {
-      dispatch(getLoadLoginAction())
+    setCategorys: ({ categorys = [] } = {}) => {
+      dispatch(getSetCategorysAction(categorys))
     },
-    turnToLoginLoading: () => {
-      dispatch(getLoginLoadingAction())
+    init: ({ categorys = [], loadStatus = 0 } = {}) => {
+      if (loadStatus === 0) {
+        dispatch(getSetCategorysAction(categorys))
+        dispatch(getInitAction())
+      }
     },
-    onload: () => {
-      dispatch(getOnloadAction())
+    auth: ({ loadStatus = 0 } = {}) => {
+      if (loadStatus === 1) {
+        dispatch(getAuthAction())
+      }
+    },
+    onload: ({ loadStatus = 0 } = {}) => {
+      if (loadStatus === 2) {
+        dispatch(getLoadAction())
+        dispatch(getFloatOnloadAction())
+      }
+      if (loadStatus === 3) {
+        dispatch(getFloatOnloadAction())
+      }
     },
     reload: () => {
-      dispatch(getLoadingAction())
+      dispatch(getFloatLoadingAction())
+    },
+    turnToLogin: () => {
+      dispatch(getFloatLoadLoginAction())
+    },
+    turnToLoginLoading: () => {
+      dispatch(getFloatLoginLoadingAction)
     },
     openMessage: () => {
       dispatch(getOpenMessageAction())

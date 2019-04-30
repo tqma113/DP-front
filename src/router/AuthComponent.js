@@ -7,7 +7,7 @@ import { connect } from '@map'
 
 const AuthComponent = (props) => {
   const { store = {}, match = {}, component = null, mutations = {}, mutate, auth = '', handlers = {}, location = {}, module = '' } = props
-  const { session } = store
+  const { session, loadStatus } = store
   const { status = false, info = {} } = session
   const { username: currentUsername } = info
   const { pathname = '' } = location
@@ -20,8 +20,10 @@ const AuthComponent = (props) => {
   useEffect(() => {
     if (!authStatus) {
       checkPermission()
+    } else {
+      handlers.auth({ loadStatus })
     }
-  }, [status])
+  })
 
   const checkPermission = async () => {
     switch (auth) {
@@ -62,10 +64,10 @@ const AuthComponent = (props) => {
     }
   }
 
-  const ConnectComponent = connect(component, module)
+  const C = component
 
   return (
-    authStatus ? <ConnectComponent {...subProps} /> : null
+    authStatus ? <C {...subProps} /> : null
   )
 }
 

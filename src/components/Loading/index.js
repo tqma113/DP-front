@@ -20,7 +20,7 @@ const iconStyle = {
 
 const Loading = (props) => {
   const { store, handlers } = props
-  const { loadStatus = 0, session = {} } = store
+  const { floatStatus = 0, session = {} } = store
   const { info = {} } = session
   const { username } = info
 
@@ -30,20 +30,20 @@ const Loading = (props) => {
 
   useEffect(() => {
     let timeout = setTimeout(() => {
-      setLoadingClass(Less[classList[loadStatus]])
+      setLoadingClass(Less[classList[floatStatus]])
       setLoadingStatus(true)
       clearTimeout(timeout)
     }, 500);
   })
 
   const handleClick = () => {
-    if (loadStatus > 0) {
+    if (floatStatus > 0) {
       setOperatorStatus(!operatorStatus)
     }
   }
 
   const handlePersonClick = () => {
-    if (loadStatus) {
+    if (floatStatus) {
       if (username) {
         handlers.go(`/${username}`)
       } else {
@@ -53,19 +53,19 @@ const Loading = (props) => {
   }
 
   const handleMessageClick = () => {
-    if (loadStatus) {
+    if (floatStatus) {
       handlers.openMessage()
     }
   }
 
   const handleNewArticleClick = () => {
-    if (loadStatus) {
+    if (floatStatus) {
       console.log('go to new article')
     }
   }
 
   const handleLogoutClick = () => {
-    if (loadStatus) {
+    if (floatStatus) {
       handlers.logout()
     }
   }

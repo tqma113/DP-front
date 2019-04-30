@@ -3,19 +3,29 @@ export const Session = {
   clearSessionInfo: 'CLEAR_SESSION_INFO'
 }
 
-export const Users = {
-  setUser: 'SET_USER',
+export const LoadStatus = {
+  init: 'INIT',
+  auth: 'AUTH',
+  load: 'LOAD'
 }
 
-export const LoadStatus = {
-  reload: 'RELOAD',
+export const floatStatus = {
+  loading: 'LOADING',
   onload: 'ONLOAD',
   login: 'TUEN_TO_LOGIN',
   loginLoading: 'TURN_TO_LOGIN_LOADING'
 }
 
-
 export const messageStatus = {
   close: 'CLOSE',
   open: 'OPEN'
+}
+
+export const Users = {
+  setUser: 'SET_USER',
+}
+
+
+export const Categorys = {
+  setCategorys: 'SET_CATEGORYS',
 }
