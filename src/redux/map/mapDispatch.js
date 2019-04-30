@@ -80,7 +80,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       dispatch(getFloatLoadLoginAction())
     },
     turnToLoginLoading: () => {
-      dispatch(getFloatLoginLoadingAction)
+      dispatch(getFloatLoginLoadingAction())
     },
     openMessage: () => {
       dispatch(getOpenMessageAction())
@@ -89,6 +89,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       dispatch(getCloseMessageAction())
     },
     goBack: () => {
+      dispatch(getFloatLoadingAction())
+
       const { history = {} } = ownProps
       const { location = {} } = history
       const { search = '' } = location
@@ -100,7 +102,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
           searchObj[arr[0]] = arr[1]
         })
         if (searchObj.from) {
-          history.push('/' + searchObj.from)
+          history.push(searchObj.from)
         } else {
           history.push('/')
         }
@@ -109,6 +111,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       }
     },
     go: (path) => {
+      dispatch(getFloatLoadingAction())
+
       const { history } = ownProps
       history.push(path)
     }

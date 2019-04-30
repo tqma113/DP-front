@@ -22,7 +22,6 @@ export default [
   {
     path: '/login',
     component: Login,
-    exact: true,
     auth: permissions.loginPage,
     module: 'Login'
   },
@@ -41,16 +40,25 @@ export default [
     module: 'PasswordSetting'
   },
   {
-    path: '/:username',
-    component: PersonalCenter,
-    auth: permissions.personalCenter,
-    module: 'PersonalCenter'
-  },
-  {
     path: '/edit',
     component: PersonalCenter,
+    exact: true,
     auth: permissions.isLogged,
-    module: 'PersonalCenter'
+    module: 'PersonalEdit',
+  },
+  {
+    path: '/article/create',
+    component: ArticleCreate,
+    exact: true,
+    auth: permissions.isLogged,
+    module: 'ArticleCreate'
+  },
+  {
+    path: '/article/edit/:id',
+    component: ArticleEdit,
+    exact: true,
+    auth: permissions.isSelfArticle,
+    module: 'ArticleEdit'
   },
   {
     path: '/article/:id',
@@ -59,16 +67,10 @@ export default [
     module: 'Article'
   },
   {
-    path: '/article/create',
-    component: ArticleCreate,
-    auth: permissions.isLogged,
-    module: 'ArticleCreate'
-  },
-  {
-    path: '/article/edit/:id',
-    component: ArticleEdit,
-    auth: permissions.isSelfArticle,
-    module: 'ArticleEdit'
+    path: '/:username',
+    component: PersonalCenter,
+    auth: permissions.personalCenter,
+    module: 'PersonalCenter'
   },
   {
     path: null,

@@ -8,7 +8,7 @@ const TabPane = Tabs.TabPane;
 const Login = (props) => {
   const { handlers = {}, form = {}, mutations = {}, mutate, store = {} } = props
   const { getFieldDecorator, getFieldValue } = form;
-  const { loadStatus } = store
+  const { loadStatus, floatStatus } = store
 
   const [timer, setTimer] = useState(0)
   const [codeKey, setCodeKey] = useState('')
@@ -23,8 +23,10 @@ const Login = (props) => {
   }, [timer])
 
   useEffect(() => {
-    if (!loadStatus) {
+    if (loadStatus === 2) {
       handlers.onload({ loadStatus })
+    }
+    if (loadStatus >= 2 && floatStatus !== 2) {
       handlers.turnToLogin()
     }
   })

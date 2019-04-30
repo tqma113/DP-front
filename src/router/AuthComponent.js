@@ -29,13 +29,15 @@ const AuthComponent = (props) => {
     switch (auth) {
       case permissions.isLogged:
         if (!status) {
-          return < Redirect to="/login" from={pathname} />
+          handlers.go('/login?from=' + pathname)
         }
+        setAuthStatus(true)
       break;
       case permissions.loginPage:
         if (status) {
           handlers.goBack()
         }
+        setAuthStatus(true)
       break;
       case permissions.personalCenter:
         const data = await mutate(
@@ -48,7 +50,7 @@ const AuthComponent = (props) => {
         const { isSuccess = false } = checkUsernameValid
 
         if (!isSuccess) {
-          return <Redirect to='notmacth' />
+          handlers.go('/notmatch')
         }
 
         let isSelf = username === currentUsername

@@ -37,15 +37,22 @@ const Loader = (props) => {
     }
   }
 
-  const setCategorysData = (data) => {
+  const getCategorysData = (data) => {
     const { isSuccess, categorys } = data
+
     if (isSuccess) {
-      setCategorys(categorys)
+      return categorys
+    } else {
+      return []
     }
   }
 
-  const setInit = () => {
-    handlers.init({ categorys, loadStatus })
+  const setInit = ({ checkLoginState, categorys }) => {
+    setLoginState(checkLoginState)
+
+    const ctg = getCategorysData(categorys)
+
+    handlers.init({ categorys: ctg, loadStatus })
   }
 
   return (
@@ -62,11 +69,8 @@ const Loader = (props) => {
         }
 
         const { checkLoginState, categorys } = data
-        setLoginState(checkLoginState)
 
-        setCategorysData(categorys)
-
-        setInit()
+        setInit({ checkLoginState, categorys })
 
         return loadStatus > 0 ? ({...children}) : null
       }}
