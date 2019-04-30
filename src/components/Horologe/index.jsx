@@ -5,7 +5,7 @@ import Less from './index.module.less'
 const Horologe = (props) => {
   const horologe = useRef()
 
-  const [time, setTime] = useState()
+  const [, setTime] = useState()
 
   useEffect(() => {
     let timeout = setTimeout(() => {

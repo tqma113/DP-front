@@ -6,7 +6,18 @@ import permissions from './permissions'
 import { connect } from '@map'
 
 const AuthComponent = (props) => {
-  const { store = {}, match = {}, component = null, mutations = {}, mutate, auth = '', handlers = {}, location = {}, module = '' } = props
+  const {
+    store = {},
+    match = {},
+    component = null,
+    mutations = {},
+    mutate,
+    auth = '',
+    handlers = {},
+    location = {},
+    module = '',
+    documentTitle = ''
+  } = props
   const { session, loadStatus } = store
   const { status = false, info = {} } = session
   const { username: currentUsername } = info
@@ -23,6 +34,10 @@ const AuthComponent = (props) => {
     } else {
       handlers.auth({ loadStatus })
     }
+  })
+
+  useEffect(() => {
+    document.title = documentTitle
   })
 
   const checkPermission = async () => {

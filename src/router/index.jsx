@@ -13,7 +13,14 @@ const GlobalRouter = function () {
         {routes.map((route, i) => (
           <Route key={i} path={route.path} exact={route.exact} render={props =>
             // pass the sub-routes down to keep nesting
-            <AuthComponent component={route.component} auth={route.auth} module={route.module} {...props} routes={route.routes} />
+            <AuthComponent
+              documentTitle={route.documentTitle}
+              component={route.component}
+              auth={route.auth}
+              module={route.module}
+              {...props}
+              routes={route.routes}
+            />
           } />
         ))}
       </Switch>
