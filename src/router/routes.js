@@ -25,7 +25,7 @@ export default [
     component: Login,
     auth: permissions.loginPage,
     module: 'Login',
-    documentTitle: 'Now'
+    documentTitle: 'Now - 登录'
   },
   {
     path: '/register',
@@ -33,7 +33,7 @@ export default [
     exact: true,
     auth: permissions.none,
     module: 'Register',
-    documentTitle: 'Now'
+    documentTitle: 'Now - 注册'
   },
   {
     path: '/password_setting',
@@ -41,7 +41,7 @@ export default [
     exact: true,
     auth: permissions.isLogged,
     module: 'PasswordSetting',
-    documentTitle: 'Now'
+    documentTitle: 'Now - 设置密码'
   },
   {
     path: '/edit',
@@ -49,7 +49,7 @@ export default [
     exact: true,
     auth: permissions.isLogged,
     module: 'PersonalEdit',
-    documentTitle: 'Now'
+    documentTitle: 'Now - 编辑个人信息'
   },
   {
     path: '/article/create',
@@ -57,7 +57,7 @@ export default [
     exact: true,
     auth: permissions.isLogged,
     module: 'ArticleCreate',
-    documentTitle: 'Now'
+    documentTitle: 'Now - 写文章'
   },
   {
     path: '/article/edit/:id',
@@ -65,21 +65,21 @@ export default [
     exact: true,
     auth: permissions.isSelfArticle,
     module: 'ArticleEdit',
-    documentTitle: 'Now'
+    documentTitle: 'Now - 编辑文章'
   },
   {
     path: '/article/:id',
     component: Article,
     auth: permissions.none,
     module: 'Article',
-    documentTitle: 'Now'
+    documentTitle: 'Now - '
   },
   {
     path: '/:username',
     component: PersonalCenter,
     auth: permissions.personalCenter,
     module: 'PersonalCenter',
-    documentTitle: 'Now'
+    documentTitle: 'Now - '
   },
   {
     path: null,

@@ -25,6 +25,11 @@ const PersonalCenter = (props) => {
     handlers.onload({ loadStatus })
   })
 
+  useEffect(() => {
+    console.log(username)
+    document.title = document.title + username
+  })
+
   if (!user) {
     message.error('网络错误')
   }
