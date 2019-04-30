@@ -6,6 +6,7 @@ const Login = AsyncComponent(() => import('@containers/Login'))
 const Register = AsyncComponent(() => import('@containers/Register'))
 const PasswordSetting = AsyncComponent(() => import('@containers/PasswordSetting'))
 const PersonalCenter = AsyncComponent(() => import('@containers/PersonalCenter'))
+const PersonalEdit = AsyncComponent(() => import('@containers/PersonalEdit'))
 const Article = AsyncComponent(() => import('@containers/Article'))
 const ArticleCreate = AsyncComponent(() => import('@containers/ArticleCreate'))
 const ArticleEdit = AsyncComponent(() => import('@containers/ArticleEdit'))
@@ -45,7 +46,7 @@ export default [
   },
   {
     path: '/edit',
-    component: PersonalCenter,
+    component: PersonalEdit,
     exact: true,
     auth: permissions.isLogged,
     module: 'PersonalEdit',

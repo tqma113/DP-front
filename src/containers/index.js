@@ -7,6 +7,7 @@ import PasswordSetting from './PasswordSetting'
 import Article from './Article'
 import ArticleCreate from './ArticleCreate'
 import ArticleEdit from './ArticleEdit'
+import PersonalEdit from './PersonalEdit'
 
 export {
   Page,
@@ -17,5 +18,6 @@ export {
   PasswordSetting,
   Article,
   ArticleCreate,
-  ArticleEdit
+  ArticleEdit,
+  PersonalEdit
 }
