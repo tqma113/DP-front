@@ -2,7 +2,7 @@ import session from './session'
 
 export default {
   // init store
-  user: {},
+  users: {},
   session,
   loadStatus: 0,
   messageStatus: 0

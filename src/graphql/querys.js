@@ -62,7 +62,65 @@ const QuerySessionState = gql`
     }
   }
 `
+const QueryUsers = gql`
+  query ($usernames: [String!]!) {
+    users (usernames: $usernames) {
+      users {
+        id
+        username
+        nickname
+        location
+        gender
+        birthday
+        industry {
+          name
+          description
+          id
+        }
+        register_at
+        last_login_at
+        head_portrait
+        statement
+        email
+        eduBC {
+          school
+          degree
+          major
+        }
+        articles {
+          id
+          titile
+          abstract
+        }
+        categorys {
+          id
+        }
+        concerned_categorys {
+          id
+        }
+        concerned {
+          id
+        }
+        likes {
+          id
+        }
+        collections {
+          id
+        }
+      }
+      isSuccess
+      extension {
+        operator
+        errors{
+          path
+          message
+        }
+      }
+    }
+  }
+`
 
 export {
-  QuerySessionState
+  QuerySessionState,
+  QueryUsers
 }

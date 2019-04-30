@@ -41,6 +41,12 @@ export default [
     path: '/:username',
     component: PersonalCenter,
     auth: permissions.personalCenter,
+    module: 'PersonalCenter'
+  },
+  {
+    path: '/user/edit',
+    component: PersonalCenter,
+    auth: permissions.isLogged,
     module: ''
   },
   {

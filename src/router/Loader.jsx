@@ -1,31 +1,62 @@
 import React, { useState } from 'react'
+import { Query } from 'react-apollo'
 import { message } from 'antd'
+
+import getCookie from '@utils/getCookie'
+import { QuerySessionState } from '@graphql/querys'
 
 import map from '@map'
 
 const Loader = (props) => {
-  const { data = {}, handlers = {}, error, children } = props
-  const { checkLoginState = {} } = data
-  const { isSuccess = false, user = {}, sessionInfo = false } = checkLoginState
+  const { children, handlers, store } = props
+  const { session: { status } } = store
 
-  const [loadStatus, setLoadStatus] = useState(false)
+  let variables = {}
+  let skip = false
 
-  if (error) {
-    message.error('无法拉取数据')
+  let username = getCookie('username') || sessionStorage.getItem('username') || localStorage.getItem('username')
+  let token = getCookie('token') || sessionStorage.getItem('token') || localStorage.getItem('token')
+  if (!username || !token) {
+    skip = true
   }
 
-  if (isSuccess && !loadStatus) {
+  variables = {
+    username,
+    token
+  }
+
+  const  handleLoad = (user, sessionInfo) => {
     handlers.setSessionInfo({
       sessionInfo,
       user
     })
-    setLoadStatus(true)
   }
 
   return (
-    <React.Fragment>
-      {loadStatus && {...children}}
-    </React.Fragment>
+    <Query
+      query={QuerySessionState}
+      variables={variables}
+      skip={skip}
+    >
+      {({ loading, error, data, refetch, networkStatus}) => {
+        if (networkStatus === 4) return null;
+        if (loading) return null;
+        if (error) {
+          message.error(error)
+          return null;
+        }
+
+        const { checkLoginState } = data
+        const { isSuccess, sessionInfo, user } = checkLoginState
+        if (isSuccess && !status) {
+          handleLoad(user, sessionInfo)
+        }
+
+        return (
+          {...children}
+        )
+      }}
+    </Query>
   )
 }
 

@@ -1,9 +1,8 @@
 // import actions
 import actions from '../actions'
 const {
-  getSetUserAction,
-  getClearUserAction
-} = actions.user
+  getSetUsersAction,
+} = actions.users
 const {
   getSetSessionInfoAction,
   getClearSessionInfoAction
@@ -34,12 +33,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('username')
       dispatch(getClearSessionInfoAction())
-      dispatch(getClearUserAction())
       history.push('/')
     },
     setSessionInfo: ({ sessionInfo, user }) => {
       dispatch(getSetSessionInfoAction(sessionInfo))
-      dispatch(getSetUserAction(user))
+      dispatch(getSetUsersAction([user]))
+    },
+    setUsers: ({ users }) => {
+      dispatch(getSetUsersAction(users))
     },
     turnToLogin: () => {
       dispatch(getLoadLoginAction())

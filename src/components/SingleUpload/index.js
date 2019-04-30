@@ -8,7 +8,7 @@ import Less from './index.module.less'
 import './index.less'
 
 const SingleUplaod = (props) => {
-  const { className = '', style = {}, uploadStyle = {}, buttonStyle = {}, onLoad, mutate, mutations = {} } = props
+  const { className = '', style = {}, uploadStyle = {}, buttonStyle = {}, onLoad, mutate, mutations = {}, static: { api } } = props
 
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -60,7 +60,7 @@ const SingleUplaod = (props) => {
         image
       }
     )
-    const { uploadSingleImage } = data
+    const { uploadSingleImage = {} } = data
     const { isSuccess = false, url, extension = {} } = uploadSingleImage
     if (isSuccess) {
       setImageUrl(url)
@@ -88,7 +88,7 @@ const SingleUplaod = (props) => {
         onChange={handleUploadChange}
       >
         {imageUrl ?
-          <img className={Less['image']} src={imageUrl} alt="avatar" /> :
+          <img className={Less['image']} src={api.dev.static + imageUrl} alt="avatar" /> :
           imageBase64 ?
           <img className={Less['image']} src={imageBase64} alt="avatar" /> :
           <div>

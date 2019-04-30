@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Icon, Tabs } from 'antd'
+import { Row, Col, Icon, Tabs, message } from 'antd'
 
 import Less from './index.module.less'
 
 const TabPane = Tabs.TabPane
 
 const PersonalCenter = (props) => {
-  const { store = {}, handlers } = props
-  const { session, user = {} } = store
+  const { store = {}, handlers = {}, isSelf = false, username = '' } = props
+  const { session, users = {} } = store
+  let user = users[username] || {}
+
+  if (!user) {
+    message.error('网络错误')
+  }
 
   handlers.onload()
 
@@ -39,7 +44,14 @@ const PersonalCenter = (props) => {
           <Col>
             <Tabs>
               <TabPane tab="概述" key="1">
+              <Row>
+                <Col className={Less['title-1']}>热门文章</Col>
+              </Row>
+              <Row type="flex">
+                <Col span={8}>
 
+                </Col>
+              </Row>
               </TabPane>
               <TabPane tab="文章" key="2">
 

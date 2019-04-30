@@ -21,15 +21,14 @@ const Controller = (props) => {
     }, 500);
   })
 
-
   return (
     <section className={Less['controller-container'] + ' ' + spinClass}>
       <section className={Less['controller']}>
         <Loading />
       </section>
       <section className={Less['loading-mask']}></section>
-      <section className={Less['controller-content']}>{{...children}}</section>
       <Message />
+      <section className={Less['controller-content']}>{{...children}}</section>
     </section>
   )
 }

@@ -1,25 +1,3 @@
-import { graphql } from 'react-apollo'
-import { QuerySessionState } from '@graphql/querys'
-
-import getCookie from '@utils/getCookie'
-
-export const querys = {
-  Loader: [
-    graphql(QuerySessionState, {
-      options: () => {
-        let username = getCookie('username') || sessionStorage.getItem('username') || localStorage.getItem('username')
-        let token = getCookie('token') || sessionStorage.getItem('token') || localStorage.getItem('token')
-        return {
-          variables: {
-            username,
-            token
-          }
-        }
-      }
-    })
-  ],
-}
-
 export const mutations = {
   UploadImage: {
     UploadImageMutation: 'UploadImageMutation'

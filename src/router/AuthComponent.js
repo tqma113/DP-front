@@ -6,7 +6,7 @@ import permissions from './permissions'
 import { connect } from '@map'
 
 const AuthComponent = (props) => {
-  const { store = {}, match = {}, component = null, mutations = {}, mutate, auth = '', history = {}, handlers = {}, location = {}, module = '' } = props
+  const { store = {}, match = {}, component = null, mutations = {}, mutate, auth = '', handlers = {}, location = {}, module = '' } = props
   const { session } = store
   const { status = false, info = {} } = session
   const { username: currentUsername } = info
@@ -18,9 +18,8 @@ const AuthComponent = (props) => {
   const [subProps, setSubProps] = useState({ module })
 
   useEffect(() => {
-    if (!authStatus && status) {
+    if (!authStatus) {
       checkPermission()
-      setAuthStatus(true)
     }
   }, [status])
 
@@ -50,9 +49,13 @@ const AuthComponent = (props) => {
           return <Redirect to='notmacth' />
         }
 
-        setSubProps({...subProps, isSelf: username === currentUsername})
+        let isSelf = username === currentUsername
+
+        setSubProps({...subProps, isSelf, username })
+        setAuthStatus(true)
       break;
       case permissions.none:
+        setAuthStatus(true)
       break;
       default:
         return <Redirect to='notmacth' />
@@ -63,7 +66,6 @@ const AuthComponent = (props) => {
 
   return (
     authStatus ? <ConnectComponent {...subProps} /> : null
-    // <div></div>
   )
 }
 

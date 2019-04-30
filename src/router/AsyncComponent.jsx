@@ -43,10 +43,11 @@ export default (loadComponent) => {
     }
 
     render() {
+      const { history, store, handlers, ...rest } = this.props
       const C = this.state.component
 
       return (
-        C ? <C isSelf={this.props.isSelf}> </C> : null
+        C ? <C {...rest}> </C> : null
       )
     }
   }
