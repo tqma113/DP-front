@@ -7,6 +7,8 @@ export default {
   floatStatus: 0,
   messageStatus: 0,
 
+  documentTitle: 'Now',
+
   users: {},
   categorys: []
 }

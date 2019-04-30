@@ -29,3 +29,7 @@ export const Users = {
 export const Categorys = {
   setCategorys: 'SET_CATEGORYS',
 }
+
+export const DocumentTitle = {
+  setDocumentTitle: 'SET_DOCUMENT_TITLE'
+}

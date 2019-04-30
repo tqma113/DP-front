@@ -18,14 +18,14 @@ export default [
     component: Index,
     exact: true,
     auth: permissions.none,
-    documentTitle: 'Now'
+    documentTitle: '首页 - Now'
   },
   {
     path: '/login',
     component: Login,
     auth: permissions.loginPage,
     module: 'Login',
-    documentTitle: 'Now - 登录'
+    documentTitle: '登录 - Now'
   },
   {
     path: '/register',
@@ -33,7 +33,7 @@ export default [
     exact: true,
     auth: permissions.none,
     module: 'Register',
-    documentTitle: 'Now - 注册'
+    documentTitle: '注册 - Now'
   },
   {
     path: '/password_setting',
@@ -41,7 +41,7 @@ export default [
     exact: true,
     auth: permissions.isLogged,
     module: 'PasswordSetting',
-    documentTitle: 'Now - 设置密码'
+    documentTitle: '设置密码 - Now'
   },
   {
     path: '/edit',
@@ -49,7 +49,7 @@ export default [
     exact: true,
     auth: permissions.isLogged,
     module: 'PersonalEdit',
-    documentTitle: 'Now - 编辑个人信息'
+    documentTitle: '编辑个人信息 - Now'
   },
   {
     path: '/article/create',
@@ -57,7 +57,7 @@ export default [
     exact: true,
     auth: permissions.isLogged,
     module: 'ArticleCreate',
-    documentTitle: 'Now - 写文章'
+    documentTitle: '写文章 - Now'
   },
   {
     path: '/article/edit/:id',
@@ -65,26 +65,26 @@ export default [
     exact: true,
     auth: permissions.isSelfArticle,
     module: 'ArticleEdit',
-    documentTitle: 'Now - 编辑文章'
+    documentTitle: '编辑文章 - Now'
   },
   {
     path: '/article/:id',
     component: Article,
     auth: permissions.none,
     module: 'Article',
-    documentTitle: 'Now - '
+    documentTitle: ' - Now'
   },
   {
     path: '/:username',
     component: PersonalCenter,
     auth: permissions.personalCenter,
     module: 'PersonalCenter',
-    documentTitle: 'Now - '
+    documentTitle: ' - Now'
   },
   {
     path: null,
     component: NoMatch,
     auth: permissions.none,
-    documentTitle: 'Now - 404'
+    documentTitle: '404 - Now'
   }
 ]

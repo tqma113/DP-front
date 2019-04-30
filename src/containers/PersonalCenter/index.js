@@ -15,7 +15,7 @@ const grid = {
 
 const PersonalCenter = (props) => {
   const { store = {}, handlers = {}, isSelf = false, username = '', static: { api } } = props
-  const { loadStatus, users = {} } = store
+  const { loadStatus, users = {}, documentTitle = '' } = store
   const user = users[username] || {}
 
   const [overLoading, setOverviewLoading] = useState(true)
@@ -26,8 +26,7 @@ const PersonalCenter = (props) => {
   })
 
   useEffect(() => {
-    console.log(username)
-    document.title = document.title + username
+    document.title = user.nickname + documentTitle
   })
 
   if (!user) {
@@ -117,13 +116,6 @@ const PersonalCenter = (props) => {
                   )}
                 />
                 }
-                <Spin indicator={loadingIcon} spinning={overLoading}>
-                  <Row type="flex" className={Less['hot-articles']}>
-                    <Col span={8}>
-
-                    </Col>
-                  </Row>
-                </Spin>
               </TabPane>
               <TabPane tab="文章" key="2">
                 <Row type="flex" justify="space-between">

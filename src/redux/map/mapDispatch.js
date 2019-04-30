@@ -25,6 +25,9 @@ const {
 const {
   getSetCategorysAction
 } = actions.categorys
+const {
+  getSetDocumentTitleAction
+} = actions.documentTitle
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   handlers: {
@@ -52,6 +55,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     setCategorys: ({ categorys = [] } = {}) => {
       dispatch(getSetCategorysAction(categorys))
+    },
+    setDocumentTitle: ({ documentTitle = '' }) => {
+      dispatch(getSetDocumentTitleAction(documentTitle))
     },
     init: ({ categorys = [], loadStatus = 0 } = {}) => {
       if (loadStatus === 0) {
