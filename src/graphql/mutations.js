@@ -44,7 +44,7 @@ const RegisterMutation = gql`
             $statement: String!
             $u_key: String!,
             $e_key: String!
-            $hd_portrial: String!) {
+            $avatar: String!) {
     register (username: $username,
               nickname: $nickname,
               address: $address,
@@ -54,7 +54,7 @@ const RegisterMutation = gql`
               statement: $statement,
               u_key: $u_key,
               e_key: $e_key,
-              hd_portrial: $hd_portrial) {
+              avatar: $avatar) {
       isSuccess
       token
       username

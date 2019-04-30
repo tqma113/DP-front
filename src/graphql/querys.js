@@ -22,7 +22,7 @@ const QueryInitData = gql`
         }
         register_at
         last_login_at
-        head_portrait
+        avatar
         statement
         email
         eduBC {
@@ -94,7 +94,7 @@ const QueryUsers = gql`
         }
         register_at
         last_login_at
-        head_portrait
+        avatar
         statement
         email
         eduBC {
