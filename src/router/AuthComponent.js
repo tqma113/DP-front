@@ -30,18 +30,18 @@ const AuthComponent = (props) => {
   const [titleStatus, setTitleStatus] = useState(false)
 
   useEffect(() => {
-    if (!authStatus) {
-      checkPermission()
-    } else {
-      handlers.auth({ loadStatus })
-    }
-  })
-
-  useEffect(() => {
     if (!titleStatus) {
       document.title = documentTitle
       handlers.setDocumentTitle({ documentTitle })
       setTitleStatus(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!authStatus) {
+      checkPermission()
+    } else {
+      handlers.auth({ loadStatus })
     }
   })
 

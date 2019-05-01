@@ -6,7 +6,7 @@ const Index = (props) => {
 
   useEffect(() => {
     handlers.onload({ loadStatus })
-  })
+  }, [])
 
   return (
     <section>

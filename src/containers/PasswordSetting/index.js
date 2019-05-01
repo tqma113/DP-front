@@ -26,7 +26,7 @@ const PasswordSetting = (props) => {
 
   useEffect(() => {
     handlers.onload({ loadStatus })
-  })
+  }, [])
 
   const handleSendCodeClick = () => {
     form.validateFields(['email'], (err, values ) => {

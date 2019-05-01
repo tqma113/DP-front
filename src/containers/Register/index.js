@@ -22,6 +22,9 @@ const genderOptions = [{
 }]
 
 const Register = (props) => {
+  const { handlers = {}, form = {}, mutate, mutations = {} } = props
+  const { getFieldDecorator, getFieldValue } = form
+
   const [emailSendKey, setEmailSendKey] = useState()
   const [emailKey, setEmailKey] = useState()
   const [usernameKey, setUsernameKey] = useState()
@@ -40,12 +43,7 @@ const Register = (props) => {
 
   useEffect(() => {
     handlers.onload()
-  })
-
-  const { handlers = {}, form = {}, mutate, mutations = {} } = props
-
-
-  const { getFieldDecorator, getFieldValue } = form
+  }, [])
 
   const code = getFieldValue('code') || ''
   const canCodeInputVision = emailSendKey && !emailKey

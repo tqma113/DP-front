@@ -29,7 +29,7 @@ const Login = (props) => {
     if (loadStatus >= 2 && floatStatus !== 2) {
       handlers.turnToLogin()
     }
-  })
+  }, [])
 
   const remeber = getFieldValue('remeber')
 

@@ -22,12 +22,9 @@ const PersonalCenter = (props) => {
   const [articlesLoading, setArticleLoading] = useState(true)
 
   useEffect(() => {
-    handlers.onload({ loadStatus })
-  })
-
-  useEffect(() => {
     document.title = user.nickname + documentTitle
-  })
+    handlers.onload({ loadStatus })
+  }, [])
 
   if (!user) {
     message.error('网络错误')

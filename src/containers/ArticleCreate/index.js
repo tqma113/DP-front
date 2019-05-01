@@ -7,9 +7,8 @@ const ArticleCreate = (props) => {
   const { loadStatus } = store
 
   useEffect(() => {
-    console.log(loadStatus)
     handlers.onload({ loadStatus })
-  })
+  }, [])
 
   return (
     <section></section>
