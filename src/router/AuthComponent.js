@@ -27,14 +27,10 @@ const AuthComponent = (props) => {
 
   const [authStatus, setAuthStatus] = useState(false)
   const [subProps, setSubProps] = useState({ module })
-  const [titleStatus, setTitleStatus] = useState(false)
 
   useEffect(() => {
-    if (!titleStatus) {
       document.title = documentTitle
       handlers.setDocumentTitle({ documentTitle })
-      setTitleStatus(true)
-    }
   }, [])
 
   useEffect(() => {
