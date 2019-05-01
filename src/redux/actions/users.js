@@ -2,7 +2,7 @@ import { Users } from '../states'
 
 const getSetUsersAction = (users) => {
   return {
-    type: Users.setUser,
+    type: Users.setUsers,
     users
   }
 }

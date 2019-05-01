@@ -8,6 +8,7 @@ import messageStatus from './messageStatus'
 import categorys from './categorys'
 import floatStatus from './floatStatus'
 import documentTitle from './documentTitle'
+import articles from './articles'
 
 export default combineReducers({
   users,
@@ -16,5 +17,6 @@ export default combineReducers({
   messageStatus,
   categorys,
   floatStatus,
-  documentTitle
+  documentTitle,
+  articles
 })

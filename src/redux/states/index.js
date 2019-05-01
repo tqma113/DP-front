@@ -22,7 +22,11 @@ export const messageStatus = {
 }
 
 export const Users = {
-  setUser: 'SET_USER',
+  setUsers: 'SET_USERS',
+}
+
+export const Articles = {
+  setArticles: 'SET_ARTICLES',
 }
 
 

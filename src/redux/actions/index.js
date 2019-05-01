@@ -5,6 +5,7 @@ import * as messageStatus from './messageStatus'
 import * as categorys from './categorys'
 import * as floatStatus from './floatStatus'
 import * as documentTitle from './documentTitle'
+import * as articles from './articles'
 
 export default {
   users,
@@ -13,5 +14,6 @@ export default {
   messageStatus,
   categorys,
   floatStatus,
-  documentTitle
+  documentTitle,
+  articles
 }

@@ -32,7 +32,7 @@ const QueryInitData = gql`
         }
         articles {
           id
-          titile
+          title
           abstract
         }
         categorys {

@@ -1,15 +1,15 @@
-import { Users } from '../states'
+import { Articles } from '../states'
 
 export default (state = {}, action) => {
   switch(action.type) {
-    case Users.setUsers:
-      let users = {}
+    case Articles.setArticles:
+      let articles = {}
       action.users.forEach(item => {
-        users[item.username] = item
+        articles[item.id] = item
       })
       return {
-        ...state.users,
-        ...users
+        ...state.articles,
+        ...articles
       }
     default:
       return state

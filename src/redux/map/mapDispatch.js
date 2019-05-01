@@ -4,6 +4,9 @@ const {
   getSetUsersAction,
 } = actions.users
 const {
+  getSetArticlesAction
+} = actions.articles
+const {
   getSetSessionInfoAction,
   getClearSessionInfoAction
 } = actions.session
@@ -55,6 +58,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     setCategorys: ({ categorys = [] } = {}) => {
       dispatch(getSetCategorysAction(categorys))
+    },
+    setArticles: ({ articles = {} } = {}) => {
+      dispatch(getSetArticlesAction(articles))
     },
     setDocumentTitle: ({ documentTitle = '' }) => {
       dispatch(getSetDocumentTitleAction(documentTitle))

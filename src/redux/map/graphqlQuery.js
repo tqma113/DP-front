@@ -21,4 +21,7 @@ export const mutations = {
     AckEmailCodeMutation: 'AckEmailCodeMutation',
     SetPassowordMutation: 'SetPassowordMutation'
   },
+  ArticleCreate: {
+    CreateArticleMutation: 'CreateArticleMutation'
+  }
 }
