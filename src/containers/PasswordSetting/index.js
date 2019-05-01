@@ -57,6 +57,10 @@ const PasswordSetting = (props) => {
     })
   }
 
+  const handleCancel = () => {
+    handlers.goBack()
+  }
+
   const sendCodeMutation = async ({ email = '' }) => {
     const data = await mutate(
       mutations.SendEmailLoginCodeMutation,
@@ -238,7 +242,7 @@ const PasswordSetting = (props) => {
             <FormItem>
               <Row type="flex" justify="space-between">
                 <Col span={6}>
-                  <Button style={{width: '100%', textAlign: 'center'}}>取消</Button>
+                  <Button onClick={handleCancel} style={{width: '100%', textAlign: 'center'}}>取消</Button>
                 </Col>
                 <Col span={6} offset={1}>
                   <Button style={{width: '100%', textAlign: 'center'}} type="primary" htmlType="submit">确认</Button>

@@ -95,11 +95,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       dispatch(getCloseMessageAction())
     },
     goBack: () => {
-      dispatch(getFloatLoadingAction())
-
       const { history = {} } = ownProps
       const { location = {} } = history
-      const { search = '' } = location
+      const { search = '', pathname = '' } = location
 
       if (search) {
         let searchObj = {}
@@ -108,18 +106,27 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
           searchObj[arr[0]] = arr[1]
         })
         if (searchObj.from) {
+          if (pathname === searchObj.from) return
+
+          dispatch(getFloatLoadingAction())
           history.push(searchObj.from)
         } else {
+          dispatch(getFloatLoadingAction())
           history.push('/')
         }
       } else {
+        dispatch(getFloatLoadingAction())
         history.push('/')
       }
     },
     go: (path) => {
-      dispatch(getFloatLoadingAction())
+      const { history = {} } = ownProps
+      const { location = {} } = history
+      const { pathname } = location
 
-      const { history } = ownProps
+      if (path === pathname) return
+
+      dispatch(getFloatLoadingAction())
       history.push(path)
     }
   }

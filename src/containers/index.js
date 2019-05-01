@@ -8,6 +8,7 @@ import Article from './Article'
 import ArticleCreate from './ArticleCreate'
 import ArticleEdit from './ArticleEdit'
 import PersonalEdit from './PersonalEdit'
+import Layout from './Layout'
 
 export {
   Page,
@@ -19,5 +20,6 @@ export {
   Article,
   ArticleCreate,
   ArticleEdit,
-  PersonalEdit
+  PersonalEdit,
+  Layout
 }

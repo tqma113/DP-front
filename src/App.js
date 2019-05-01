@@ -10,7 +10,7 @@ import store from '@redux';
 // import './plugins/fontAwesome';
 
 import Router from '@router/index.jsx';
-import { Controller } from '@containers'
+import { Controller, Layout } from '@containers'
 
 import './App.less';
 
@@ -21,7 +21,9 @@ const App = function() {
         <LocaleProvider locale={zh_CN}>
           <BrowserRouter>
             <Controller>
-              <Router />
+              <Layout>
+                <Router />
+              </Layout>
             </Controller>
           </BrowserRouter>
         </LocaleProvider>
