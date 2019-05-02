@@ -23,7 +23,7 @@ const AuthComponent = (props) => {
   const { username: currentUsername } = info
   const { pathname = '' } = location
   const { params = {} } = match
-  const { username } = params
+  const { username, id } = params
 
   const [authStatus, setAuthStatus] = useState(false)
   const [subProps, setSubProps] = useState({ module })
@@ -56,7 +56,7 @@ const AuthComponent = (props) => {
         setAuthStatus(true)
       break;
       case permissions.personalCenter:
-        const data = await mutate(
+        let data = await mutate(
           mutations.checkUsernameValidMutation,
           {
             username
@@ -74,6 +74,25 @@ const AuthComponent = (props) => {
         setSubProps({...subProps, isSelf, username })
         setAuthStatus(true)
       break;
+      case permissions.article: {
+        data = await mutate(
+          mutations.checkArticleValidMutation,
+          {
+            id: Number(id)
+          }
+        )
+        const { checkArticleIdValid } = data
+        let { isSuccess = false } = checkArticleIdValid
+
+        if (!isSuccess) {
+          handlers.go('/notmatch')
+        }
+
+        setSubProps({...subProps, id: Number(id) })
+        setAuthStatus(true)
+
+        break;
+      }
       case permissions.none:
         setAuthStatus(true)
       break;

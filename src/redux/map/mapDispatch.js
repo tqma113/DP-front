@@ -65,7 +65,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     setIndustrys: ({ industrys = [] } = {}) => {
       dispatch(getSetIndustrysAction(industrys))
     },
-    setArticles: ({ articles = {} } = {}) => {
+    setArticles: ({ articles = [] } = {}) => {
       dispatch(getSetArticlesAction(articles))
     },
     setDocumentTitle: ({ documentTitle = '' }) => {

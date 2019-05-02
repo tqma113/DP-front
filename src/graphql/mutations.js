@@ -217,6 +217,36 @@ const CreateArticleMutation = gql`
   }
 `
 
+const checkArticleValidMutation = gql`
+  mutation($id: Int!) {
+    checkArticleIdValid(id: $id) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
+const SendCommentMutation = gql`
+  mutation($username: String!, $token: String!, $content: String!, $articleId: Int!) {
+    sendComment(username: $username, token: $token, content: $content, articleId: $articleId) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export const names = {
   LoginMutation: 'login',
   RegisterMutation: 'register',
@@ -228,7 +258,9 @@ export const names = {
   LoginWithEmailMutation: 'loginWithEmail',
   SetPassowordMutation: 'setPassword',
   checkUsernameValidMutation: 'checUsernameValid',
-  CreateArticleMutation: 'createArticle'
+  CreateArticleMutation: 'createArticle',
+  checkArticleValidMutation: 'checkArticleValidMutation',
+  SendCommentMutation: 'SendCommentMutation'
 }
 
 export {
@@ -242,5 +274,7 @@ export {
   LoginWithEmailMutation,
   SetPassowordMutation,
   checkUsernameValidMutation,
-  CreateArticleMutation
+  CreateArticleMutation,
+  checkArticleValidMutation,
+  SendCommentMutation
 }

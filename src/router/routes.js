@@ -15,6 +15,12 @@ const NoMatch = AsyncComponent(() => import('@containers/NoMatch'))
 
 export default [
   {
+    path: '/notmatch',
+    component: NoMatch,
+    auth: permissions.none,
+    documentTitle: '404 - Now'
+  },
+  {
     path: '/',
     component: Index,
     exact: true,
@@ -71,7 +77,7 @@ export default [
   {
     path: '/article/:id',
     component: Article,
-    auth: permissions.none,
+    auth: permissions.article,
     module: 'Article',
     documentTitle: ' - Now'
   },
@@ -81,11 +87,5 @@ export default [
     auth: permissions.personalCenter,
     module: 'PersonalCenter',
     documentTitle: ' - Now'
-  },
-  {
-    path: null,
-    component: NoMatch,
-    auth: permissions.none,
-    documentTitle: '404 - Now'
   }
 ]

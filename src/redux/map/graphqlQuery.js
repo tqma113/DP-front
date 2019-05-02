@@ -3,7 +3,8 @@ export const mutations = {
     UploadImageMutation: 'UploadImageMutation'
   },
   Auth: {
-    checkUsernameValidMutation: 'checkUsernameValidMutation'
+    checkUsernameValidMutation: 'checkUsernameValidMutation',
+    checkArticleValidMutation: 'checkArticleValidMutation'
   },
   Login: {
     LoginMutation: 'LoginMutation',
@@ -27,11 +28,17 @@ export const mutations = {
   PersonalCenter: {
     SendEmailLoginCodeMutation: 'SendEmailLoginCodeMutation',
     AckEmailCodeMutation: 'AckEmailCodeMutation',
+  },
+  Article: {
+    SendCommentMutation: 'SendCommentMutation'
   }
 }
 
 export const querys = {
   PersonalCenter: {
     QueryUsers: 'QueryUsers'
+  },
+  Article: {
+    QueryArticles: 'QueryArticles'
   }
 }

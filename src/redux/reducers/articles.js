@@ -4,7 +4,7 @@ export default (state = {}, action) => {
   switch(action.type) {
     case Articles.setArticles:
       let articles = {}
-      action.users.forEach(item => {
+      action.articles.forEach(item => {
         articles[item.id] = item
       })
       return {

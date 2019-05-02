@@ -40,18 +40,20 @@ const QueryInitData = gql`
           id
           title
           abstract
-          release_at
+          release_time
+          last_modify_time
           categorys {
-            id
-          }
-          industrys {
             id
           }
           comments {
             id
           }
-          likes
-          collections
+          likes {
+            id
+          }
+          collections {
+            id
+          }
         }
         categorys {
           id
@@ -61,13 +63,21 @@ const QueryInitData = gql`
         }
         concerned {
           id
-          username
+          user_id
+          create_time
+          concern_user_id
         }
         likes {
           id
+          article_id
+          user_id
+          create_time
         }
         collections {
           id
+          article_id
+          user_id
+          create_time
         }
       }
       isSuccess
@@ -139,18 +149,27 @@ const QueryUsers = gql`
           id
           title
           abstract
-          release_at
+          release_time
+          last_modify_time
           categorys {
-            id
-          }
-          industrys {
             id
           }
           comments {
             id
+            user_id
           }
-          likes
-          collections
+          likes {
+            id
+            article_id
+            user_id
+            create_time
+          }
+          collections {
+            id
+            article_id
+            user_id
+            create_time
+          }
         }
         categorys {
           id
@@ -162,12 +181,18 @@ const QueryUsers = gql`
           id
           username
         }
-        likes {
-          id
-        }
-        collections {
-          id
-        }
+        likes  {
+            id
+            article_id
+            user_id
+            create_time
+          }
+        collections  {
+            id
+            article_id
+            user_id
+            create_time
+          }
       }
       isSuccess
       extension {
@@ -184,28 +209,61 @@ const QueryUsers = gql`
 const QueryArticles = gql`
   query ($idList: [Int!]!) {
     articles (idList: $idList) {
-      id
-      title
-      abstract
-      content
-      release_at
-      last_modify_at
-      user {
+      articles {
         id
-        username
+        title
+        abstract
+        content
+        release_time
+        last_modify_time
+        user {
+          id
+          username
+          nickname
+          statement
+          avatar
+        }
+        project_link
+        categorys {
+          id
+        }
+        comments {
+          id
+          content
+          create_time
+          likes  {
+            id
+            user_id
+            create_time
+          }
+          user {
+            id
+            avatar
+            username
+            nickname
+          }
+        }
+        likes  {
+            id
+            article_id
+            user_id
+            create_time
+          }
+        collections  {
+            id
+            article_id
+            user_id
+            create_time
+          }
       }
-      project_link
-      categorys {
-        id
+      isSuccess
+      extension {
+        operator
+        errors{
+          path
+          message
+        }
       }
-      industrys {
-        id
-      }
-      comments {
-        id
-      }
-      likes
-      collections
     }
   }
 `
