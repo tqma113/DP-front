@@ -34,6 +34,18 @@ const QueryInitData = gql`
           id
           title
           abstract
+          create_at
+          categorys {
+            id
+          }
+          industrys {
+            id
+          }
+          comments {
+            id
+          }
+          likes
+          collections
         }
         categorys {
           id
@@ -43,6 +55,7 @@ const QueryInitData = gql`
         }
         concerned {
           id
+          username
         }
         likes {
           id
@@ -104,8 +117,20 @@ const QueryUsers = gql`
         }
         articles {
           id
-          titile
+          title
           abstract
+          create_at
+          categorys {
+            id
+          }
+          industrys {
+            id
+          }
+          comments {
+            id
+          }
+          likes
+          collections
         }
         categorys {
           id
@@ -115,6 +140,7 @@ const QueryUsers = gql`
         }
         concerned {
           id
+          username
         }
         likes {
           id

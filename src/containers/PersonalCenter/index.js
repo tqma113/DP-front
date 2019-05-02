@@ -14,7 +14,15 @@ const grid = {
 }
 
 const PersonalCenter = (props) => {
-  const { store = {}, handlers = {}, isSelf = false, username = '', static: { api } } = props
+  const {
+    store = {},
+    handlers = {},
+    isSelf = false,
+    username = '',
+    static: { api },
+    query,
+    querys
+  } = props
   const { loadStatus, users = {}, documentTitle = '' } = store
   const user = users[username] || {}
 
@@ -23,12 +31,15 @@ const PersonalCenter = (props) => {
 
   useEffect(() => {
     document.title = user.nickname + documentTitle
-    handlers.onload({ loadStatus })
   }, [])
 
-  if (!user) {
-    message.error('网络错误')
-  }
+  useEffect(() => {
+    if (user.username !== username) {
+      loadUser(username)
+    } else {
+      handlers.onload({ loadStatus })
+    }
+  })
 
   const handleChangeTab = (key) => {
     switch(key) {
@@ -61,6 +72,19 @@ const PersonalCenter = (props) => {
 
   const loadArticles = () => {
     setArticleLoading(true)
+  }
+
+  const loadUser = async (username) => {
+    const data = await query(
+      querys.QueryUsers,
+      {
+        usernames: [username]
+      }
+    )
+    const { users: { users = [], isSuccess } = {} } = data
+    if (isSuccess) {
+      handlers.setUsers({ users })
+    }
   }
 
   return (

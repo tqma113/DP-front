@@ -25,3 +25,9 @@ export const mutations = {
     CreateArticleMutation: 'CreateArticleMutation'
   }
 }
+
+export const querys = {
+  PersonalCenter: {
+    QueryUsers: 'QueryUsers'
+  }
+}
