@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Upload, Button, Icon, message } from 'antd'
 import { connect } from '@map'
 
@@ -8,7 +8,7 @@ import Less from './index.module.less'
 import './index.less'
 
 const SingleUplaod = (props) => {
-  const { className = '', style = {}, uploadStyle = {}, buttonStyle = {}, onLoad, mutate, mutations = {}, static: { api } } = props
+  const { className = '', style = {}, uploadStyle = {}, buttonStyle = {}, onLoad, mutate, mutations = {}, static: { api }, img = '' } = props
 
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -16,6 +16,12 @@ const SingleUplaod = (props) => {
   const [image, setImage] = useState()
   const [imageUrl, setImageUrl] = useState('')
   const [imageBase64, setImageBase64] = useState('')
+
+  useEffect(() => {
+    if (img && !imageUrl) {
+      setImageUrl(img)
+    }
+  })
 
   const beforeUpload = (file) => {
     setLoading(true)

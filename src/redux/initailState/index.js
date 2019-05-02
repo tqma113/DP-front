@@ -10,6 +10,7 @@ export default {
   documentTitle: 'Now',
 
   users: {},
+  articles: {},
   categorys: [],
-  articles: {}
+  industrys: []
 }

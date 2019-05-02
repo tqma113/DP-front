@@ -25,16 +25,22 @@ const QueryInitData = gql`
         avatar
         statement
         email
-        eduBC {
+        eduBG {
+          id
           school
           degree
           major
+        }
+        emRecords {
+          id
+          company
+          position
         }
         articles {
           id
           title
           abstract
-          create_at
+          release_at
           categorys {
             id
           }
@@ -88,6 +94,15 @@ const QueryInitData = gql`
         }
       }
     }
+    industrys {
+      isSuccess
+      industrys {
+        id
+        name
+        description
+        image
+      }
+    }
   }
 `
 const QueryUsers = gql`
@@ -110,16 +125,21 @@ const QueryUsers = gql`
         avatar
         statement
         email
-        eduBC {
+        eduBG {
           school
           degree
           major
+        }
+        emRecords {
+          id
+          company
+          position
         }
         articles {
           id
           title
           abstract
-          create_at
+          release_at
           categorys {
             id
           }
@@ -161,7 +181,37 @@ const QueryUsers = gql`
   }
 `
 
+const QueryArticles = gql`
+  query ($idList: [Int!]!) {
+    articles (idList: $idList) {
+      id
+      title
+      abstract
+      content
+      release_at
+      last_modify_at
+      user {
+        id
+        username
+      }
+      project_link
+      categorys {
+        id
+      }
+      industrys {
+        id
+      }
+      comments {
+        id
+      }
+      likes
+      collections
+    }
+  }
+`
+
 export {
   QueryInitData,
-  QueryUsers
+  QueryUsers,
+  QueryArticles
 }

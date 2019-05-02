@@ -23,6 +23,10 @@ export const mutations = {
   },
   ArticleCreate: {
     CreateArticleMutation: 'CreateArticleMutation'
+  },
+  PersonalCenter: {
+    SendEmailLoginCodeMutation: 'SendEmailLoginCodeMutation',
+    AckEmailCodeMutation: 'AckEmailCodeMutation',
   }
 }
 

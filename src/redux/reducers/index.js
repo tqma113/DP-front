@@ -9,6 +9,7 @@ import categorys from './categorys'
 import floatStatus from './floatStatus'
 import documentTitle from './documentTitle'
 import articles from './articles'
+import industrys from './industrys'
 
 export default combineReducers({
   users,
@@ -18,5 +19,6 @@ export default combineReducers({
   categorys,
   floatStatus,
   documentTitle,
-  articles
+  articles,
+  industrys
 })

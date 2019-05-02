@@ -47,12 +47,23 @@ const Loader = (props) => {
     }
   }
 
-  const setInit = ({ checkLoginState, categorys }) => {
+  const getIndustrysData = (data) => {
+    const { isSuccess, industrys } = data
+
+    if (isSuccess) {
+      return industrys
+    } else {
+      return []
+    }
+  }
+
+  const setInit = ({ checkLoginState, categorys, industrys }) => {
     setLoginState(checkLoginState)
 
     const ctg = getCategorysData(categorys)
+    const idy = getIndustrysData(industrys)
 
-    handlers.init({ categorys: ctg, loadStatus })
+    handlers.init({ categorys: ctg, loadStatus, industrys: idy })
   }
 
   return (
@@ -68,9 +79,9 @@ const Loader = (props) => {
           return null;
         }
 
-        const { checkLoginState, categorys } = data
+        const { checkLoginState, categorys, industrys } = data
 
-        setInit({ checkLoginState, categorys })
+        setInit({ checkLoginState, categorys, industrys })
 
         return loadStatus > 0 ? ({...children}) : null
       }}

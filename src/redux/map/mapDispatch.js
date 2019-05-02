@@ -29,6 +29,9 @@ const {
   getSetCategorysAction
 } = actions.categorys
 const {
+  getSetIndustrysAction
+} = actions.industrys
+const {
   getSetDocumentTitleAction
 } = actions.documentTitle
 
@@ -59,15 +62,19 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     setCategorys: ({ categorys = [] } = {}) => {
       dispatch(getSetCategorysAction(categorys))
     },
+    setIndustrys: ({ industrys = [] } = {}) => {
+      dispatch(getSetIndustrysAction(industrys))
+    },
     setArticles: ({ articles = {} } = {}) => {
       dispatch(getSetArticlesAction(articles))
     },
     setDocumentTitle: ({ documentTitle = '' }) => {
       dispatch(getSetDocumentTitleAction(documentTitle))
     },
-    init: ({ categorys = [], loadStatus = 0 } = {}) => {
+    init: ({ categorys = [], loadStatus = 0, industrys = [] } = {}) => {
       if (loadStatus === 0) {
         dispatch(getSetCategorysAction(categorys))
+        dispatch(getSetIndustrysAction(industrys))
         dispatch(getInitAction())
       }
     },

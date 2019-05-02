@@ -34,6 +34,10 @@ export const Categorys = {
   setCategorys: 'SET_CATEGORYS',
 }
 
+export const Industrys = {
+  setIndustrys: 'SET_INDUSTRYS',
+}
+
 export const DocumentTitle = {
   setDocumentTitle: 'SET_DOCUMENT_TITLE'
 }

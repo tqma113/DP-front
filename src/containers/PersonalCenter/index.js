@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Icon, Tabs, message, Input, Select, Button, Divider, Spin, Avatar, Skeleton, List } from 'antd'
+import { ArticleCard } from '@components'
+import PersonalInfo from './PersonalInfo'
 
 import Less from './index.module.less'
 
 const TabPane = Tabs.TabPane
 const Option = Select.Option
 const Search = Input.Search
-
-const loadingIcon = <Icon type="clock-circle" style={{ fontSize: 40, fontWeight: '200', color: '#888' }} spin />
 
 const grid = {
   gutter: 48, xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 2,
@@ -30,14 +30,12 @@ const PersonalCenter = (props) => {
   const [articlesLoading, setArticleLoading] = useState(true)
 
   useEffect(() => {
-    document.title = user.nickname + documentTitle
-  }, [])
-
-  useEffect(() => {
     if (user.username !== username) {
       loadUser(username)
     } else {
       handlers.onload({ loadStatus })
+      document.title = user.nickname + documentTitle
+      setArticleLoading(false)
     }
   })
 
@@ -48,6 +46,8 @@ const PersonalCenter = (props) => {
         break;
       case 2:
         loadArticles()
+        break;
+      case 3:
         break;
       default:
     }
@@ -93,7 +93,7 @@ const PersonalCenter = (props) => {
         <Row bottom='md'>
           <Col span={6}>
             <Row>
-              <Avatar className={Less['avatar']} src={api.dev.static + user.avatar} title="avatar" />
+              <Avatar className={Less['avatar']} src={user.avatar ? api.dev.static + user.avatar : ''} title="avatar" />
             </Row>
             <Row>
               <p className={Less['nickname']}>{user.nickname}</p>
@@ -113,7 +113,7 @@ const PersonalCenter = (props) => {
             </Row>
           </Col>
           <Col span={17} offset={1}>
-            <Tabs onChange={handleChangeTab}>
+            <Tabs onChange={handleChangeTab} defaultActiveKey={'3'}>
               <TabPane tab="概述" key="1">
                 <Row>
                   <Col className={Less['title-1']}>热门文章</Col>
@@ -167,7 +167,16 @@ const PersonalCenter = (props) => {
                 <List
                   itemLayout="vertical"
                   size="large"
+                  dataSource={user.articles}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <ArticleCard article={item} />
+                    </List.Item>
+                  )}
                 />}
+              </TabPane>
+              <TabPane tab="个人信息" key={3}>
+                <PersonalInfo user={user} {...props} />
               </TabPane>
             </Tabs>
           </Col>

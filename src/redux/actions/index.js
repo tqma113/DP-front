@@ -6,6 +6,7 @@ import * as categorys from './categorys'
 import * as floatStatus from './floatStatus'
 import * as documentTitle from './documentTitle'
 import * as articles from './articles'
+import * as industrys from './industrys'
 
 export default {
   users,
@@ -15,5 +16,6 @@ export default {
   categorys,
   floatStatus,
   documentTitle,
-  articles
+  articles,
+  industrys
 }
