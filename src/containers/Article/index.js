@@ -9,18 +9,12 @@ import Less from './index.module.less'
 
 const Article = (props) => {
   const { store = {}, handlers = {}, query, querys = {}, id, static: { api }, mutate, mutations } = props
-  const { loadStatus, session = {}, articles = {}, documentTitle } = store
+  const { loadStatus, session = {}, articles = {}, documentTitle, users = {} } = store
   const { info = {} } = session
   const { username: currentUsername, token } = info
   const article = articles[id] || {}
   const { user: { username } = {} } = article
-
-  const comments = article.comments ? article.comments.map(item => ({
-    avatar: api.dev.static + item.user.avatar,
-    author: item.user.nickname,
-    content: item.content,
-    datetime: moment(item.create_time, 'x').fromNow()
-  })) : []
+  const currentUser = users[currentUsername]
 
   const isLiked = article.likes ? article.likes.some(item => item.user && item.user.username === currentUsername) : false
   const isCollected = article.collections ? article.collections.some(item => item.user && item.user.username === currentUsername) : false
@@ -30,7 +24,7 @@ const Article = (props) => {
   const [comment, setComment] = useState()
 
   useEffect(() => {
-    if (username !== currentUsername) {
+    if (!articles[id]) {
       loadArticle(id)
     } else {
       document.title = article.title + documentTitle
@@ -186,9 +180,9 @@ const Article = (props) => {
         <Comment
           avatar={(
             <Avatar
-              src={article.user && article.user.avatar ? api.dev.static + article.user.avatar : ''}
-              alt={article.user && article.user.nickname ? article.user.nickname : ''}
-              onClick={() => handleAvatarClick(article.user ? article.user.username : false)}
+              src={currentUser && currentUser.avatar ? api.dev.static + currentUser.avatar : ''}
+              alt={currentUser && currentUser.nickname ? currentUser.nickname : ''}
+              onClick={() => handleAvatarClick(currentUser ? currentUser.username : false)}
             />
           )}
           content={(
@@ -200,7 +194,7 @@ const Article = (props) => {
             />
           )}
         />
-        {article.comments.length > 0 && <CommentList comments={comments} />}
+        {article.comments.length > 0 && <CommentList currentUserId={Number(currentUser.id)} comments={article.comments} />}
       </Card>
     </section>
   )

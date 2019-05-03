@@ -22,6 +22,9 @@ const PasswordSetting = (props) => {
         clearTimeout(timeout)
       }, 1000)
     }
+    if (emailCodeTimer > 0 && !emailCodeKey) {
+      setEmailCodeSendKey()
+    }
   }, [emailCodeTimer])
 
   useEffect(() => {
@@ -68,20 +71,20 @@ const PasswordSetting = (props) => {
         email
       }
     )
-    const { sendEmailLoginCode } = data
+    const { sendEmailLoginCode = {} } = data
     setEmailCodeSendKeyRes(sendEmailLoginCode)
   }
 
   const ackCodeMutation = async ({ email = '', code = ''}) => {
-    const data = await mutate({
-      mutation: mutations.AckEmailCodeMutation,
-      variables: {
+    const data = await mutate(
+      mutations.AckEmailCodeMutation,
+      {
         email,
         code,
         key: emailCodeSendKey
       }
-    })
-    const { ackEmail } = data
+    )
+    const { ackEmail = {} } = data
     setEmailCodeKeyRes(ackEmail)
   }
 
@@ -96,7 +99,7 @@ const PasswordSetting = (props) => {
         key: emailCodeKey
       }
     )
-    const { setPassword } = data
+    const { setPassword = {} } = data
     setPasswordRes(setPassword)
 
     handlers.reload()
@@ -105,7 +108,7 @@ const PasswordSetting = (props) => {
   const setEmailCodeSendKeyRes = (res) => {
     const { isSuccess = false, key = '', extension = {} } = res
     if (isSuccess) {
-      setEmailCodeTimer(60)
+      setEmailCodeTimer(300)
       setEmailCodeSendKey(key)
     } else {
       const { errors = [] } = extension
@@ -119,7 +122,7 @@ const PasswordSetting = (props) => {
     if (isSuccess) {
       setEmailCodeKey(key)
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr } = errors[0]
       message.error(`验证失败: ${messStr}`)
     }
@@ -183,7 +186,7 @@ const PasswordSetting = (props) => {
                     <Input disabled={emailCodeKey} onChange={handleEmailChange} />
                   </Col>
                   {!emailCodeKey && <Col className={Less['float-button']}>
-                    <Button disabled={emailCodeTimer > 0} onClick={handleSendCodeClick} style={{width: '100%', textAlign: 'center'}}>{emailCodeTimer > 0 && emailCodeTimer} 发送</Button>
+                    <Button disabled={emailCodeTimer - 240 > 0} onClick={handleSendCodeClick} style={{width: '100%', textAlign: 'center'}}>{emailCodeTimer - 240 > 0 && emailCodeTimer - 240} 发送</Button>
                   </Col>}
                 </Row>
               )}

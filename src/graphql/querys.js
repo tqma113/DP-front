@@ -15,11 +15,7 @@ const QueryInitData = gql`
         location
         gender
         birthday
-        industry {
-          name
-          description
-          id
-        }
+        industrys
         register_at
         last_login_at
         avatar
@@ -42,11 +38,11 @@ const QueryInitData = gql`
           abstract
           release_time
           last_modify_time
-          categorys {
-            id
-          }
+          categorys
           comments {
             id
+            content
+            user_id
           }
           likes {
             id
@@ -55,17 +51,17 @@ const QueryInitData = gql`
             id
           }
         }
-        categorys {
-          id
-        }
-        concerned_categorys {
-          id
-        }
+        categorys
         concerned {
           id
           user_id
-          create_time
           concern_user_id
+          user {
+            id
+            username
+            nickname
+            avatar
+          }
         }
         likes {
           id
@@ -125,11 +121,7 @@ const QueryUsers = gql`
         location
         gender
         birthday
-        industry {
-          name
-          description
-          id
-        }
+        industrys
         register_at
         last_login_at
         avatar
@@ -161,7 +153,12 @@ const QueryUsers = gql`
           likes {
             id
             article_id
-            user_id
+            user {
+              id
+              username
+              avatar
+              nickname
+            }
             create_time
           }
           collections {
@@ -171,28 +168,29 @@ const QueryUsers = gql`
             create_time
           }
         }
-        categorys {
-          id
-        }
-        concerned_categorys {
-          id
-        }
+        categorys
         concerned {
           id
-          username
+          user_id
+          user {
+            id
+            username
+            nickname
+            avatar
+          }
         }
         likes  {
-            id
-            article_id
-            user_id
-            create_time
-          }
+          id
+          article_id
+          user_id
+          create_time
+        }
         collections  {
-            id
-            article_id
-            user_id
-            create_time
-          }
+          id
+          article_id
+          user_id
+          create_time
+        }
       }
       isSuccess
       extension {
@@ -224,9 +222,7 @@ const QueryArticles = gql`
           avatar
         }
         project_link
-        categorys {
-          id
-        }
+        categorys
         comments {
           id
           content

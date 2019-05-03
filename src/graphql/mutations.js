@@ -37,7 +37,7 @@ const LoginWithEmailMutation = gql`
 const RegisterMutation = gql`
   mutation ($username: String!,
             $nickname: String!,
-            $address: String!,
+            $location: String!,
             $birthday: Date!
             $email: String!,
             $gender: String!
@@ -47,7 +47,7 @@ const RegisterMutation = gql`
             $avatar: String!) {
     register (username: $username,
               nickname: $nickname,
-              address: $address,
+              location: $location,
               birthday: $birthday,
               gender: $gender
               email: $email,
@@ -277,6 +277,49 @@ const ArticleLikeMutation = gql`
   }
 `
 
+const ChangeUserInfoMutation = gql`
+  mutation(
+    $email: String!,
+    $key: String!,
+    $nickname: String
+    $location: String
+    $gender: String
+    $birthday: Date
+    $avatar: String
+    $statement: String
+    $eduBG: JSON
+    $emRecords: JSON
+    $secQuestions: JSON
+    $categoryIds: [Int]!
+    $industryIds: [Int]!
+  ) {
+    changeUserInfo(
+      email: $email,
+      key: $key,
+      nickname: $nickname,
+      location: $location
+      gender: $gender
+      birthday: $birthday
+      avatar: $avatar
+      statement: $statement
+      eduBG: $eduBG
+      emRecords: $emRecords
+      secQuestions: $secQuestions
+      categoryIds: $categoryIds
+      industryIds: $industryIds
+    ) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export const names = {
   LoginMutation: 'login',
   RegisterMutation: 'register',
@@ -292,7 +335,8 @@ export const names = {
   checkArticleValidMutation: 'checkArticleValidMutation',
   SendCommentMutation: 'SendCommentMutation',
   ArticleStarMutation: 'ArticleStarMutation',
-  ArticleLikeMutation: 'ArticleLikeMutation'
+  ArticleLikeMutation: 'ArticleLikeMutation',
+  ChangeUserInfoMutation: 'ChangeUserInfoMutation'
 }
 
 export {
@@ -310,5 +354,6 @@ export {
   checkArticleValidMutation,
   SendCommentMutation,
   ArticleStarMutation,
-  ArticleLikeMutation
+  ArticleLikeMutation,
+  ChangeUserInfoMutation
 }
