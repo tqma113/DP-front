@@ -1,11 +1,14 @@
 import React from 'react'
-import { Drawer } from 'antd'
+import { Drawer, Row, Col, Avatar } from 'antd'
 
-import { connect } from '@map'
+import map from '@map'
 
 const Message = (props) => {
-  const { store = {}, handlers = {} } = props
-  const { messageStatus= false } = store
+  const { store = {}, handlers = {}, static:{ api } } = props
+  const { messageStatus= false, users = {}, session = {} } = store
+  const { status, info = {} } = session
+  const { username : currentUsername, token } = info
+  const currentUser = users[currentUsername] || {}
 
   const handleCloseMessage = () => {
     handlers.closeMessage()
@@ -19,9 +22,11 @@ const Message = (props) => {
       visible={messageStatus === 1}
       onClose={handleCloseMessage}
     >
-      <Message />
+    <Row>
+      <Col><Avatar src={api.dev.static + currentUser.avatar} /></Col>
+    </Row>
     </Drawer>
   )
 }
 
-export default connect(Message)
+export default map(Message, 'Message')

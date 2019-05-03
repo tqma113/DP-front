@@ -24,6 +24,18 @@ const NativeLayout = (props) => {
       case '2':
         handlers.go('/article/create')
         break;
+      case '3':
+        handlers.openMessage()
+        break;
+      case '4':
+        handlers.logout()
+        break;
+      case '5':
+        handlers.go('/login')
+        break;
+      case '6':
+        handlers.go('/register')
+        break;
       default:
       break;
     }
@@ -43,6 +55,13 @@ const NativeLayout = (props) => {
           <Menu.Item key={0}>首页</Menu.Item>
           {status && <Menu.Item key={1}>个人中心</Menu.Item>}
           {status && <Menu.Item key={2}>写文章</Menu.Item>}
+          {status && <Menu.Item key={3}>私信</Menu.Item>}
+          {status ? <Menu.Item className={Less['right-head']} key={4}>注销</Menu.Item> :
+            <React.Fragment>
+              <Menu.Item className={Less['right-head']} key={5}>登录</Menu.Item>
+              <Menu.Item className={Less['right-head']} key={6}>注册</Menu.Item>
+            </React.Fragment>
+          }
         </Menu>
       </Header>
       <Content style={{ background: '#fff', minHeight: 680 }}>{{...children}}</Content>
