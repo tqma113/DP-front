@@ -13,6 +13,12 @@ const grid = {
   gutter: 48, xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 2,
 }
 
+const tabs = {
+  overview: '1',
+  articles: '2',
+  setting: '3'
+}
+
 const PersonalCenter = (props) => {
   const {
     store = {},
@@ -21,7 +27,8 @@ const PersonalCenter = (props) => {
     username = '',
     static: { api },
     query,
-    querys
+    querys,
+    location = {}
   } = props
   const { loadStatus, users = {}, documentTitle = '', categorys = [] } = store
   const user = users[username] || {}
@@ -34,6 +41,8 @@ const PersonalCenter = (props) => {
   const [filterArticles, setFilterArticles] = useState(user.articles || [])
   const [hotArticles, setHotArticles] = useState(user.articles || [])
   const [sortArticles, setSortArticles] = useState(user.articles || [])
+
+  const [tabKey, setTabKey] = useState('1')
 
   useEffect(() => {
     if (user.username !== username) {
@@ -65,6 +74,15 @@ const PersonalCenter = (props) => {
     setFilterArticles(filterArticles)
   }, [sortArticles, search, category])
 
+  useEffect(() => {
+    if (location.hash) {
+      let title = location.hash.slice(1)
+      if (tabs[title]) {
+        setTabKey(tabs[title])
+      }
+    }
+  }, [])
+
   const handleChangeTab = (key) => {
     switch(key) {
       case 1:
@@ -89,6 +107,10 @@ const PersonalCenter = (props) => {
 
   const handleEditClick = () => {
 
+  }
+
+  const handleTabClick = (key) => {
+    setTabKey(key)
   }
 
   const loadOverview = () => {
@@ -140,7 +162,7 @@ const PersonalCenter = (props) => {
             </Row>
           </Col>
           <Col span={17} offset={1}>
-            <Tabs onChange={handleChangeTab}>
+            <Tabs onTabClick={handleTabClick} onChange={handleChangeTab} activeKey={tabKey}>
               <TabPane tab="概述" key="1">
                 <Row style={{ lineHeight: '50px'}}>
                   <Col className={Less['title-1']}>热门文章</Col>

@@ -5,7 +5,7 @@ export default {
   session,
   loadStatus: 0,
   floatStatus: 0,
-  messageStatus: 0,
+  messageStatus: 1,
 
   documentTitle: 'Now',
 
