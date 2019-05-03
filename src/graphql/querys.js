@@ -143,9 +143,7 @@ const QueryUsers = gql`
           abstract
           release_time
           last_modify_time
-          categorys {
-            id
-          }
+          categorys
           comments {
             id
             user_id
@@ -153,12 +151,7 @@ const QueryUsers = gql`
           likes {
             id
             article_id
-            user {
-              id
-              username
-              avatar
-              nickname
-            }
+            user_id
             create_time
           }
           collections {

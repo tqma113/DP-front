@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Icon, Tabs, message, Input, Select, Button, Divider, Spin, Avatar, Skeleton, List } from 'antd'
-import { ArticleCard } from '@components'
+import { ArticleCard, ArticleRow } from '@components'
 import PersonalInfo from './PersonalInfo'
 
 import Less from './index.module.less'
@@ -23,11 +23,17 @@ const PersonalCenter = (props) => {
     query,
     querys
   } = props
-  const { loadStatus, users = {}, documentTitle = '' } = store
+  const { loadStatus, users = {}, documentTitle = '', categorys = [] } = store
   const user = users[username] || {}
 
   const [overLoading, setOverviewLoading] = useState(true)
   const [articlesLoading, setArticleLoading] = useState(true)
+
+  const [category, setCategory] = useState(-1)
+  const [search, setSearch] = useState('')
+  const [filterArticles, setFilterArticles] = useState(user.articles || [])
+  const [hotArticles, setHotArticles] = useState(user.articles || [])
+  const [sortArticles, setSortArticles] = useState(user.articles || [])
 
   useEffect(() => {
     if (user.username !== username) {
@@ -36,8 +42,28 @@ const PersonalCenter = (props) => {
       handlers.onload({ loadStatus })
       document.title = user.nickname + documentTitle
       setArticleLoading(false)
+      setOverviewLoading(false)
     }
   })
+
+  useEffect(() => {
+    let articles = user.articles || []
+    articles.sort((a, b) => {
+      return b.likes.length + b.collections.length - a.likes.length + a.collections.length
+    })
+    setSortArticles(articles)
+    const hotArticles = articles.slice(0, 6)
+    setHotArticles(hotArticles)
+    const filterArticles = category != -1 ?
+    articles.filter(i => i.categorys.some(item => item == category))
+                      .filter(i => JSON.stringify(i).includes(search)) : articles
+    setFilterArticles(filterArticles)
+  }, [user.articles])
+
+  useEffect(() => {
+    let filterArticles = (category != -1 ? sortArticles.filter(i => i.categorys.some(item => item == category)) : sortArticles).filter(i => JSON.stringify(i).includes(search))
+    setFilterArticles(filterArticles)
+  }, [sortArticles, search, category])
 
   const handleChangeTab = (key) => {
     switch(key) {
@@ -54,11 +80,11 @@ const PersonalCenter = (props) => {
   }
 
   const handleCategoryChange = (value) => {
-
+    setCategory(value)
   }
 
-  const handleSearchClick = (value) => {
-
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value)
   }
 
   const handleEditClick = () => {
@@ -87,6 +113,7 @@ const PersonalCenter = (props) => {
     }
   }
 
+
   return (
     <section className={Less['personal-center']}>
       <section className={Less['main']}>
@@ -113,9 +140,9 @@ const PersonalCenter = (props) => {
             </Row>
           </Col>
           <Col span={17} offset={1}>
-            <Tabs onChange={handleChangeTab} defaultActiveKey={'3'}>
+            <Tabs onChange={handleChangeTab}>
               <TabPane tab="概述" key="1">
-                <Row>
+                <Row style={{ lineHeight: '50px'}}>
                   <Col className={Less['title-1']}>热门文章</Col>
                 </Row>
                 {overLoading ?
@@ -130,9 +157,10 @@ const PersonalCenter = (props) => {
                 /> :
                 <List
                   grid={grid}
+                  dataSource={hotArticles}
                   renderItem={item => (
                     <List.Item>
-
+                      <ArticleCard username={username} article={item} />
                     </List.Item>
                   )}
                 />
@@ -141,11 +169,14 @@ const PersonalCenter = (props) => {
               <TabPane tab="文章" key="2">
                 <Row type="flex" justify="space-between">
                   <Col span={12}>
-                    <Search onSearch={handleSearchClick} placeholder="搜索文章..." />
+                    <Search onChange={handleSearchChange} placeholder="搜索文章..." />
                   </Col>
                   <Col span={5} offset={2}>
-                    <Select onChange={handleCategoryChange} style={{ width: '100%'}} defaultValue={'all'}>
-                      <Option key={-1} value={'all'}>全部</Option>
+                    <Select onChange={handleCategoryChange} style={{ width: '100%'}} value={category}>
+                      <Option key={-1} value={-1}>全部</Option>
+                      {categorys.map((item, index) => (
+                        <Option key={index} value={item.id}>{item.subject}</Option>
+                      ))}
                     </Select>
                   </Col>
                   {isSelf && <Col span={4} offset={1}>
@@ -167,10 +198,10 @@ const PersonalCenter = (props) => {
                 <List
                   itemLayout="vertical"
                   size="large"
-                  dataSource={user.articles}
+                  dataSource={filterArticles}
                   renderItem={(item) => (
                     <List.Item>
-                      <ArticleCard article={item} />
+                      <ArticleRow username={username} article={item} />
                     </List.Item>
                   )}
                 />}

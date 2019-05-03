@@ -1,13 +1,16 @@
 import React from 'react'
-import { Card, Row, Col, Icon, message } from 'antd'
+import { Card, Row, Col, Icon, Tag, message } from 'antd'
 import moment from 'moment'
 
 import map from '@map'
 
 import Less from './index.module.less'
 
-const ArticleCard = (props) => {
+moment.locale('zh-cn')
+
+const ArticleRow = (props) => {
   const { article, store = {}, handlers = {}, mutate, mutations = {}, query, querys = {}, username } = props
+  const { categorys = [] } = store
   const { session = {}, users = {} } = store
   const { info = {}, status } = session
   const { username: currentUsername, token } = info
@@ -84,6 +87,7 @@ const ArticleCard = (props) => {
       handlers.setUsers({ users })
     }
   }
+
   return (
     <Card>
       <Row type="flex" justify="space-between">
@@ -95,13 +99,27 @@ const ArticleCard = (props) => {
         </Col>
       </Row>
       <Row className={Less['row']}>{article.abstract}</Row>
-      <Row type="flex" justify="space-between" className={Less['row']}>
-        <Col>发布于 {moment(article.release_time, 'x').fromNow()}</Col>
-        <Col><Icon onClick={handleLikeClick} type="like" theme={isLiked ? 'filled' : 'outlined'} /> {article.likes.length || 0}</Col>
-        <Col><Icon onClick={handleStarClick} type="star" theme={isCollected ? 'filled' : 'outlined'} /> {article.collections.length || 0}</Col>
+      <Row className={Less['categorys']}>
+        {categorys.filter(item => article.categorys.some(i => i == item.id)).map(item => (
+          <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+        ))}
+      </Row>
+      <Row type="flex" justify="space-between">
+        <Col span={12}>
+          <Row type="flex" justify="space-between" className={Less['row']}>
+            <Col>发布于 {moment(article.release_time, 'x').fromNow()}</Col>
+            <Col>最后更新于 {moment(article.last_modify_time, 'x').fromNow()}</Col>
+          </Row>
+        </Col>
+        <Col span={12}>
+          <Row type="flex" style={{ marginTop: '10px'}} justify="end">
+            <Col><Icon onClick={handleLikeClick} type="like" theme={isLiked ? 'filled' : 'outlined'} /> {article.likes.length || 0}</Col>
+            <Col offset={3}><Icon onClick={handleStarClick} type="star" theme={isCollected ? 'filled' : 'outlined'} /> {article.collections.length || 0}</Col>
+          </Row>
+        </Col>
       </Row>
     </Card>
   )
 }
 
-export default map(ArticleCard, 'ArticleCard')
+export default map(ArticleRow, 'ArticleRow')

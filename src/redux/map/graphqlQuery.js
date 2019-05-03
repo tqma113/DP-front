@@ -37,6 +37,14 @@ export const mutations = {
   },
   CommentList: {
 
+  },
+  ArticleRow: {
+    ArticleStarMutation: 'ArticleStarMutation',
+    ArticleLikeMutation: 'ArticleLikeMutation'
+  },
+  ArticleCard: {
+    ArticleStarMutation: 'ArticleStarMutation',
+    ArticleLikeMutation: 'ArticleLikeMutation'
   }
 }
 
@@ -46,5 +54,11 @@ export const querys = {
   },
   Article: {
     QueryArticles: 'QueryArticles'
+  },
+  ArticleRow: {
+    QueryUsers: 'QueryUsers'
+  },
+  ArticleCard: {
+    QueryUsers: 'QueryUsers'
   }
 }

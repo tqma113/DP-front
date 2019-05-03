@@ -8,7 +8,7 @@ export default (state = {}, action) => {
         users[item.username] = item
       })
       return {
-        ...state.users,
+        ...state,
         ...users
       }
     default:
