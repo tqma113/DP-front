@@ -30,7 +30,9 @@ export const mutations = {
     AckEmailCodeMutation: 'AckEmailCodeMutation',
   },
   Article: {
-    SendCommentMutation: 'SendCommentMutation'
+    SendCommentMutation: 'SendCommentMutation',
+    ArticleStarMutation: 'ArticleStarMutation',
+    ArticleLikeMutation: 'ArticleLikeMutation'
   }
 }
 

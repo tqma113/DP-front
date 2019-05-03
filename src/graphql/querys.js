@@ -235,6 +235,10 @@ const QueryArticles = gql`
             id
             user_id
             create_time
+            user {
+              id
+              username
+            }
           }
           user {
             id
@@ -244,18 +248,27 @@ const QueryArticles = gql`
           }
           comments
         }
-        likes  {
+        likes {
+          id
+          article_id
+          user_id
+          create_time
+          user {
             id
-            article_id
-            user_id
-            create_time
+            username
           }
-        collections  {
+
+        }
+        collections {
+          id
+          article_id
+          user_id
+          create_time
+          user {
             id
-            article_id
-            user_id
-            create_time
+            username
           }
+        }
       }
       isSuccess
       extension {

@@ -247,6 +247,36 @@ const SendCommentMutation = gql`
   }
 `
 
+const ArticleStarMutation = gql`
+  mutation($username: String!, $token: String!, $articleId: Int!, $status: Boolean!) {
+    articleStar(username: $username, token: $token, articleId: $articleId, status: $status) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
+const ArticleLikeMutation = gql`
+  mutation($username: String!, $token: String!, $articleId: Int!, $status: Boolean!) {
+    articleLike(username: $username, token: $token, articleId: $articleId, status: $status) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export const names = {
   LoginMutation: 'login',
   RegisterMutation: 'register',
@@ -260,7 +290,9 @@ export const names = {
   checkUsernameValidMutation: 'checUsernameValid',
   CreateArticleMutation: 'createArticle',
   checkArticleValidMutation: 'checkArticleValidMutation',
-  SendCommentMutation: 'SendCommentMutation'
+  SendCommentMutation: 'SendCommentMutation',
+  ArticleStarMutation: 'ArticleStarMutation',
+  ArticleLikeMutation: 'ArticleLikeMutation'
 }
 
 export {
@@ -276,5 +308,7 @@ export {
   checkUsernameValidMutation,
   CreateArticleMutation,
   checkArticleValidMutation,
-  SendCommentMutation
+  SendCommentMutation,
+  ArticleStarMutation,
+  ArticleLikeMutation
 }

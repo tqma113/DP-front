@@ -15,6 +15,16 @@ const Article = (props) => {
   const article = articles[id] || {}
   const { user: { username } = {} } = article
 
+  const comments = article.comments ? article.comments.map(item => ({
+    avatar: api.dev.static + item.user.avatar,
+    author: item.user.nickname,
+    content: item.content,
+    datetime: moment(item.create_time, 'x').fromNow()
+  })) : []
+
+  const isLiked = article.likes ? article.likes.some(item => item.user && item.user.username === currentUsername) : false
+  const isCollected = article.collections ? article.collections.some(item => item.user && item.user.username === currentUsername) : false
+
   const [content, setContent] = useState()
   const [submitting, setSubmitting] = useState()
   const [comment, setComment] = useState()
@@ -93,18 +103,59 @@ const Article = (props) => {
     }
   }
 
+  const handleArticleStarClick = () => {
+    if (currentUsername) {
+      articleStar()
+    }
+  }
+
+  const handleArticleLikeClick = () => {
+    if (currentUsername) {
+      articleLike()
+    }
+  }
+
+  const articleStar = async () => {
+    let data = await mutate(
+      mutations.ArticleStarMutation,
+      {
+        username: currentUsername,
+        token,
+        articleId: Number(article.id),
+        status: isCollected
+      }
+    )
+    const { articleStar: { isSuccess } = {} } = data
+    if (isSuccess) {
+      loadArticle(id, 'no-cache')
+    } else {
+      message.error('点赞失败,请重试')
+    }
+  }
+
+  const articleLike = async () => {
+    let data = await mutate(
+      mutations.ArticleLikeMutation,
+      {
+        username: currentUsername,
+        token,
+        articleId: Number(article.id),
+        status: isLiked
+      }
+    )
+    const { articleLike: { isSuccess } = {} } = data
+    if (isSuccess) {
+      loadArticle(id, 'no-cache')
+    } else {
+      message.error('点赞失败,请重试')
+    }
+  }
+
   if (loadStatus === 2) {
     return (
       <Skeleton active />
     )
   }
-
-  const comments = article.comments.map(item => ({
-    avatar: api.dev.static + item.user.avatar,
-    author: item.user.nickname,
-    content: item.content,
-    datetime: moment(item.create_time, 'x').fromNow()
-  }))
 
   return (
     <section className={Less['article']}>
@@ -126,8 +177,8 @@ const Article = (props) => {
         <p>创建于 {moment(article.release_time).format('YYYY-MM-DD')}</p>
       </Row>
       <Row className={Less['info']} type="flex">
-        <p><Icon type="star" /> {article.collections && article.collections.length}</p>
-        <p><Icon type="like" /> {article.likes && article.likes.length}</p>
+        <p><Icon onClick={handleArticleStarClick} type="star" theme={isCollected ? 'twoTone' : 'outlined'} /> {article.collections && article.collections.length}</p>
+        <p><Icon onClick={handleArticleLikeClick} type="like" theme={isLiked ? 'twoTone' : 'outlined'} /> {article.likes && article.likes.length}</p>
       </Row>
       <Card
         title="评论"
