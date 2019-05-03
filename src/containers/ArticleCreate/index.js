@@ -4,6 +4,7 @@ import BraftEditor from 'braft-editor'
 
 import Less from './index.module.less'
 import 'braft-editor/dist/index.css'
+import './index.less'
 
 const { TextArea } = Input
 const Option = Select.Option
@@ -104,7 +105,7 @@ const ArticleCreate = (props) => {
         <Select
           value={categoryIds}
           mode="tags"
-          className={Less['categorys']}
+          className={Less['categorys'] + ' category'}
           placeholder="请选择类别"
           onChange={handleCategorysChange}
           disabled={sending}
