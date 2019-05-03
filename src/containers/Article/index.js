@@ -70,6 +70,10 @@ const Article = (props) => {
     sendComment()
   }
 
+  const handleAvatarClick = (username) => {
+    if (username) handlers.go('/' + username)
+  }
+
   const sendComment = async () => {
     let data = await mutate(
       mutations.SendCommentMutation,
@@ -133,6 +137,7 @@ const Article = (props) => {
             <Avatar
               src={article.user && article.user.avatar ? api.dev.static + article.user.avatar : ''}
               alt={article.user && article.user.nickname ? article.user.nickname : ''}
+              onClick={() => handleAvatarClick(article.user ? article.user.username : false)}
             />
           )}
           content={(

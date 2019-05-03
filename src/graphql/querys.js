@@ -242,6 +242,7 @@ const QueryArticles = gql`
             username
             nickname
           }
+          comments
         }
         likes  {
             id
