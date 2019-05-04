@@ -383,9 +383,9 @@ const PersonalCenter = (props) => {
                   }}
                 />}
               </TabPane>
-              <TabPane tab="个人信息" key={3}>
+              {isSelf && <TabPane tab="个人信息" key={3}>
                 <PersonalInfo user={user} {...props} />
-              </TabPane>
+              </TabPane>}
             </Tabs>
           </Col>
         </Row>

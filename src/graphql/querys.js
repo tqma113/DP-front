@@ -62,6 +62,7 @@ const QueryInitData = gql`
             nickname
             avatar
             categorys
+            industrys
             statement
           }
         }
@@ -188,6 +189,7 @@ const QueryUsers = gql`
             nickname
             avatar
             categorys
+            industrys
             statement
           }
         }

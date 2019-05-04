@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Drawer, Row, Col, Avatar, Tag, Tabs, List, Icon, Empty, Card, Input, Button } from 'antd'
+import { Drawer, Row, Col, Avatar, Tag, Tabs, List, Icon, Empty, Card, Input, Button, Skeleton } from 'antd'
 
 import map from '@map'
 
@@ -10,7 +10,7 @@ const TextArea = Input.TextArea
 
 const Message = (props) => {
   const { store = {}, handlers = {}, static:{ api } } = props
-  const { messageStatus= false, users = {}, session = {}, categorys = [] } = store
+  const { messageStatus= false, users = {}, session = {}, categorys = [], industrys = [] } = store
   const { status, info = {} } = session
   const { username : currentUsername, token } = info
   const currentUser = users[currentUsername] || {}
@@ -34,17 +34,24 @@ const Message = (props) => {
   const renderItem = item => (
     <List.Item
       key={item.user_id}
-      actions={item.user && item.user.categorys && item.user.categorys.length > 0 ?
-        categorys.filter(a => item.user.categorys.some(i => i == a.id)).map(item => (
-          <Tag key={item.id} color="geekblue">{item.subject}</Tag>
-        )) : []
-      }
     >
       <List.Item.Meta
         avatar={<Avatar onDoubleClick={() => handleUserClick(item.user)} size={40} src={item.user && api.dev.static + item.user.avatar} />}
         title={<a href={'/' + item.user.username}>{item.user && item.user.nickname}</a>}
         description={item.user && item.user.statement}
       />
+      <Row>
+        {item.user && item.user.categorys && item.user.categorys.length > 0 ?
+          categorys.filter(a => item.user.categorys.some(i => i == a.id)).map(item => (
+            <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+          ))
+          .concat(
+            item.user && item.user.industrys.length > 0 ? industrys.filter(a => item.user.industrys.some(i => i == a.id)).map(item => (
+              <Tag key={item.id} color="purple">{item.name}</Tag>
+            )) : []
+          ) : []
+        }
+      </Row>
     </List.Item>
   )
 
@@ -56,7 +63,7 @@ const Message = (props) => {
       visible={messageStatus === 1}
       onClose={handleCloseMessage}
     >
-    <div className={Less['head']}>
+    {status ? <div className={Less['head']}>
       <Row type="flex">
         <Col><Avatar size={60} src={api.dev.static + currentUser.avatar} /></Col>
         <Col offset={1}><p className={Less['nickname']}>{currentUser.nickname}</p></Col>
@@ -67,11 +74,17 @@ const Message = (props) => {
           <Tag key={item.id} color="geekblue">{item.subject}</Tag>
         ))}
       </Row>
-    </div>
+      <Row style={{ marginTop: '10px'}}>
+        {industrys.filter(item => currentUser.industrys.some(i => i == item.id)).map(item => (
+          <Tag key={item.id} color="purple">{item.name}</Tag>
+        ))}
+      </Row>
+    </div> : <Skeleton active />}
     <Tabs className={Less['body']} onTabClick={handleTabClick} activeKey={tabKey}>
       <TabPane tab="用户" key="1">
         <List
-          footer={<div>您关注了<b> {currentUser.concerned && currentUser.concerned.length} </b>位用户</div>}
+          itemLayout="vertical"
+          footer={<div>您关注了<b> {currentUser && currentUser.concerned && currentUser.concerned.length} </b>位用户</div>}
           dataSource={currentUser.concerned}
           renderItem={renderItem}
         />

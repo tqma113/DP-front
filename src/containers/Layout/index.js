@@ -48,7 +48,7 @@ const NativeLayout = (props) => {
         <Menu
           theme="dark"
           mode="horizontal"
-          selectedKeys={['5']}
+          selectedKeys={['10']}
           onClick={handleClick}
           style={{ lineHeight: '64px', backgroundColor: '#24292e' }}
         >
@@ -56,12 +56,11 @@ const NativeLayout = (props) => {
           {status && <Menu.Item key={1}>个人中心</Menu.Item>}
           {status && <Menu.Item key={2}>写文章</Menu.Item>}
           {status && <Menu.Item key={3}>私信</Menu.Item>}
-          {status ? <Menu.Item className={Less['right-head']} key={4}>注销</Menu.Item> :
-            <React.Fragment>
-              <Menu.Item className={Less['right-head']} key={5}>登录</Menu.Item>
-              <Menu.Item className={Less['right-head']} key={6}>注册</Menu.Item>
-            </React.Fragment>
+          {status ?
+            <Menu.Item className={Less['right-head']} key={4}>注销</Menu.Item> :
+            <Menu.Item className={Less['right-head']} key={5}>登录</Menu.Item>
           }
+          <Menu.Item className={Less['right-head']} key={6}>注册</Menu.Item>
         </Menu>
       </Header>
       <Content style={{ background: '#fff', minHeight: 680 }}>{{...children}}</Content>
