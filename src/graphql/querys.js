@@ -55,12 +55,14 @@ const QueryInitData = gql`
         concerned {
           id
           user_id
-          concern_user_id
+          concerned_user_id
           user {
             id
             username
             nickname
             avatar
+            categorys
+            statement
           }
         }
         likes {
@@ -68,12 +70,26 @@ const QueryInitData = gql`
           article_id
           user_id
           create_time
+          article {
+            id
+            title
+            abstract
+            release_time
+            last_modify_time
+          }
         }
         collections {
           id
           article_id
           user_id
           create_time
+          article {
+            id
+            title
+            abstract
+            release_time
+            last_modify_time
+          }
         }
       }
       isSuccess
@@ -165,11 +181,14 @@ const QueryUsers = gql`
         concerned {
           id
           user_id
+          concerned_user_id
           user {
             id
             username
             nickname
             avatar
+            categorys
+            statement
           }
         }
         likes  {
@@ -177,12 +196,26 @@ const QueryUsers = gql`
           article_id
           user_id
           create_time
+          article {
+            id
+            title
+            abstract
+            release_time
+            last_modify_time
+          }
         }
         collections  {
           id
           article_id
           user_id
           create_time
+          article {
+            id
+            title
+            abstract
+            release_time
+            last_modify_time
+          }
         }
       }
       isSuccess
