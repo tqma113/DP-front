@@ -183,6 +183,11 @@ const PersonalCenter = (props) => {
       if (username) {
         loadUser(username, 'no-cache')
       }
+      if (isCollected) {
+        message.success('取关成功')
+      } else {
+        message.success('关注成功')
+      }
     } else {
       message.error('点赞失败,请重试')
     }
@@ -205,6 +210,11 @@ const PersonalCenter = (props) => {
       if (username) {
         loadUser(username, 'no-cache')
       }
+      if (isLiked) {
+        message.success('取赞成功')
+      } else {
+        message.success('点赞成功')
+      }
     } else {
       message.error('点赞失败,请重试')
     }
@@ -225,9 +235,81 @@ const PersonalCenter = (props) => {
       if (currentUsername) {
         loadUser(currentUsername, 'no-cache')
       }
+      if (isConcerned) {
+        message.success('取关成功')
+      } else {
+        message.success('关注成功')
+      }
     } else {
       message.error('关注失败,请重试')
     }
+  }
+
+  const renderItem1 = item => {
+    const isLiked = item.likes ? item.likes.some(item => item.user_id == currentUser.id) : false
+    const isCollected = item.collections ? item.collections.some(item => item.user_id == currentUser.id) : false
+
+    return (
+      <List.Item
+        key={item.id}
+        actions={[
+          <span>发布于{moment(item.release_time, 'x').fromNow()}</span>
+// ,         <IconText onClick={() => handleStarClick(item)} theme={isCollected ? 'filled' : 'outlined'} type="star" text={item.collections.length} />,
+          // <IconText onClick={() => handleLikeClick(item)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
+          // <IconText type="message" text={item.comments.length} />
+        ]}
+        // extra={currentUsername === username && <a className={Less['edit-button']} href={'/article/' + item.id}><Button>编辑</Button></a>}
+        className={Less['article-card']}
+      >
+
+        <List.Item.Meta
+          title={<a className={Less['title']} href={'/article/' + item.id}>{item.title}</a>}
+          description={
+            <div style={{lineHeight: '20px', height: '20px'}}>
+              {
+                categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
+                  <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+                ))
+              }
+            </div>
+          }
+        />
+        <p className={Less['abstract']}>{item.abstract}</p>
+      </List.Item>
+    )
+  }
+
+  const renderItem2 = (item) => {
+    const isLiked = item.likes ? item.likes.some(item => item.user_id == currentUser.id) : false
+    const isCollected = item.collections ? item.collections.some(item => item.user_id == currentUser.id) : false
+    return (
+      <List.Item
+        key={item.id}
+        actions={[
+          <span>发布于{moment(item.release_time, 'x').fromNow()}</span>
+,                       <IconText onClick={() => handleStarClick(item)} theme={isCollected ? 'filled' : 'outlined'} type="star" text={item.collections.length} />,
+          <IconText onClick={() => handleLikeClick(item)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
+          <IconText type="message" text={item.comments.length} />
+        ]}
+        extra={currentUsername === username && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
+        className={Less['article-row']}
+      >
+
+        <List.Item.Meta
+          title={<a className={Less['title']} href={'/article/' + item.id}>{item.title}</a>}
+          description={
+            <div style={{lineHeight: '30px', height: '30px'}}>
+              {
+                categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
+                  <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+                ))
+              }
+            </div>
+          }
+        />
+        <p className={Less['abstract']}>{item.abstract}</p>
+      </List.Item>
+    )
   }
 
   return (
@@ -278,41 +360,10 @@ const PersonalCenter = (props) => {
                   }
                 /> :
                 <List
+                  itemLayout="vertical"
                   grid={grid}
                   dataSource={hotArticles}
-                  renderItem={item => {
-                    const isLiked = item.likes ? item.likes.some(item => item.user_id == currentUser.id) : false
-                    const isCollected = item.collections ? item.collections.some(item => item.user_id == currentUser.id) : false
-
-                    return (
-                      <List.Item
-                        key={item.id}
-                        actions={[
-                          <span>发布于{moment(item.release_time, 'x').fromNow()}</span>
-  ,                       <IconText onClick={() => handleStarClick(item)} theme={isCollected ? 'filled' : 'outlined'} type="star" text={item.collections.length} />,
-                          <IconText onClick={() => handleLikeClick(item)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
-                          <IconText type="message" text={item.comments.length} />
-                        ]}
-                        extra={currentUsername === username && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
-                        className={Less['article-card']}
-                      >
-
-                        <List.Item.Meta
-                          title={<a className={Less['title']} href={'/article/' + item.id}>{item.title}</a>}
-                          description={
-                            <div style={{lineHeight: '30px', height: '30px'}}>
-                              {
-                                categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
-                                  <Tag key={item.id} color="geekblue">{item.subject}</Tag>
-                                ))
-                              }
-                            </div>
-                          }
-                        />
-                        <p className={Less['abstract']}>{item.abstract}</p>
-                      </List.Item>
-                    )
-                  }}
+                  renderItem={renderItem1}
                 />
                 }
               </TabPane>
@@ -349,38 +400,7 @@ const PersonalCenter = (props) => {
                   itemLayout="vertical"
                   size="large"
                   dataSource={filterArticles}
-                  renderItem={(item) => {
-                    const isLiked = item.likes ? item.likes.some(item => item.user_id == currentUser.id) : false
-                    const isCollected = item.collections ? item.collections.some(item => item.user_id == currentUser.id) : false
-                    return (
-                      <List.Item
-                        key={item.id}
-                        actions={[
-                          <span>发布于{moment(item.release_time, 'x').fromNow()}</span>
-  ,                       <IconText onClick={() => handleStarClick(item)} theme={isCollected ? 'filled' : 'outlined'} type="star" text={item.collections.length} />,
-                          <IconText onClick={() => handleLikeClick(item)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
-                          <IconText type="message" text={item.comments.length} />
-                        ]}
-                        extra={currentUsername === username && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
-                        className={Less['article-row']}
-                      >
-
-                        <List.Item.Meta
-                          title={<a className={Less['title']} href={'/article/' + item.id}>{item.title}</a>}
-                          description={
-                            <div style={{lineHeight: '30px', height: '30px'}}>
-                              {
-                                categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
-                                  <Tag key={item.id} color="geekblue">{item.subject}</Tag>
-                                ))
-                              }
-                            </div>
-                          }
-                        />
-                        <p className={Less['abstract']}>{item.abstract}</p>
-                      </List.Item>
-                    )
-                  }}
+                  renderItem={renderItem2}
                 />}
               </TabPane>
               {isSelf && <TabPane tab="个人信息" key={3}>

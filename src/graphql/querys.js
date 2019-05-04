@@ -66,6 +66,20 @@ const QueryInitData = gql`
             statement
           }
         }
+        concern {
+          id
+          user_id
+          concerned_user_id
+          user {
+            id
+            username
+            nickname
+            avatar
+            categorys
+            industrys
+            statement
+          }
+        }
         likes {
           id
           article_id
@@ -108,6 +122,8 @@ const QueryInitData = gql`
         id
         subject
         description
+        image
+        users
       }
       extension {
         operator
@@ -124,12 +140,13 @@ const QueryInitData = gql`
         name
         description
         image
+        users
       }
     }
   }
 `
 const QueryUsers = gql`
-  query ($usernames: [String!]!) {
+  query ($usernames: [String]) {
     users (usernames: $usernames) {
       users {
         id
@@ -193,6 +210,20 @@ const QueryUsers = gql`
             statement
           }
         }
+        concern {
+          id
+          user_id
+          concerned_user_id
+          user {
+            id
+            username
+            nickname
+            avatar
+            categorys
+            industrys
+            statement
+          }
+        }
         likes  {
           id
           article_id
@@ -233,7 +264,7 @@ const QueryUsers = gql`
 `
 
 const QueryArticles = gql`
-  query ($idList: [Int!]!) {
+  query ($idList: [Int]) {
     articles (idList: $idList) {
       articles {
         id

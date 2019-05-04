@@ -25,6 +25,7 @@ export default [
     component: Index,
     exact: true,
     auth: permissions.none,
+    module: 'Index',
     documentTitle: '首页 - Now'
   },
   {

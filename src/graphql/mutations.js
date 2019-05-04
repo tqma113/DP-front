@@ -187,28 +187,64 @@ const CreateArticleMutation = gql`
         title
         abstract
         content
-        release_at
-        last_modify_at
+        release_time
+        last_modify_time
         user {
           id
+          username
+          nickname
+          statement
+          avatar
         }
         project_link
-        categorys {
-          id
-        }
-        industrys {
-          id
-        }
+        categorys
         comments {
           id
+          content
+          create_time
+          likes  {
+            id
+            user_id
+            create_time
+            user {
+              id
+              username
+            }
+          }
+          user {
+            id
+            avatar
+            username
+            nickname
+          }
+          comments
         }
-        likes
-        collections
+        likes {
+          id
+          article_id
+          user_id
+          create_time
+          user {
+            id
+            username
+          }
+
+        }
+        collections {
+          id
+          article_id
+          user_id
+          create_time
+          user {
+            id
+            username
+          }
+        }
       }
       isSuccess
       extension {
         operator
-        errors {
+        errors{
           path
           message
         }
@@ -292,6 +328,36 @@ const UserConcernMutation = gql`
   }
 `
 
+const categoryStarMutation = gql`
+  mutation($username: String!, $token: String!, $categoryId: Int!, $status: Boolean!) {
+    categoryStar(username: $username, token: $token, categoryId: $categoryId, status: $status) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
+const industryStarMutation = gql`
+  mutation($username: String!, $token: String!, $industryId: Int!, $status: Boolean!) {
+    industryStar(username: $username, token: $token, industryId: $industryId, status: $status) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 const ChangeUserInfoMutation = gql`
   mutation(
     $email: String!,
@@ -352,7 +418,9 @@ export const names = {
   ArticleStarMutation: 'ArticleStarMutation',
   ArticleLikeMutation: 'ArticleLikeMutation',
   ChangeUserInfoMutation: 'ChangeUserInfoMutation',
-  UserConcernMutation: 'UserConcernMutation'
+  UserConcernMutation: 'UserConcernMutation',
+  categoryStarMutation: 'categoryStarMutation',
+  industryStarMutation: 'industryStarMutation'
 }
 
 export {
@@ -372,5 +440,7 @@ export {
   ArticleStarMutation,
   ArticleLikeMutation,
   ChangeUserInfoMutation,
-  UserConcernMutation
+  UserConcernMutation,
+  categoryStarMutation,
+  industryStarMutation
 }

@@ -48,6 +48,10 @@ export const mutations = {
   ArticleCard: {
     ArticleStarMutation: 'ArticleStarMutation',
     ArticleLikeMutation: 'ArticleLikeMutation'
+  },
+  Index: {
+    categoryStarMutation: 'categoryStarMutation',
+    industryStarMutation: 'industryStarMutation'
   }
 }
 
@@ -62,6 +66,9 @@ export const querys = {
     QueryUsers: 'QueryUsers'
   },
   ArticleCard: {
+    QueryUsers: 'QueryUsers'
+  },
+  Index: {
     QueryUsers: 'QueryUsers'
   }
 }

@@ -11,8 +11,6 @@ const Loader = (props) => {
   const { children, handlers, store } = props
   const { session: { status }, loadStatus } = store
 
-  const [categorys, setCategorys] = useState()
-
   let variables = {}
 
   let username = getCookie('username') || sessionStorage.getItem('username') || localStorage.getItem('username') || ''
