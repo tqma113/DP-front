@@ -4,6 +4,7 @@ import { Tabs } from 'antd'
 import Category from './Category'
 import Industry from './Industry'
 import User from './User'
+import Article from './Article'
 
 import Less from './index.module.less'
 
@@ -41,7 +42,7 @@ const Index = (props) => {
     <section className={Less['index']}>
       <Tabs onTabClick={handleTabClick} activeKey={tabKey}>
         <TabPane tab="文章" key={1}>
-
+          <Article {...props} />
         </TabPane>
         <TabPane tab="用户" key={2}>
           <User {...props} />

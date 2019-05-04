@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Input, Select, Divider, List, Button, message, Skeleton, Avatar, Tag } from 'antd'
+import moment from 'moment'
+
 import { IconText } from '@components'
 
 import Less from './index.module.less'
@@ -9,15 +11,16 @@ const Option = Select.Option
 
 const Article = (props) => {
   const { handlers = {}, store = {}, mutate, mutations = {}, query, querys = {}, static: { api = {} } } = props
-  const { categorys = [], industrys = [], session = {}, users = {}, articles = {} } = store
+  const { categorys = [], industrys = [], session = {}, articles = {}, users = {} } = store
   const { status, info = {} } = session
   const { username: currentUsername, token } = info
-  const currentUser = users[currentUsername]
+  const currentUser = users[currentUsername] || {}
 
   const [loading, setLoading] = useState(true)
 
   const [articleSearch, setArticleSearch] = useState('')
-  const [articleType, setArticleType] = useState(1)
+  const [articleLikeType, setArticleLikeType] = useState(1)
+  const [articleStarType, setArticleStarType] = useState(1)
   const [articleCategorys, setArticleCategorys] = useState([])
   const [sortArticles, setSortArticles] = useState([])
   const [filterArticles, setFilterArticles] = useState([])
@@ -32,117 +35,105 @@ const Article = (props) => {
 
   useEffect(() => {
     filterArticle()
-  }, [articleType, articleCategorys, sortUsers, userSearch])
-
-  const loadAllArticle = async () => {
-    const data = await query(
-      querys.QueryArticles,
-      {
-        fetchPolicy: 'no-cache'
-      }
-    )
-    let { articles: { isSuccess, articles, extension = {} } = {} } = data
-
-    if (isSuccess) {
-      handlers.setArticles({ articles })
-      setLoading(false)
-    } else {
-      const { errors = [] } = extension
-      const { message: messStr = '' } = errors[0]
-      message.error(`数据更新失败: ${messStr}`)
-    }
-  }
+  }, [articleLikeType, articleCategorys, articleStarType, sortArticles, articleSearch])
 
   const sortArticle = () => {
-    let sortUsers = users && typeof users === 'object' ? Object.values(users) : []
-    sortUsers.sort((a, b) => b.concern.length - a.concern.length)
-    setSortUsers(sortUsers)
+    let sortArticles = articles && typeof articles === 'object' ? Object.values(articles) : []
+    sortArticles.sort((a, b) => b.likes.length + b.collections.length - a.likes.length + a.collections.length)
+    setSortArticles(sortArticles)
   }
 
-  const filterUser = () => {
-    let filterUsers = sortUsers || []
-    filterUsers = (userType != 1 ? filterUsers.filter(item => {
-      let isConcerned = status && currentUser.categorys && currentUser.categorys.some(i => i == item.id)
-      if (isConcerned && userType == 2) {
+  const filterArticle = () => {
+    let filterArticles = sortArticles || []
+    filterArticles = (articleLikeType != 1 ? filterArticles.filter(item => {
+      let isLike = status && currentUser.likes && currentUser.likes.some(i => i.article_id == item.id)
+      if (isLike && articleLikeType == 2) {
         return false
       }
-      if (!isConcerned && userType == 3) {
+      if (!isLike && articleLikeType == 3) {
         return false
       }
       return true
-    }) : filterUsers)
-    .filter(item => JSON.stringify(item).includes(userSearch))
-    if (userCategorys && userCategorys.length !== 0) {
-      filterUsers = filterUsers.filter(item => item.categorys.some(i => userCategorys.some(a => a == i)))
+    }) : filterArticles)
+    .filter(item => JSON.stringify(item).includes(articleSearch))
+    filterArticles = (articleStarType != 1 ? filterArticles.filter(item => {
+      let isStar = status && currentUser.collections && currentUser.collections.some(i => i.article_id == item.id)
+      if (isStar && articleStarType == 2) {
+        return false
+      }
+      if (!isStar && articleStarType == 3) {
+        return false
+      }
+      return true
+    }) : filterArticles)
+    .filter(item => JSON.stringify(item).includes(articleSearch))
+    if (articleCategorys && articleCategorys.length !== 0) {
+      filterArticles = filterArticles.filter(item => item.categorys.some(i => articleCategorys.some(a => a == i)))
     }
-    if (userIndustrys && userIndustrys.length !== 0) {
-      filterUsers = filterUsers.filter(item => item.industrys.some(i => userIndustrys.some(a => a == i)))
-    }
-    setFilterUsers(filterUsers)
+    setFilterArticles(filterArticles)
   }
 
-  const handleUserSearchChange = (e) => {
-    setUserSearch(e.target.value)
+  const handleArticleSearchChange = (e) => {
+    setArticleSearch(e.target.value)
   }
 
-  const handleUserTypeChange = (key) => {
-    setUserType(key)
+  const handleArticleLikeTypeChange = (key) => {
+    setArticleLikeType(key)
   }
 
-  const handleUserCategorysChange = (key) => {
-    setUserCategorys(key)
+  const handleArticleStarTypeChange = (key) => {
+    setArticleStarType(key)
   }
 
-  const handleUserIndustrysChange = (key) => {
-    setUserIndustrys(key)
+  const handleArticleCategorysChange = (key) => {
+    setArticleCategorys(key)
   }
 
-  const handleUserConcernClick = (userId, userStatus) => {
+  const handleStarClick = (articleId, isStared) => {
     if (status) {
-      userConcern(userId, userStatus)
+      articleStar(articleId, isStared)
     }
   }
 
+  const handleLikeClick = (articleId, isLiked) => {
+    if (status) {
+      articleLike(articleId, isLiked)
+    }
+  }
 
-
-  const articleStar = async (article) => {
-    const isCollected = article.collections ? article.collections.some(item => item.user_id == currentUser.id) : false
+  const articleStar = async (articleId, isCollected) => {
 
     let data = await mutate(
       mutations.ArticleStarMutation,
       {
         username: currentUsername,
         token,
-        articleId: Number(article.id),
+        articleId: Number(articleId),
         status: isCollected
       }
     )
     const { articleStar: { isSuccess } = {} } = data
     if (isSuccess) {
-      if (isSuccess) {
-        if (currentUsername) {
-          loadUser(currentUsername, 'no-cache')
-          loadArticle(article.id, 'no-cache')
-        }
+      if (currentUsername) {
+        loadUser(currentUsername, 'no-cache')
+        loadArticle(articleId, 'no-cache')
+      }
       if (isCollected) {
         message.success('取关成功')
       } else {
         message.success('关注成功')
       }
-    } else {
-      message.error('点赞失败,请重试')
     }
   }
 
-  const articleLike = async (article) => {
-    const isLiked = article.likes ? article.likes.some(item => item.user_id == currentUser.id) : false
+  const articleLike = async (articleId, isLiked) => {
 
     let data = await mutate(
       mutations.ArticleLikeMutation,
       {
         username: currentUsername,
         token,
-        articleId: Number(article.id),
+        articleId: Number(articleId),
         status: isLiked
       }
     )
@@ -150,7 +141,7 @@ const Article = (props) => {
     if (isSuccess) {
       if (currentUsername) {
         loadUser(currentUsername, 'no-cache')
-        loadArticle(article.id, 'no-cache')
+        loadArticle(articleId, 'no-cache')
       }
       if (isLiked) {
         message.success('取赞成功')
@@ -177,7 +168,7 @@ const Article = (props) => {
     if (isSuccess) {
       handlers.setUsers({ users })
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr = '' } = errors[0]
       message.error(`数据更新失败: ${messStr}`)
     }
@@ -204,41 +195,53 @@ const Article = (props) => {
     }
   }
 
-  const userRenderItem = item => {
-    const isConcerned = currentUser.concerned ? currentUser.concerned.some(i => i.concerned_user_id == item.id) : false
+  const loadAllArticle = async () => {
+    const data = await query(
+      querys.QueryArticles,
+      {
+        fetchPolicy: 'no-cache'
+      }
+    )
+    let { articles: { isSuccess, articles, extension = {} } = {} } = data
+
+    if (isSuccess) {
+      handlers.setArticles({ articles })
+      setLoading(false)
+    } else {
+      const { errors = [] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据更新失败: ${messStr}`)
+    }
+  }
+
+  const articleRenderItem = item => {
+    const isLiked = item.likes ? item.likes.some(item => item.user_id == currentUser.id) : false
+    const isCollected = item.collections ? item.collections.some(item => item.user_id == currentUser.id) : false
     return (
       <List.Item
         key={item.id}
-        extra={
-          <div style={{ width: '200px', height: '100px' }}>
-            {status &&
-              (isConcerned ?
-                <Button onClick={() => handleUserConcernClick(item.id, isConcerned)} style={{ float: 'right'}}>已关注</Button> :
-                <Button onClick={() => handleUserConcernClick(item.id, isConcerned)} style={{ float: 'right'}}>关注</Button>
-              )
-            }
-          </div>
-        }
-        actions={[<IconText type="user" text={item.concerned.length} />]}
+        actions={[
+          <span>发布于{moment(item.release_time, 'x').fromNow()}</span>
+,         <IconText onClick={() => handleStarClick(item.id, isCollected)} theme={isCollected ? 'filled' : 'outlined'} type="star" text={item.collections.length} />,
+          <IconText onClick={() => handleLikeClick(item.id, isLiked)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
+          <IconText type="message" text={item.comments.length} />
+        ]}
+        extra={currentUsername === item.user.username && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
       >
+
         <List.Item.Meta
-          className={Less['user-item']}
-          avatar={<Avatar size={50} src={api.dev.static + item.avatar} />}
-          title={<a>{item.nickname}</a>}
-          description={<span>{item.statement}</span>}
+          title={<a className={Less['title']} href={'/article/' + item.id}>{item.title}</a>}
+          description={
+            <div style={{lineHeight: '30px', height: '30px'}}>
+              {
+                categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
+                  <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+                ))
+              }
+            </div>
+          }
         />
-        <Row>
-          {item.categorys && item.categorys.length > 0 ? categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
-              <Tag key={item.id} color="geekblue">{item.subject}</Tag>
-            )) : []
-          }
-        </Row>
-        <Row style={{marginTop: '10px'}}>
-          {item.industrys.length > 0 ? industrys.filter(a => item.industrys.some(i => i == a.id)).map(item => (
-              <Tag key={item.id} color="purple">{item.name}</Tag>
-            )) : []
-          }
-        </Row>
+        <p className={Less['abstract']}>{item.abstract}</p>
       </List.Item>
     )
   }
@@ -247,25 +250,27 @@ const Article = (props) => {
     <div>
       <Row type="flex" justify="space-between">
         <Col span={7}>
-          <Search value={userSearch} className={Less['search']} onChange={handleUserSearchChange} placeholder="搜索用户" />
+          <Search value={articleSearch} className={Less['search']} onChange={handleArticleSearchChange} placeholder="搜索用户" />
         </Col>
         <Col span={5}>
-          <Select allowClear style={{ width: '100%'}} mode="multiple" value={userCategorys} onChange={handleUserCategorysChange} placeholder="选择类别">
+          <Select allowClear style={{ width: '100%'}} mode="multiple" value={articleCategorys} onChange={handleArticleCategorysChange} placeholder="选择类别">
             {categorys.map(item => (
               <Option key={Number(item.id)} value={item.id}>{item.subject}</Option>
             ))}
           </Select>
         </Col>
-        <Col span={5}>
-          <Select allowClear style={{ width: '100%'}} mode="multiple" value={userIndustrys} onChange={handleUserIndustrysChange} placeholder="选择行业">
-            {industrys.map(item => (
-              <Option key={Number(item.id)} value={item.id}>{item.name}</Option>
-            ))}
-          </Select>
+        <Col span={4}>
+          {status &&
+            <Select onChange={handleArticleLikeTypeChange} value={articleLikeType} style={{ width: '100%'}}>
+              <Option key={1} value={1}>全部</Option>
+              <Option key={2} value={2}>未点赞</Option>
+              <Option key={3} value={3}>已点赞</Option>
+            </Select>
+          }
         </Col>
         <Col span={4}>
           {status &&
-            <Select onChange={handleUserTypeChange} value={userType} style={{ width: '100%'}}>
+            <Select onChange={handleArticleStarTypeChange} value={articleStarType} style={{ width: '100%'}}>
               <Option key={1} value={1}>全部</Option>
               <Option key={2} value={2}>未关注</Option>
               <Option key={3} value={3}>已关注</Option>
@@ -285,9 +290,9 @@ const Article = (props) => {
         /> :
         <List
           itemLayout="vertical"
-          dataSource={filterUsers}
-          renderItem={userRenderItem}
-          footer={<div>共筛选出 <b>{filterUsers.length}</b> 位用户</div>}
+          dataSource={filterArticles}
+          renderItem={articleRenderItem}
+          footer={<div>共筛选出 <b>{filterArticles.length}</b> 篇文章</div>}
         />
       }
     </div>

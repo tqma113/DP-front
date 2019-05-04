@@ -53,6 +53,8 @@ export const mutations = {
     categoryStarMutation: 'categoryStarMutation',
     industryStarMutation: 'industryStarMutation',
     UserConcernMutation: 'UserConcernMutation',
+    ArticleStarMutation: 'ArticleStarMutation',
+    ArticleLikeMutation: 'ArticleLikeMutation'
   }
 }
 

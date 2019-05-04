@@ -55,7 +55,7 @@ const Loader = (props) => {
     }
   }
 
-  const setInit = ({ checkLoginState, categorys, industrys }) => {
+  const setInit = ({ checkLoginState = {}, categorys = {}, industrys = {} }) => {
     setLoginState(checkLoginState)
 
     const ctg = getCategorysData(categorys)
