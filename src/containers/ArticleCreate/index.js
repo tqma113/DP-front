@@ -66,12 +66,12 @@ const ArticleCreate = (props) => {
   }
 
   const setCreate = (createArticle) => {
-    const { isSuccess, article, extension } = createArticle
+    const { isSuccess, article, extension = {} } = createArticle
     if (isSuccess) {
       handlers.go('/article/' + article.id)
     } else {
       const { errors = [] } = extension
-      const { message: messStr } = errors[0]
+      const { message: messStr = '' } = errors[0]
       message.error(`上传失败: ${messStr}`)
       handlers.onload({ loadStatus })
       setSending(false)

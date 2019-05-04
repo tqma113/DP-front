@@ -44,12 +44,16 @@ const Article = (props) => {
         fetchPolicy
       }
     )
-    let { articles: { isSuccess, articles } = {} } = data
+    let { articles: { isSuccess, articles, extension = {} } = {} } = data
 
     if (isSuccess) {
       handlers.setArticles({ articles })
       setComment('')
       setSubmitting(false)
+    } else {
+      const { errors = [] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据下载失败: ${messStr}`)
     }
   }
 

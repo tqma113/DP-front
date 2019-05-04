@@ -147,10 +147,14 @@ const PersonalCenter = (props) => {
         fetchPolicy
       }
     )
-    let { users: { isSuccess, users } = {} } = data
+    let { users: { isSuccess, users, extension = {} } = {} } = data
 
     if (isSuccess) {
       handlers.setUsers({ users })
+    } else {
+      const { errors = [] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据更新失败: ${messStr}`)
     }
   }
 

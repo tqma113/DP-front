@@ -288,10 +288,14 @@ const PersonalInfo = (props) => {
         usernames: [username]
       }
     )
-    const { users: { users = [], isSuccess } = {} } = data
+    const { users: { users = [], isSuccess, extension = {} } = {} } = data
     if (isSuccess) {
       handlers.setUsers({ users })
       resetFields()
+    } else {
+      const { errors = [] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据更新失败: ${messStr}`)
     }
 
     setSpinning(false)
