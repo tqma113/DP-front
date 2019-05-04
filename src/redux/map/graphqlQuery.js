@@ -28,7 +28,10 @@ export const mutations = {
   PersonalCenter: {
     SendEmailLoginCodeMutation: 'SendEmailLoginCodeMutation',
     AckEmailCodeMutation: 'AckEmailCodeMutation',
-    ChangeUserInfoMutation: 'ChangeUserInfoMutation'
+    ChangeUserInfoMutation: 'ChangeUserInfoMutation',
+    ArticleStarMutation: 'ArticleStarMutation',
+    ArticleLikeMutation: 'ArticleLikeMutation',
+    UserConcernMutation: 'UserConcernMutation'
   },
   Article: {
     SendCommentMutation: 'SendCommentMutation',

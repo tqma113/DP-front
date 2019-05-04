@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Icon, Tabs, message, Input, Select, Button, Divider, Spin, Avatar, Skeleton, List } from 'antd'
-import { ArticleCard, ArticleRow } from '@components'
+import { Row, Col, Icon, Tabs, message, Input, Select, Button, Divider, Card, Avatar, Skeleton, List, Tag } from 'antd'
+import { IconText } from '@components'
 import PersonalInfo from './PersonalInfo'
+import moment from 'moment'
 
 import Less from './index.module.less'
+import './index.less'
 
 const TabPane = Tabs.TabPane
 const Option = Select.Option
@@ -28,10 +30,15 @@ const PersonalCenter = (props) => {
     static: { api },
     query,
     querys,
+    mutate,
+    mutations,
     location = {}
   } = props
-  const { loadStatus, users = {}, documentTitle = '', categorys = [] } = store
+  const { loadStatus, users = {}, documentTitle = '', categorys = [], session = {} } = store
   const user = users[username] || {}
+  const { info = {}, status } = session
+  const { username: currentUsername, token } = info
+  const currentUser = users[currentUsername]
 
   const [overLoading, setOverviewLoading] = useState(true)
   const [articlesLoading, setArticleLoading] = useState(true)
@@ -43,6 +50,8 @@ const PersonalCenter = (props) => {
   const [sortArticles, setSortArticles] = useState(user.articles || [])
 
   const [tabKey, setTabKey] = useState('1')
+
+  const isConcerned = currentUser.concerned ? currentUser.concerned.some(item => item.concerned_user_id == user.id) : false
 
   useEffect(() => {
     if (user.username !== username) {
@@ -106,7 +115,13 @@ const PersonalCenter = (props) => {
   }
 
   const handleEditClick = () => {
+    setTabKey('3')
+  }
 
+  const handleConcernClick = () => {
+    if (status) {
+      userConcern()
+    }
   }
 
   const handleTabClick = (key) => {
@@ -122,22 +137,101 @@ const PersonalCenter = (props) => {
     setArticleLoading(true)
   }
 
-  const loadUser = async (username) => {
+  const loadUser = async (username, fetchPolicy) => {
     const data = await query(
       querys.QueryUsers,
       {
         usernames: [username]
+      },
+      {
+        fetchPolicy
       }
     )
-    const { users: { users = [], isSuccess } = {} } = data
+    let { users: { isSuccess, users } = {} } = data
+
     if (isSuccess) {
       handlers.setUsers({ users })
     }
   }
 
+  const handleStarClick = (article) => {
+    if (status) {
+      articleStar(article)
+    }
+  }
+
+  const handleLikeClick = (article) => {
+    if (status) {
+      articleLike(article)
+    }
+  }
+
+  const articleStar = async (article) => {
+    const isCollected = article.collections ? article.collections.some(item => item.user_id == currentUser.id) : false
+
+    let data = await mutate(
+      mutations.ArticleStarMutation,
+      {
+        username: currentUsername,
+        token,
+        articleId: Number(article.id),
+        status: isCollected
+      }
+    )
+    const { articleStar: { isSuccess } = {} } = data
+    if (isSuccess) {
+      if (username) {
+        loadUser(username, 'no-cache')
+      }
+    } else {
+      message.error('点赞失败,请重试')
+    }
+  }
+
+  const articleLike = async (article) => {
+    const isLiked = article.likes ? article.likes.some(item => item.user_id == currentUser.id) : false
+
+    let data = await mutate(
+      mutations.ArticleLikeMutation,
+      {
+        username: currentUsername,
+        token,
+        articleId: Number(article.id),
+        status: isLiked
+      }
+    )
+    const { articleLike: { isSuccess } = {} } = data
+    if (isSuccess) {
+      if (username) {
+        loadUser(username, 'no-cache')
+      }
+    } else {
+      message.error('点赞失败,请重试')
+    }
+  }
+
+  const userConcern = async () => {
+    let data = await mutate(
+      mutations.UserConcernMutation,
+      {
+        username: currentUsername,
+        token,
+        userId: Number(user.id),
+        status: isConcerned
+      }
+    )
+    const { userConcern: { isSuccess } = {} } = data
+    if (isSuccess) {
+      if (currentUsername) {
+        loadUser(currentUsername, 'no-cache')
+      }
+    } else {
+      message.error('关注失败,请重试')
+    }
+  }
 
   return (
-    <section className={Less['personal-center']}>
+    <section className={Less['personal-center'] + ' personal'}>
       <section className={Less['main']}>
         <Row bottom='md'>
           <Col span={6}>
@@ -158,7 +252,13 @@ const PersonalCenter = (props) => {
               {user.statement &&
                 <p className={Less['statement']}>{user.statement}</p>
               }
-              {isSelf && <Button onClick={handleEditClick} style={{ width: '100%'}} size="small">编辑</Button>}
+              {
+                isSelf ?
+                <Button onClick={handleEditClick} style={{ width: '100%'}} size="small">编辑</Button> :
+                isConcerned ?
+                <Button onClick={handleConcernClick} style={{ width: '100%'}} size="small">已关注</Button> :
+                <Button onClick={handleConcernClick} style={{ width: '100%'}} size="small">关注</Button>
+              }
             </Row>
           </Col>
           <Col span={17} offset={1}>
@@ -180,11 +280,39 @@ const PersonalCenter = (props) => {
                 <List
                   grid={grid}
                   dataSource={hotArticles}
-                  renderItem={item => (
-                    <List.Item>
-                      <ArticleCard username={username} article={item} />
-                    </List.Item>
-                  )}
+                  renderItem={item => {
+                    const isLiked = item.likes ? item.likes.some(item => item.user_id == currentUser.id) : false
+                    const isCollected = item.collections ? item.collections.some(item => item.user_id == currentUser.id) : false
+
+                    return (
+                      <List.Item
+                        key={item.id}
+                        actions={[
+                          <span>发布于{moment(item.release_time, 'x').fromNow()}</span>
+  ,                       <IconText onClick={() => handleStarClick(item)} theme={isCollected ? 'filled' : 'outlined'} type="star" text={item.collections.length} />,
+                          <IconText onClick={() => handleLikeClick(item)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
+                          <IconText type="message" text={item.comments.length} />
+                        ]}
+                        extra={currentUsername === username && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
+                        className={Less['article-card']}
+                      >
+
+                        <List.Item.Meta
+                          title={<a className={Less['title']} href={'/article/' + item.id}>{item.title}</a>}
+                          description={
+                            <div style={{lineHeight: '30px', height: '30px'}}>
+                              {
+                                categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
+                                  <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+                                ))
+                              }
+                            </div>
+                          }
+                        />
+                        <p className={Less['abstract']}>{item.abstract}</p>
+                      </List.Item>
+                    )
+                  }}
                 />
                 }
               </TabPane>
@@ -221,11 +349,38 @@ const PersonalCenter = (props) => {
                   itemLayout="vertical"
                   size="large"
                   dataSource={filterArticles}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <ArticleRow username={username} article={item} />
-                    </List.Item>
-                  )}
+                  renderItem={(item) => {
+                    const isLiked = item.likes ? item.likes.some(item => item.user_id == currentUser.id) : false
+                    const isCollected = item.collections ? item.collections.some(item => item.user_id == currentUser.id) : false
+                    return (
+                      <List.Item
+                        key={item.id}
+                        actions={[
+                          <span>发布于{moment(item.release_time, 'x').fromNow()}</span>
+  ,                       <IconText onClick={() => handleStarClick(item)} theme={isCollected ? 'filled' : 'outlined'} type="star" text={item.collections.length} />,
+                          <IconText onClick={() => handleLikeClick(item)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
+                          <IconText type="message" text={item.comments.length} />
+                        ]}
+                        extra={currentUsername === username && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
+                        className={Less['article-row']}
+                      >
+
+                        <List.Item.Meta
+                          title={<a className={Less['title']} href={'/article/' + item.id}>{item.title}</a>}
+                          description={
+                            <div style={{lineHeight: '30px', height: '30px'}}>
+                              {
+                                categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
+                                  <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+                                ))
+                              }
+                            </div>
+                          }
+                        />
+                        <p className={Less['abstract']}>{item.abstract}</p>
+                      </List.Item>
+                    )
+                  }}
                 />}
               </TabPane>
               <TabPane tab="个人信息" key={3}>

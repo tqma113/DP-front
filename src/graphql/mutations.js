@@ -277,6 +277,21 @@ const ArticleLikeMutation = gql`
   }
 `
 
+const UserConcernMutation = gql`
+  mutation($username: String!, $token: String!, $userId: Int!, $status: Boolean!) {
+    userConcern(username: $username, token: $token, userId: $userId, status: $status) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 const ChangeUserInfoMutation = gql`
   mutation(
     $email: String!,
@@ -336,7 +351,8 @@ export const names = {
   SendCommentMutation: 'SendCommentMutation',
   ArticleStarMutation: 'ArticleStarMutation',
   ArticleLikeMutation: 'ArticleLikeMutation',
-  ChangeUserInfoMutation: 'ChangeUserInfoMutation'
+  ChangeUserInfoMutation: 'ChangeUserInfoMutation',
+  UserConcernMutation: 'UserConcernMutation'
 }
 
 export {
@@ -355,5 +371,6 @@ export {
   SendCommentMutation,
   ArticleStarMutation,
   ArticleLikeMutation,
-  ChangeUserInfoMutation
+  ChangeUserInfoMutation,
+  UserConcernMutation
 }
