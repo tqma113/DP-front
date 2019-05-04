@@ -469,11 +469,11 @@ const PersonalInfo = (props) => {
             >
               {getFieldDecorator('industrys', {
                 rules: [],
-                initialValue: user.industrys
+                initialValue: user.industrys.map(i => i + '')
               })(
                 <Select mode="multiple">
                   {industrys.map(item => (
-                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                    <Option key={Number(item.id)} value={item.id}>{item.name}</Option>
                   ))}
                 </Select>
               )}
@@ -485,11 +485,11 @@ const PersonalInfo = (props) => {
             >
               {getFieldDecorator('categorys', {
                 rules: [],
-                initialValue: user.categorys
+                initialValue: user.categorys.map(i => i + '')
               })(
                 <Select mode="multiple">
                   {categorys.map(item => (
-                    <Option key={item.id} value={item.id}>{item.subject}</Option>
+                    <Option key={Number(item.id)} value={item.id}>{item.subject}</Option>
                   ))}
                 </Select>
               )}
