@@ -9,14 +9,28 @@ import Less from './index.module.less'
 
 const TabPane = Tabs.TabPane
 
+const tabs = {
+  'articles': '1',
+  'users': '2',
+  'categorys': '3',
+  'industrys': '4'
+}
+
 const Index = (props) => {
-  const { handlers = {}, store = {} } = props
+  const { handlers = {}, store = {}, location = {} } = props
   const { loadStatus } = store
+  const { hash } = location
 
   const [tabKey, setTabKey] = useState('1')
 
   useEffect(() => {
     handlers.onload({ loadStatus })
+    if (hash) {
+      let key = tabs[hash.slice(1)]
+      if (key) {
+        setTabKey(key)
+      }
+    }
   }, [])
 
   const handleTabClick = (key) => {

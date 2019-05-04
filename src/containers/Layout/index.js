@@ -9,9 +9,10 @@ const { Header, Content, Footer } = Layout
 
 const NativeLayout = (props) => {
   const { children, handlers = {}, store = {} } = props
-  const { session = {} } = store
+  const { session = {}, users= {} } = store
   const { status, info = {} } = session
   const { username } = info
+  const currentUser = users[username] || {}
 
   const handleClick = ({ key }) => {
     switch(key) {
@@ -53,9 +54,9 @@ const NativeLayout = (props) => {
           style={{ lineHeight: '64px', backgroundColor: '#24292e' }}
         >
           <Menu.Item key={0}>首页</Menu.Item>
-          {status && <Menu.Item key={1}>个人中心</Menu.Item>}
           {status && <Menu.Item key={2}>写文章</Menu.Item>}
           {status && <Menu.Item key={3}>私信</Menu.Item>}
+          {status && <Menu.Item className={Less['right-head']} key={1}>{currentUser.nickname}</Menu.Item>}
           {status ?
             <Menu.Item className={Less['right-head']} key={4}>注销</Menu.Item> :
             <Menu.Item className={Less['right-head']} key={5}>登录</Menu.Item>

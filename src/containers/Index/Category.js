@@ -155,6 +155,7 @@ const Category = props => {
         itemLayout="vertical"
         dataSource={filterCategorys}
         renderItem={categoryRenderItem}
+        footer={<div>共筛选出 <b>{filterCategorys.length}</b> 种类别</div>}
       />
     </div>
   )

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Icon, Tabs, message, Input, Select, Button, Divider, Card, Avatar, Skeleton, List, Tag } from 'antd'
+import { Row, Col, Icon, Tabs, message, Input, Select, Button, Divider, Avatar, Skeleton, List, Tag } from 'antd'
 import { IconText } from '@components'
 import PersonalInfo from './PersonalInfo'
 import moment from 'moment'

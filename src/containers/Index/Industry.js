@@ -156,6 +156,7 @@ const Industry = props => {
         itemLayout="vertical"
         dataSource={filterIndustrys}
         renderItem={industryRenderItem}
+        footer={<div>共筛选出 <b>{filterIndustrys.length}</b> 种行业</div>}
       />
     </div>
   )

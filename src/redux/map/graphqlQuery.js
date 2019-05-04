@@ -51,7 +51,8 @@ export const mutations = {
   },
   Index: {
     categoryStarMutation: 'categoryStarMutation',
-    industryStarMutation: 'industryStarMutation'
+    industryStarMutation: 'industryStarMutation',
+    UserConcernMutation: 'UserConcernMutation',
   }
 }
 
@@ -69,6 +70,7 @@ export const querys = {
     QueryUsers: 'QueryUsers'
   },
   Index: {
-    QueryUsers: 'QueryUsers'
+    QueryUsers: 'QueryUsers',
+    QueryArticles: 'QueryArticles'
   }
 }

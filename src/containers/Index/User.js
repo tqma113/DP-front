@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Input, Select, Divider, List, Button, message } from 'antd'
+import { Row, Col, Input, Select, Divider, List, Button, message, Skeleton, Avatar, Tag } from 'antd'
 import { IconText } from '@components'
 
 import Less from './index.module.less'
@@ -8,83 +8,106 @@ const Search = Input.Search
 const Option = Select.Option
 
 const User = props => {
-  const { handlers = {}, store = {}, mutate, mutations = {}, query, querys = {} } = props
-  const { categorys = [], static: { api } = {}, session = {}, users = {} } = store
+  const { handlers = {}, store = {}, mutate, mutations = {}, query, querys = {}, static: { api = {} } } = props
+  const { categorys = [], industrys = [], session = {}, users = {} } = store
   const { status, info = {} } = session
-  const { username, token } = info
-  const user = users[username]
+  const { username: currentUsername, token } = info
+  const currentUser = users[currentUsername]
 
-  const [categorySearch, setCategorySearch] = useState('')
-  const [categoryType, setCategoryType] = useState(1)
-  const [sortCategorys, setSortCategorys] = useState([])
-  const [filterCategorys, setFilterCategorys] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  const [userSearch, setUserSearch] = useState('')
+  const [userType, setUserType] = useState(1)
+  const [userCategorys, setUserCategorys] = useState([])
+  const [userIndustrys, setUserIndustrys] = useState([])
+  const [sortUsers, setSortUsers] = useState([])
+  const [filterUsers, setFilterUsers] = useState([])
 
   useEffect(() => {
-    sortCategory()
-  }, [categorys])
+    loadAllUser()
+  }, [])
 
   useEffect(() => {
-    filterCategory()
-  }, [categoryType, sortCategorys, categorySearch])
+    sortUser()
+  }, [users])
 
-  const sortCategory = () => {
-    let sortCategorys = categorys || []
-    sortCategorys.sort((a, b) => b.users.length - a.users.length)
-    setSortCategorys(sortCategorys)
+  useEffect(() => {
+    filterUser()
+  }, [userType, userCategorys, userIndustrys, sortUsers, userSearch])
+
+  const sortUser = () => {
+    let sortUsers = users && typeof users === 'object' ? Object.values(users) : []
+    sortUsers.sort((a, b) => b.concern.length - a.concern.length)
+    setSortUsers(sortUsers)
   }
 
-  const filterCategory = () => {
-    let filterCategorys = sortCategorys || []
-    filterCategorys = (categoryType != 1 ? filterCategorys.filter(item => {
-      let isLiked = status && user.categorys && user.categorys.some(i => i == item.id)
-      if (isLiked && categoryType == 2) {
+  const filterUser = () => {
+    let filterUsers = sortUsers || []
+    filterUsers = (userType != 1 ? filterUsers.filter(item => {
+      let isConcerned = status && currentUser.categorys && currentUser.categorys.some(i => i == item.id)
+      if (isConcerned && userType == 2) {
         return false
       }
-      if (!isLiked && categoryType == 3) {
+      if (!isConcerned && userType == 3) {
         return false
       }
       return true
-    }) : filterCategorys)
-    .filter(item => JSON.stringify(item).includes(categorySearch))
-    setFilterCategorys(filterCategorys)
+    }) : filterUsers)
+    .filter(item => JSON.stringify(item).includes(userSearch))
+    if (userCategorys && userCategorys.length !== 0) {
+      filterUsers = filterUsers.filter(item => item.categorys.some(i => userCategorys.some(a => a == i)))
+    }
+    if (userIndustrys && userIndustrys.length !== 0) {
+      filterUsers = filterUsers.filter(item => item.industrys.some(i => userIndustrys.some(a => a == i)))
+    }
+    setFilterUsers(filterUsers)
   }
 
-  const handleCategorySearchChange = (e) => {
-    setCategorySearch(e.target.value)
+  const handleUserSearchChange = (e) => {
+    setUserSearch(e.target.value)
   }
 
-  const handleCategoryTypeChange = (key) => {
-    setCategoryType(key)
+  const handleUserTypeChange = (key) => {
+    setUserType(key)
   }
 
-  const handleCategoryStarClick = (categoryId, categoryStatus) => {
+  const handleUserCategorysChange = (key) => {
+    setUserCategorys(key)
+  }
+
+  const handleUserIndustrysChange = (key) => {
+    setUserIndustrys(key)
+  }
+
+  const handleUserConcernClick = (userId, userStatus) => {
     if (status) {
-      categoryStar(categoryId, categoryStatus)
+      userConcern(userId, userStatus)
     }
   }
 
-  const categoryStar = async (categoryId, status) => {
+  const userConcern = async (userId, isConcerned) => {
+
     let data = await mutate(
-      mutations.categoryStarMutation,
+      mutations.UserConcernMutation,
       {
-        username: username,
+        username: currentUsername,
         token,
-        categoryId: Number(categoryId),
-        status
+        userId: Number(userId),
+        status: isConcerned
       }
     )
-    const { categoryStar: { isSuccess } = {} } = data
+    const { userConcern: { isSuccess } = {} } = data
     if (isSuccess) {
-      if (username) {
-        loadUser(username, 'no-cache')
+      if (currentUsername) {
+        loadUser(currentUsername, 'no-cache')
       }
-      if (status) {
+      if (isConcerned) {
         message.success('取关成功')
       } else {
-        message.success('收藏成功')
+        message.success('关注成功')
       }
     } else {
-      message.error('收藏失败,请重试')
+      message.error('关注失败,请重试')
     }
   }
 
@@ -98,38 +121,71 @@ const User = props => {
         fetchPolicy
       }
     )
-    let { users: { isSuccess, users } = {} } = data
+    let { users: { isSuccess, users, extension = {} } = {} } = data
 
     if (isSuccess) {
       handlers.setUsers({ users })
+    } else {
+      const { errors = [] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据更新失败: ${messStr}`)
     }
   }
 
-  const categoryRenderItem = item => {
-    const isStared = status && user.categorys && user.categorys.some(i => i == item.id)
+  const loadAllUser = async () => {
+    const data = await query(
+      querys.QueryUsers,
+      {
+        fetchPolicy: 'no-cache'
+      }
+    )
+    let { users: { isSuccess, users, extension = {} } = {} } = data
+
+    if (isSuccess) {
+      handlers.setUsers({ users })
+      setLoading(false)
+    } else {
+      const { errors = [] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据更新失败: ${messStr}`)
+    }
+  }
+
+  const userRenderItem = item => {
+    const isConcerned = currentUser.concerned ? currentUser.concerned.some(i => i.concerned_user_id == item.id) : false
     return (
       <List.Item
         key={item.id}
         extra={
-          <div style={{ width: '200px', height: '200px' }}>
+          <div style={{ width: '200px', height: '100px' }}>
             {status &&
-              (isStared ?
-                <Button onClick={() => handleCategoryStarClick(item.id, isStared)} style={{ float: 'right'}}>已关注</Button> :
-                <Button onClick={() => handleCategoryStarClick(item.id, isStared)} style={{ float: 'right'}}>关注</Button>
+              (isConcerned ?
+                <Button onClick={() => handleUserConcernClick(item.id, isConcerned)} style={{ float: 'right'}}>已关注</Button> :
+                <Button onClick={() => handleUserConcernClick(item.id, isConcerned)} style={{ float: 'right'}}>关注</Button>
               )
-            }
-            {
-              item.image && <img src={api.dev.static + item.image} />
             }
           </div>
         }
-        actions={[<IconText type="user" text={item.users.length} />]}
+        actions={[<IconText type="user" text={item.concerned.length} />]}
       >
         <List.Item.Meta
-          className={Less['category-item']}
-          title={<a>{item.subject}</a>}
-          description={<span title={item.description}>{item.description}</span>}
+          className={Less['user-item']}
+          avatar={<Avatar size={50} src={api.dev.static + item.avatar} />}
+          title={<a>{item.nickname}</a>}
+          description={<span>{item.statement}</span>}
         />
+        <Row>
+          {item.categorys && item.categorys.length > 0 ? categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
+              <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+            )) : []
+          }
+        </Row>
+        <Row style={{marginTop: '10px'}}>
+          {item.industrys.length > 0 ? industrys.filter(a => item.industrys.some(i => i == a.id)).map(item => (
+              <Tag key={item.id} color="purple">{item.name}</Tag>
+            )) : []
+          }
+        </Row>
       </List.Item>
     )
   }
@@ -137,12 +193,26 @@ const User = props => {
   return (
     <div>
       <Row type="flex" justify="space-between">
-        <Col span={12}>
-          <Search value={categorySearch} className={Less['search']} onChange={handleCategorySearchChange} placeholder="搜索类别" />
+        <Col span={7}>
+          <Search value={userSearch} className={Less['search']} onChange={handleUserSearchChange} placeholder="搜索用户" />
         </Col>
-        <Col span={6}>
+        <Col span={5}>
+          <Select allowClear style={{ width: '100%'}} mode="multiple" value={userCategorys} onChange={handleUserCategorysChange} placeholder="选择类别">
+            {categorys.map(item => (
+              <Option key={Number(item.id)} value={item.id}>{item.subject}</Option>
+            ))}
+          </Select>
+        </Col>
+        <Col span={5}>
+          <Select allowClear style={{ width: '100%'}} mode="multiple" value={userIndustrys} onChange={handleUserIndustrysChange} placeholder="选择行业">
+            {industrys.map(item => (
+              <Option key={Number(item.id)} value={item.id}>{item.name}</Option>
+            ))}
+          </Select>
+        </Col>
+        <Col span={4}>
           {status &&
-            <Select onChange={handleCategoryTypeChange} value={categoryType} style={{ width: '100%'}}>
+            <Select onChange={handleUserTypeChange} value={userType} style={{ width: '100%'}}>
               <Option key={1} value={1}>全部</Option>
               <Option key={2} value={2}>未关注</Option>
               <Option key={3} value={3}>已关注</Option>
@@ -151,11 +221,22 @@ const User = props => {
         </Col>
       </Row>
       <Divider />
-      <List
-        itemLayout="vertical"
-        dataSource={filterCategorys}
-        renderItem={categoryRenderItem}
-      />
+      {loading ?
+        <List
+          dataSource={[1,2,3,4,5,6]}
+          renderItem={() =>
+            <List.Item>
+              <Skeleton active />
+            </List.Item>
+          }
+        /> :
+        <List
+          itemLayout="vertical"
+          dataSource={filterUsers}
+          renderItem={userRenderItem}
+          footer={<div>共筛选出 <b>{filterUsers.length}</b> 位用户</div>}
+        />
+      }
     </div>
   )
 }
