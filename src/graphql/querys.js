@@ -146,8 +146,8 @@ const QueryInitData = gql`
   }
 `
 const QueryUsers = gql`
-  query ($usernames: [String]) {
-    users (usernames: $usernames) {
+  query ($usernames: [String], $categoryIds: [Int], $industryIds: [Int]) {
+    users (usernames: $usernames, categoryIds: $categoryIds, industryIds: $industryIds) {
       users {
         id
         username
