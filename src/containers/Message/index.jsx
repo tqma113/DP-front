@@ -18,6 +18,8 @@ const Message = (props) => {
   const [messageUser, setMessageUser] = useState()
   const [tabKey, setTabKey] = useState('1')
 
+  const [message, setMessage] = useState('')
+
   const handleCloseMessage = () => {
     handlers.closeMessage()
   }
@@ -29,6 +31,18 @@ const Message = (props) => {
   const handleUserClick = (user) => {
     setMessageUser(user)
     setTabKey('3')
+  }
+
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value)
+  }
+
+  const handleMessageClearClick = () => {
+    setMessage('')
+  }
+
+  const handleMessageSendClick = () => {
+
   }
 
   const renderItem = item => (
@@ -89,7 +103,7 @@ const Message = (props) => {
           renderItem={renderItem}
         />
       </TabPane>
-      <TabPane tab="会话" key="2"></TabPane>
+      {/* <TabPane tab="会话" key="2"></TabPane> */}
       <TabPane tab="聊天" key="3">
         {messageUser ?
           <Card
@@ -103,10 +117,12 @@ const Message = (props) => {
           </Card> :
           <Empty description="您还未选择用户,请先选择用户" />
         }
-        <Row style={{marginTop: '10px'}}><TextArea style={{resize: 'none'}} /></Row>
+        <Row style={{marginTop: '10px'}}>
+          <TextArea onChange={handleMessageChange} vlaue={message} style={{resize: 'none'}} />
+        </Row>
         <Row style={{marginTop: '10px'}} type="flex" justify="space-between">
-          <Button>清空</Button>
-          <Button type="primary">发送</Button>
+          <Button onClick={handleMessageClearClick}>清空</Button>
+          <Button onClick={handleMessageSendClick} type="primary">发送</Button>
         </Row>
       </TabPane>
     </Tabs>
