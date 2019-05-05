@@ -1,24 +1,27 @@
 import React, { useState } from 'react'
-import { Query } from 'react-apollo'
+import { Query, Subscription } from 'react-apollo'
 import { message } from 'antd'
 
 import getCookie from '@utils/getCookie'
 import { QueryInitData } from '@graphql/querys'
+import { NewMessageSubScription } from '@graphql/subscriptions'
 
 import map from '@map'
 
+let username = getCookie('username') || sessionStorage.getItem('username') || localStorage.getItem('username') || ''
+let token = getCookie('token') || sessionStorage.getItem('token') || localStorage.getItem('token') || ''
+
 const Loader = (props) => {
   const { children, handlers, store } = props
-  const { session: { status }, loadStatus } = store
+  const { session: { status }, loadStatus, users = {} } = store
+  const currentUser = users[username]
 
-  let variables = {}
-
-  let username = getCookie('username') || sessionStorage.getItem('username') || localStorage.getItem('username') || ''
-  let token = getCookie('token') || sessionStorage.getItem('token') || localStorage.getItem('token') || ''
-
-  variables = {
+  const initVariables = {
     username,
     token
+  }
+  const newMessageVariables = {
+    userId: currentUser ? Number(currentUser.id) : NaN
   }
 
   const  handleLoad = (user, sessionInfo) => {
@@ -29,9 +32,12 @@ const Loader = (props) => {
   }
 
   const setLoginState = (data) => {
-    const { isSuccess, sessionInfo, user } = data
+    const { isSuccess, user } = data
     if (isSuccess && !status) {
-      handleLoad(user, sessionInfo)
+      handleLoad(user, {
+        username,
+        token
+      })
     }
   }
 
@@ -55,8 +61,8 @@ const Loader = (props) => {
     }
   }
 
-  const setInit = ({ checkLoginState = {}, categorys = {}, industrys = {} }) => {
-    setLoginState(checkLoginState)
+  const setInit = ({ init = {}, categorys = {}, industrys = {} }) => {
+    setLoginState(init)
 
     const ctg = getCategorysData(categorys)
     const idy = getIndustrysData(industrys)
@@ -64,26 +70,43 @@ const Loader = (props) => {
     handlers.init({ categorys: ctg, loadStatus, industrys: idy })
   }
 
+  console.log('loader', status, currentUser)
+
   return (
-    <Query
-      query={QueryInitData}
-      variables={variables}
-    >
-      {({ loading, error, data = {}, refetch, networkStatus}) => {
-        if (networkStatus === 4) return null;
-        if (loading) return null;
-        if (error) {
-          message.error(error)
-          return null;
-        }
+    <React.Fragment>
+      <Query
+        query={QueryInitData}
+        variables={initVariables}
+      >
+        {({ loading, error, data = {}, refetch, networkStatus}) => {
+          if (networkStatus === 4) return null;
+          if (loading) return null;
+          if (error) {
+            message.error(error)
+            return null;
+          }
 
-        const { checkLoginState, categorys, industrys } = data
+          const { init, categorys, industrys } = data
 
-        setInit({ checkLoginState, categorys, industrys })
+          setInit({ init, categorys, industrys })
 
-        return loadStatus > 0 ? ({...children}) : null
-      }}
-    </Query>
+          return loadStatus > 0 ? ({...children}) : null
+        }}
+      </Query>
+      {status && currentUser &&
+        <React.Fragment>
+          <Subscription
+            subscription={NewMessageSubScription}
+            variables={newMessageVariables}
+          >
+            {({ data: { newMessage } = {}, loading }) => {
+              console.log(newMessage)
+              return null
+            }}
+          </Subscription>
+        </React.Fragment>
+      }
+    </React.Fragment>
   )
 }
 

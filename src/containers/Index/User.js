@@ -135,6 +135,7 @@ const User = props => {
   const loadAllUser = async () => {
     const data = await query(
       querys.QueryUsers,
+      {},
       {
         fetchPolicy: 'no-cache'
       }
@@ -152,7 +153,7 @@ const User = props => {
   }
 
   const userRenderItem = item => {
-    const isConcerned = currentUser.concerned ? currentUser.concerned.some(i => i.concerned_user_id == item.id) : false
+    const isConcerned = currentUser && currentUser.concerned ? currentUser.concerned.some(i => i.concerned_user_id == item.id) : false
     return (
       <List.Item
         key={item.id}

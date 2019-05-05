@@ -198,6 +198,7 @@ const Article = (props) => {
   const loadAllArticle = async () => {
     const data = await query(
       querys.QueryArticles,
+      {},
       {
         fetchPolicy: 'no-cache'
       }
@@ -208,7 +209,7 @@ const Article = (props) => {
       handlers.setArticles({ articles })
       setLoading(false)
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr = '' } = errors[0]
       message.error(`数据更新失败: ${messStr}`)
     }

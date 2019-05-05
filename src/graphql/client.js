@@ -13,6 +13,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
 
 const isToken = localStorage.getItem('token') || '';
+const username = localStorage.getItem('username') || '';
 
 const wsLink = new WebSocketLink({
   uri: 'ws://localhost:4000/subscriptions',
@@ -20,6 +21,7 @@ const wsLink = new WebSocketLink({
     reconnect: true,
     connectionParams: () => ({
       authToken: isToken,
+      username
     }),
   },
 });
@@ -88,10 +90,12 @@ const cache = new InMemoryCache({
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username');
   return {
     headers: {
       ...headers,
-      Authorization: `Bearer ${token}` || null,
+      Authorization: token || null,
+      Username: username || null
     },
   };
 });

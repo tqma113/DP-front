@@ -180,8 +180,8 @@ const checkUsernameValidMutation = gql`
 `
 
 const CreateArticleMutation = gql`
-  mutation ($title: String!, $abstract: String!, $content: String!, $username: String!, $token: String!, $categoryIds: [Int]!) {
-    createArticle(title: $title, abstract: $abstract, content: $content, username: $username, token: $token categoryIds: $categoryIds) {
+  mutation ($title: String!, $abstract: String!, $content: String!, $categoryIds: [Int]!) {
+    createArticle(title: $title, abstract: $abstract, content: $content, categoryIds: $categoryIds) {
       article {
         id
         title
@@ -269,8 +269,8 @@ const checkArticleValidMutation = gql`
 `
 
 const SendCommentMutation = gql`
-  mutation($username: String!, $token: String!, $content: String!, $articleId: Int!) {
-    sendComment(username: $username, token: $token, content: $content, articleId: $articleId) {
+  mutation($content: String!, $articleId: Int!) {
+    sendComment(content: $content, articleId: $articleId) {
       isSuccess
       extension {
         operator
@@ -284,8 +284,8 @@ const SendCommentMutation = gql`
 `
 
 const ArticleStarMutation = gql`
-  mutation($username: String!, $token: String!, $articleId: Int!, $status: Boolean!) {
-    articleStar(username: $username, token: $token, articleId: $articleId, status: $status) {
+  mutation($articleId: Int!, $status: Boolean!) {
+    articleStar(articleId: $articleId, status: $status) {
       isSuccess
       extension {
         operator
@@ -299,8 +299,8 @@ const ArticleStarMutation = gql`
 `
 
 const ArticleLikeMutation = gql`
-  mutation($username: String!, $token: String!, $articleId: Int!, $status: Boolean!) {
-    articleLike(username: $username, token: $token, articleId: $articleId, status: $status) {
+  mutation($articleId: Int!, $status: Boolean!) {
+    articleLike(articleId: $articleId, status: $status) {
       isSuccess
       extension {
         operator
@@ -314,8 +314,8 @@ const ArticleLikeMutation = gql`
 `
 
 const UserConcernMutation = gql`
-  mutation($username: String!, $token: String!, $userId: Int!, $status: Boolean!) {
-    userConcern(username: $username, token: $token, userId: $userId, status: $status) {
+  mutation($userId: Int!, $status: Boolean!) {
+    userConcern(userId: $userId, status: $status) {
       isSuccess
       extension {
         operator
@@ -329,8 +329,8 @@ const UserConcernMutation = gql`
 `
 
 const categoryStarMutation = gql`
-  mutation($username: String!, $token: String!, $categoryId: Int!, $status: Boolean!) {
-    categoryStar(username: $username, token: $token, categoryId: $categoryId, status: $status) {
+  mutation($categoryId: Int!, $status: Boolean!) {
+    categoryStar(categoryId: $categoryId, status: $status) {
       isSuccess
       extension {
         operator
@@ -344,8 +344,23 @@ const categoryStarMutation = gql`
 `
 
 const industryStarMutation = gql`
-  mutation($username: String!, $token: String!, $industryId: Int!, $status: Boolean!) {
-    industryStar(username: $username, token: $token, industryId: $industryId, status: $status) {
+  mutation($industryId: Int!, $status: Boolean!) {
+    industryStar(industryId: $industryId, status: $status) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
+const SendMessageMutation = gql`
+  mutation($userId: Int!, $message: String!) {
+    sendMessage(userId: $userId, message: $message) {
       isSuccess
       extension {
         operator
@@ -420,7 +435,8 @@ export const names = {
   ChangeUserInfoMutation: 'ChangeUserInfoMutation',
   UserConcernMutation: 'UserConcernMutation',
   categoryStarMutation: 'categoryStarMutation',
-  industryStarMutation: 'industryStarMutation'
+  industryStarMutation: 'industryStarMutation',
+  SendMessageMutation: 'SendMessageMutation'
 }
 
 export {
@@ -442,5 +458,6 @@ export {
   ChangeUserInfoMutation,
   UserConcernMutation,
   categoryStarMutation,
-  industryStarMutation
+  industryStarMutation,
+  SendMessageMutation
 }

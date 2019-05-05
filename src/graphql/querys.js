@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 const QueryInitData = gql`
-  query ($username: ID!, $token: String!) {
-    checkLoginState (username: $username, token: $token) {
+  query {
+    init {
       sessionInfo {
         token
         username

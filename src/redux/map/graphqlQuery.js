@@ -55,6 +55,9 @@ export const mutations = {
     UserConcernMutation: 'UserConcernMutation',
     ArticleStarMutation: 'ArticleStarMutation',
     ArticleLikeMutation: 'ArticleLikeMutation'
+  },
+  Message: {
+    SendMessageMutation: 'SendMessageMutation'
   }
 }
 

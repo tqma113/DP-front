@@ -16,7 +16,6 @@ export default (state = {}, action) => {
 
     case Session.clearSessionInfo:
       return {
-        ...state,
         status: false,
         info: {}
       }
