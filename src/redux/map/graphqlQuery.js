@@ -25,7 +25,7 @@ export const mutations = {
   ArticleCreate: {
     CreateArticleMutation: 'CreateArticleMutation'
   },
-  PersonalCenter: {
+  Home: {
     SendEmailLoginCodeMutation: 'SendEmailLoginCodeMutation',
     AckEmailCodeMutation: 'AckEmailCodeMutation',
     ChangeUserInfoMutation: 'ChangeUserInfoMutation',
@@ -39,7 +39,7 @@ export const mutations = {
     ArticleLikeMutation: 'ArticleLikeMutation'
   },
   CommentList: {
-
+    CommentLikeMutation: 'CommentLikeMutation'
   },
   ArticleRow: {
     ArticleStarMutation: 'ArticleStarMutation',
@@ -62,7 +62,7 @@ export const mutations = {
 }
 
 export const querys = {
-  PersonalCenter: {
+  Home: {
     QueryUsers: 'QueryUsers'
   },
   Article: {
@@ -80,5 +80,8 @@ export const querys = {
   },
   Message: {
     QueryMessages: 'QueryMessages',
+  },
+  CommentList: {
+    QueryArticles: 'QueryArticles'
   }
 }

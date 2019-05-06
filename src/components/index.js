@@ -7,6 +7,7 @@ import Editor from './Editor'
 import CommentList from './CommentList'
 import ArticleRow from './ArticleRow'
 import IconText from './IconText'
+import SingleLargeUpload from './SingleLargeUpload'
 
 export {
   Horologe,
@@ -17,5 +18,6 @@ export {
   Editor,
   CommentList,
   ArticleRow,
-  IconText
+  IconText,
+  SingleLargeUpload
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Avatar, Icon, Card, Skeleton, Comment, message } from 'antd'
+import { Row, Col, Avatar, Icon, Card, Skeleton, Comment, message, Tooltip } from 'antd'
 import BraftEditor from 'braft-editor'
 import moment from 'moment'
 
@@ -176,8 +176,8 @@ const Article = (props) => {
         <p>创建于 {moment(article.release_time).format('YYYY-MM-DD')}</p>
       </Row>
       <Row className={Less['info']} type="flex">
-        <p><Icon onClick={handleArticleStarClick} type="star" theme={isCollected ? 'twoTone' : 'outlined'} /> {article.collections && article.collections.length}</p>
-        <p><Icon onClick={handleArticleLikeClick} type="like" theme={isLiked ? 'twoTone' : 'outlined'} /> {article.likes && article.likes.length}</p>
+        <Tooltip title="star"><Icon onClick={handleArticleStarClick} type="star" theme={isCollected ? 'twoTone' : 'outlined'} /> {article.collections && article.collections.length}</Tooltip>
+        <Tooltip title="like"><Icon onClick={handleArticleLikeClick} type="like" theme={isLiked ? 'twoTone' : 'outlined'} /> {article.likes && article.likes.length}</Tooltip>
       </Row>
       <Card
         title="评论"
@@ -199,7 +199,7 @@ const Article = (props) => {
             />
           )}
         />
-        {article.comments.length > 0 && <CommentList currentUserId={Number(currentUser.id)} comments={article.comments} />}
+        {article.comments.length > 0 && <CommentList articleId={id} currentUserId={Number(currentUser.id)} comments={article.comments} />}
       </Card>
     </section>
   )

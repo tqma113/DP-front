@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Input, Row, Button, Select, message } from 'antd'
 import BraftEditor from 'braft-editor'
 
+import { SingleLargeUpload } from '@components'
+
 import Less from './index.module.less'
 import 'braft-editor/dist/index.css'
 import './index.less'
@@ -11,15 +13,14 @@ const Option = Select.Option
 
 const ArticleCreate = (props) => {
   const { store = {}, handlers = {}, mutate, mutations = {} } = props
-  const { loadStatus, categorys = [], session = {} } = store
-  const { info = {} } = session
-  const { username, token } = info
+  const { loadStatus, categorys = [] } = store
 
   const [title, setTitle] = useState()
   const [abstract, setAbstract] = useState()
   const [content, setContent] = useState()
   const [categoryIds, setCategoryIds] = useState([])
   const [sending, setSending] = useState()
+  const [imageUrl, setImageUrl] = useState()
 
   useEffect(() => {
     handlers.onload({ loadStatus })
@@ -39,8 +40,7 @@ const ArticleCreate = (props) => {
         abstract,
         content: contentStr,
         categoryIds: categoryIdsN,
-        username,
-        token
+        image: imageUrl
       }
     )
 
@@ -65,6 +65,10 @@ const ArticleCreate = (props) => {
     setCategoryIds(categoryIds)
   }
 
+  const handleUpload = (image, url, imageBase64) => {
+    setImageUrl(url)
+  }
+
   const setCreate = (createArticle) => {
     const { isSuccess, article, extension = {} } = createArticle
     if (isSuccess) {
@@ -80,6 +84,7 @@ const ArticleCreate = (props) => {
 
   return (
     <section className={Less['create']}>
+      <SingleLargeUpload onLoad={handleUpload}  style={{ width: '100%' }} uploadStyle={{ width: '100%', display: 'block' }} />
       <Input
         className={Less['title']}
         placeholder="标题"
@@ -100,6 +105,7 @@ const ArticleCreate = (props) => {
         onChange={handleContentChange}
         value={content}
         disabled={sending}
+        contentStyle={{ minHeight: '500px', height: 'auto' }}
       />
       <Row>
         <Select

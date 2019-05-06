@@ -18,7 +18,7 @@ const AuthComponent = (props) => {
     module = '',
     documentTitle = ''
   } = props
-  const { session, loadStatus, messageStatus } = store
+  const { session, loadStatus } = store
   const { status = false, info = {} } = session
   const { username: currentUsername } = info
   const { pathname = '' } = location
@@ -56,7 +56,7 @@ const AuthComponent = (props) => {
         }
         setAuthStatus(true)
       break;
-      case permissions.personalCenter:
+      case permissions.home:
         let data = await mutate(
           mutations.checkUsernameValidMutation,
           {

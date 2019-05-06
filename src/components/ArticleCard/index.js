@@ -13,8 +13,8 @@ const ArticleCard = (props) => {
   const { username: currentUsername, token } = info
   const currentUser = users[currentUsername]
 
-  const isLiked = article.likes ? article.likes.some(item => item.user_id == currentUser.id) : false
-  const isCollected = article.collections ? article.collections.some(item => item.user_id == currentUser.id) : false
+  const isLiked = article.likes ? article.likes.some(item => Number(item.user_id) === Number(currentUser.id)) : false
+  const isCollected = article.collections ? article.collections.some(item => Number(item.user_id) === Number(currentUser.id)) : false
 
   const handleStarClick = () => {
     if (status) {

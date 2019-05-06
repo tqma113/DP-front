@@ -1,6 +1,6 @@
 export default {
   isLogged: 'IS_LOGGED',
-  personalCenter: 'PERSONAL_CENTER',
+  home: 'HOME',
   loginPage: 'LOGIN_PAGE',
   article: 'ARTICLE',
   none: 'NONE'

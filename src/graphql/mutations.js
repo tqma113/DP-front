@@ -180,8 +180,8 @@ const checkUsernameValidMutation = gql`
 `
 
 const CreateArticleMutation = gql`
-  mutation ($title: String!, $abstract: String!, $content: String!, $categoryIds: [Int]!) {
-    createArticle(title: $title, abstract: $abstract, content: $content, categoryIds: $categoryIds) {
+  mutation ($title: String!, $abstract: String!, $content: String!, $categoryIds: [Int]!, $image: String!) {
+    createArticle(title: $title, abstract: $abstract, content: $content, categoryIds: $categoryIds, image: $image) {
       article {
         id
         title
@@ -416,6 +416,21 @@ const ChangeUserInfoMutation = gql`
   }
 `
 
+const CommentLikeMutation = gql`
+  mutation($commentId: Int!, $status: Boolean!) {
+    commentLike(commentId: $commentId, status: $status) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export const names = {
   LoginMutation: 'login',
   RegisterMutation: 'register',
@@ -436,7 +451,8 @@ export const names = {
   UserConcernMutation: 'UserConcernMutation',
   categoryStarMutation: 'categoryStarMutation',
   industryStarMutation: 'industryStarMutation',
-  SendMessageMutation: 'SendMessageMutation'
+  SendMessageMutation: 'SendMessageMutation',
+  CommentLikeMutation: 'CommentLikeMutation'
 }
 
 export {
@@ -459,5 +475,6 @@ export {
   UserConcernMutation,
   categoryStarMutation,
   industryStarMutation,
-  SendMessageMutation
+  SendMessageMutation,
+  CommentLikeMutation
 }

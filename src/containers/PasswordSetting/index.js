@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Form, Input, Divider, Row, Col, Button, Modal, message , Tag, Icon} from 'antd'
+import { Card, Form, Input, Divider, Row, Col, Button, message , Tag, Icon} from 'antd'
 
 import Less from './index.module.less'
 import './index.less'

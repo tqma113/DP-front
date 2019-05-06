@@ -12,7 +12,7 @@ const SingleUplaod = (props) => {
 
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
-  const [image, setImage] = useState()
+  const [image, setImage] = useState(null)
   const [imageUrl, setImageUrl] = useState('')
   const [imageBase64, setImageBase64] = useState('')
 
@@ -37,8 +37,8 @@ const SingleUplaod = (props) => {
       setImage(file)
       try {
         getBase64(file).then(base64 => {
-          setImageBase64(base64)
           setLoading(false)
+          setImageBase64(base64)
         })
       } catch (err) {
         setLoading(false)
@@ -53,6 +53,8 @@ const SingleUplaod = (props) => {
   }
 
   const handleUploadClick = async () => {
+    console.log('a')
+
     if (loading || uploading) {
       return
     }
@@ -94,7 +96,7 @@ const SingleUplaod = (props) => {
           <img className={Less['image']} src={api.dev.static + imageUrl} alt="avatar" /> :
           imageBase64 ?
           <img className={Less['image']} src={imageBase64} alt="avatar" /> :
-          <div>
+          <div style={{ padding: '80px 0'}}>
             <Icon type={loading ? 'loading' : 'plus'} />
             <div className="ant-upload-text">选择图片</div>
           </div>

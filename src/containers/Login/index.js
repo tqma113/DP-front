@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Form, Icon, Input, Button, Checkbox, Row, Col, Modal, Tabs, message } from 'antd'
+import { Card, Form, Icon, Input, Button, Checkbox, Row, Col, Tabs, message } from 'antd'
 
 import Less from './index.module.less'
 
@@ -159,7 +159,7 @@ const Login = (props) => {
                         )}
                       </Col>
                       <Col span={12}>
-                        <a className={Less['login-form-forgot']}>忘记密码</a>
+                        <a href="#" className={Less['login-form-forgot']}>忘记密码</a>
                       </Col>
                     </Row>
                     <Button type="primary" htmlType="submit" className={Less['login-form-button']}>

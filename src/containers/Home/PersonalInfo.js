@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Input, Select, Radio, Button, Row, Col, message, Divider, Tag, Icon, Card, Table, DatePicker, Spin } from 'antd'
+import { Form, Input, Select, Button, Row, Col, message, Divider, Tag, Icon, Table, DatePicker, Spin } from 'antd'
 import moment from 'moment'
 
 import { SingleUpload } from '@components'
@@ -36,9 +36,8 @@ const genderOptions = [{
 
 const PersonalInfo = (props) => {
   const { form = {}, user = {}, mutate, mutations = {}, store = {}, handlers = {}, query, querys = {} } = props
-  const { getFieldDecorator, getFieldsValue, resetFields, setFields, setFieldsValue, validateFields, validateFieldsAndScroll } = form
+  const { getFieldDecorator, resetFields, setFieldsValue, validateFields } = form
   const {
-    id,
     username,
     nickname,
     statement,
@@ -48,8 +47,6 @@ const PersonalInfo = (props) => {
     birthday,
     eduBG: psEduBG = [],
     emRecords: psEmRecords = [],
-    categorys: psCategorys = [],
-    industrys: psIndustrys = [],
     secQuestions: psSecQuestions = []
   } = user
   const { industrys = [], categorys = [] } = store

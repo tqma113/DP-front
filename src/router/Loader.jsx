@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Query } from 'react-apollo'
 import { message } from 'antd'
 
@@ -12,8 +12,7 @@ let token = getCookie('token') || sessionStorage.getItem('token') || localStorag
 
 const Loader = (props) => {
   const { children, handlers, store } = props
-  const { session: { status }, loadStatus, users = {} } = store
-  const currentUser = users[username]
+  const { session: { status }, loadStatus } = store
 
   const initVariables = {
     username,

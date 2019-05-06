@@ -16,8 +16,8 @@ const ArticleRow = (props) => {
   const { username: currentUsername, token } = info
   const currentUser = users[currentUsername]
 
-  const isLiked = article.likes ? article.likes.some(item => item.user_id == currentUser.id) : false
-  const isCollected = article.collections ? article.collections.some(item => item.user_id == currentUser.id) : false
+  const isLiked = article.likes ? article.likes.some(item => Number(item.user_id) === Number(currentUser.id)) : false
+  const isCollected = article.collections ? article.collections.some(item => Number(item.user_id) === Number(currentUser.id)) : false
 
   const handleStarClick = () => {
     if (status) {
@@ -100,7 +100,7 @@ const ArticleRow = (props) => {
       </Row>
       <Row className={Less['row']}>{article.abstract}</Row>
       <Row className={Less['categorys']}>
-        {categorys.filter(item => article.categorys.some(i => i == item.id)).map(item => (
+        {categorys.filter(item => article.categorys.some(i => Number(i) === Number(item.id))).map(item => (
           <Tag key={item.id} color="geekblue">{item.subject}</Tag>
         ))}
       </Row>
