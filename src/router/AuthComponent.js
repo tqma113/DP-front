@@ -18,7 +18,7 @@ const AuthComponent = (props) => {
     module = '',
     documentTitle = ''
   } = props
-  const { session, loadStatus } = store
+  const { session, loadStatus, messageStatus } = store
   const { status = false, info = {} } = session
   const { username: currentUsername } = info
   const { pathname = '' } = location
@@ -31,6 +31,7 @@ const AuthComponent = (props) => {
   useEffect(() => {
       document.title = documentTitle
       handlers.setDocumentTitle({ documentTitle })
+      handlers.closeMessage()
   }, [])
 
   useEffect(() => {

@@ -146,7 +146,7 @@ const User = props => {
       handlers.setUsers({ users })
       setLoading(false)
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr = '' } = errors[0]
       message.error(`数据更新失败: ${messStr}`)
     }

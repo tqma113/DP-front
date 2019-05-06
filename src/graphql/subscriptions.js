@@ -1,32 +1,24 @@
 import gql from 'graphql-tag'
 
 const NewMessageSubScription = gql`
-  subscription($userId: Int!) {
-    newMessage(userId: $userId) {
-      message {
-        sendUser {
-          id
-          username
-          nickname
-          avatar
-        }
-        acceptUser {
-          id
-          username
-          nickname
-          avatar
-        }
-        content
-        send_time
+  subscription {
+    newMessage {
+      a_user_id
+      s_user_id
+      sendUser {
+        id
+        username
+        nickname
+        avatar
       }
-      isSuccess
-      extension {
-        operator
-        errors {
-          path
-          message
-        }
+      acceptUser {
+        id
+        username
+        nickname
+        avatar
       }
+      content
+      send_time
     }
   }
 `

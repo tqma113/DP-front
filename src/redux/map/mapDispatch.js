@@ -34,6 +34,10 @@ const {
 const {
   getSetDocumentTitleAction
 } = actions.documentTitle
+const {
+  getSetMessagesAction,
+  getPushMessageAction
+} = actions.messages
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   handlers: {
@@ -67,6 +71,12 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     setArticles: ({ articles = [] } = {}) => {
       dispatch(getSetArticlesAction(articles))
+    },
+    setMessages: ({ messages = [], username = '' }) => {
+      dispatch(getSetMessagesAction(messages, username))
+    },
+    pushMessage: ({ message = {}, username = ''}) => {
+      dispatch(getPushMessageAction(message, username))
     },
     setDocumentTitle: ({ documentTitle = '' }) => {
       dispatch(getSetDocumentTitleAction(documentTitle))

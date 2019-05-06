@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { Query, Subscription } from 'react-apollo'
+import { Query } from 'react-apollo'
 import { message } from 'antd'
 
 import getCookie from '@utils/getCookie'
 import { QueryInitData } from '@graphql/querys'
-import { NewMessageSubScription } from '@graphql/subscriptions'
 
 import map from '@map'
 
@@ -19,9 +18,6 @@ const Loader = (props) => {
   const initVariables = {
     username,
     token
-  }
-  const newMessageVariables = {
-    userId: currentUser ? Number(currentUser.id) : NaN
   }
 
   const  handleLoad = (user, sessionInfo) => {
@@ -70,43 +66,26 @@ const Loader = (props) => {
     handlers.init({ categorys: ctg, loadStatus, industrys: idy })
   }
 
-  console.log('loader', status, currentUser)
-
   return (
-    <React.Fragment>
-      <Query
-        query={QueryInitData}
-        variables={initVariables}
-      >
-        {({ loading, error, data = {}, refetch, networkStatus}) => {
-          if (networkStatus === 4) return null;
-          if (loading) return null;
-          if (error) {
-            message.error(error)
-            return null;
-          }
+    <Query
+      query={QueryInitData}
+      variables={initVariables}
+    >
+      {({ loading, error, data = {}, refetch, networkStatus}) => {
+        if (networkStatus === 4) return null;
+        if (loading) return null;
+        if (error) {
+          message.error(error)
+          return null;
+        }
 
-          const { init, categorys, industrys } = data
+        const { init, categorys, industrys } = data
 
-          setInit({ init, categorys, industrys })
+        setInit({ init, categorys, industrys })
 
-          return loadStatus > 0 ? ({...children}) : null
-        }}
-      </Query>
-      {status && currentUser &&
-        <React.Fragment>
-          <Subscription
-            subscription={NewMessageSubScription}
-            variables={newMessageVariables}
-          >
-            {({ data: { newMessage } = {}, loading }) => {
-              console.log(newMessage)
-              return null
-            }}
-          </Subscription>
-        </React.Fragment>
-      }
-    </React.Fragment>
+        return loadStatus > 0 ? ({...children}) : null
+      }}
+    </Query>
   )
 }
 

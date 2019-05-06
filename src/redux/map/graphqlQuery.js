@@ -77,5 +77,8 @@ export const querys = {
   Index: {
     QueryUsers: 'QueryUsers',
     QueryArticles: 'QueryArticles'
+  },
+  Message: {
+    QueryMessages: 'QueryMessages',
   }
 }

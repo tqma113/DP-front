@@ -6,6 +6,7 @@ import moment from 'moment'
 import { Editor, CommentList } from '@components'
 
 import Less from './index.module.less'
+import 'braft-editor/dist/output.css'
 
 const Article = (props) => {
   const { store = {}, handlers = {}, query, querys = {}, id, static: { api }, mutate, mutations } = props
@@ -170,7 +171,7 @@ const Article = (props) => {
         </Col>
       </Row>
       <Row className={Less['abstract']}>{article.abstract}</Row>
-      <Row className={Less['content']}><div dangerouslySetInnerHTML={{ __html: content }}></div></Row>
+      <Row className={Less['content']}><div className="braft-output-content" dangerouslySetInnerHTML={{ __html: content }}></div></Row>
       <Row className={Less['time']} type="flex">
         <p>创建于 {moment(article.release_time).format('YYYY-MM-DD')}</p>
       </Row>

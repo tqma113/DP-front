@@ -7,6 +7,7 @@ import * as floatStatus from './floatStatus'
 import * as documentTitle from './documentTitle'
 import * as articles from './articles'
 import * as industrys from './industrys'
+import * as messages from './messages'
 
 export default {
   users,
@@ -17,5 +18,6 @@ export default {
   floatStatus,
   documentTitle,
   articles,
-  industrys
+  industrys,
+  messages
 }

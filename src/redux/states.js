@@ -41,3 +41,8 @@ export const Industrys = {
 export const DocumentTitle = {
   setDocumentTitle: 'SET_DOCUMENT_TITLE'
 }
+
+export const Messages = {
+  setMessages: 'SET_MESSAGES',
+  pushMessage: 'PUSH_MESSAGE'
+}
