@@ -17,11 +17,11 @@ import 'braft-editor/dist/output.css'
 const TabPane = Tabs.TabPane
 
 const Message = (props) => {
-  const { store = {}, handlers = {}, static:{ api } } = props
-  const { messageStatus= false, users = {}, session = {} } = store
-  const { info = {} } = session
-  const { username : currentUsername, status } = info
-  const currentUser = users[currentUsername] || {}
+  const { store = {}, handlers = {}, static:{ api }, query, querys = {}} = props
+  const { messageStatus= false, users = {}, session = {}, messages = {} } = store
+  const { info = {}, status } = session
+  const { username : currentUsername } = info
+  const currentUser = users[currentUsername]
   const [tabKey, setTabKey] = useState('1')
 
   const [messageUsername, setMessageUsername] = useState('')
@@ -43,6 +43,11 @@ const Message = (props) => {
     const { sendUser = {}, content } = newMessage
     let contentState = BraftEditor.createEditorState(JSON.parse(content))
     let html = contentState.toHTML()
+    if (!messages[sendUser.username]) {
+      loadMessages(sendUser.id, sendUser.name)
+    } else {
+      handlers.pushMessage({ message: newMessage, username: sendUser.username })
+    }
     if (messageStatus == 0) {
       notification.open({
         message: <Row><Avatar src={api.dev.static + sendUser.avatar} />{sendUser.nickname}</Row>,
@@ -54,6 +59,43 @@ const Message = (props) => {
         },
       });
     }
+  }
+
+  const loadMessages = async (userId, username) => {
+    const data = await query(
+      querys.QueryMessages,
+      {
+        userId: Number(userId)
+      }
+    )
+    let { messages } = data
+    setMessagesRes(messages, username)
+  }
+
+  const setMessagesRes = (res = {}, username) => {
+    const { messages, isSuccess, extension = {} } = res
+    if (isSuccess) {
+      handlers.setMessages({ messages, username })
+    } else {
+      const { errors = [{}] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据更新失败: ${messStr}`)
+    }
+  }
+
+  const render = ({ data: { newMessage } = {}, loading = true, error }) => {
+    if (loading) return null
+    if (error) {
+      message.error(error)
+      return null
+    }
+    return null
+  }
+
+  const subscribe = ({ client, subscriptionData, error }) => {
+    const { data = {} } = subscriptionData
+    const { newMessage } = data
+    acceptNewMessage(newMessage)
   }
 
   return (
@@ -77,18 +119,9 @@ const Message = (props) => {
       {status && currentUser &&
         <Subscription
           subscription={NewMessageSubScription}
-        >
-          {({ data: { newMessage } = {}, loading = true, error }) => {
-            if (loading) return null
-            if (error) {
-              message.error(error)
-              return null
-            }
-
-            acceptNewMessage(newMessage)
-            return null
-          }}
-        </Subscription>
+          children={render}
+          onSubscriptionData={subscribe}
+        />
       }
     </Drawer>
   )

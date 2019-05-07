@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Row, Avatar, List,  Empty, Card, Button, message } from 'antd'
 import BraftEditor from 'braft-editor'
 import moment from 'moment'
+import { Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 
 
@@ -135,9 +136,9 @@ const Chat = (props) => {
       <List.Item key={item.id}>
         <div style={{ display: 'flex', flexDirection: item.s_user_id == currentUser.id ? 'row-reverse' : 'row'}}>
           <Avatar src={api.dev.static + item.sendUser.avatar} />
-          <div style={{ marginLeft: '5px'}}>
-            <span style={{color: '#888', fontSize: '12px'}}>{moment(item.send_time, 'x').fromNow()}</span>
-            <div className="braft-output-content" dangerouslySetInnerHTML={{ __html: html }}></div>
+          <div style={{ marginLeft: '5px', width: '300px' }}>
+            <p style={{color: '#888', fontSize: '10px', margin: '0'}}>{moment(item.send_time, 'x').fromNow()}</p>
+            <div style={{ width: '60%' }} className="braft-output-content" dangerouslySetInnerHTML={{ __html: html }}></div>
           </div>
         </div>
       </List.Item>
@@ -148,26 +149,29 @@ const Chat = (props) => {
 
   return (
     <React.Fragment>
-      {messageUser ?
-        <Card
-          bordered={false}
-          headStyle={{padding: '0', height: '50px'}}
-          bodyStyle={{boxShadow: 'inset 0px 0px 3px #ccc', borderRadius: '5px', height: '350px', overflow: 'scroll'}}
-          className={Less['chat']}
-          title={messageUser.nickname}
-        >
-          <List
-            bordered={false}
-            loading={messageLoadStatus}
-            itemLayout="vertical"
-            dataSource={currentMessages}
-            renderItem={messageRenderItem}
-            header={<div style={{textAlign: 'center'}}>无其他聊天记录</div>}
-            footer={<div style={{textAlign: 'center'}}>已经是最新的聊天记录</div>}
-          />
-        </Card> :
-        <Empty description="您还未选择用户,请先选择用户" style={{ height: '400px'}} />
-      }
+      <Element
+        style={{
+          position: 'relative',
+          height: '500px',
+          overflow: 'scroll',
+          border: '1px solid #e8e8e8',
+          padding: '0 10px'
+        }}
+      >
+        {messageUser ?
+            <List
+              bordered={false}
+              split={false}
+              loading={messageLoadStatus}
+              itemLayout="vertical"
+              dataSource={currentMessages}
+              renderItem={messageRenderItem}
+              header={<div style={{textAlign: 'center'}}>无其他聊天记录</div>}
+            />
+          :
+          <Empty description="您还未选择用户,请先选择用户" style={{ height: '400px'}} />
+        }
+      </Element>
       <Row style={{marginTop: '10px'}}>
         <BraftEditor
           onChange={handleMessageChange}
