@@ -81,7 +81,7 @@ const SingleUplaod = (props) => {
   }
 
   return (
-    <div className={`${Less['single-upload']} single-upload ${className}`} style={style}>
+    <div className={`${Less['single-large-upload']} single-upload ${className}`} style={style}>
       <Upload
         style={uploadStyle}
         accept="image/*"

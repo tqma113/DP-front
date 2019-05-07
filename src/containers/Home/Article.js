@@ -79,6 +79,10 @@ const Article = (props) => {
     }
   }
 
+  const handleNewArticleClick = () => {
+    handlers.go('/article/create')
+  }
+
   const articleStar = async (article) => {
     const isCollected = article.collections ? article.collections.some(item => item.user_id == currentUser.id) : false
 
@@ -178,7 +182,6 @@ const Article = (props) => {
   const renderItem2 = (item) => {
     const isLiked = item.likes ? item.likes.some(item => item.user_id == currentUser.id) : false
     const isCollected = item.collections ? item.collections.some(item => item.user_id == currentUser.id) : false
-    console.log(item.collections)
     return (
       <List.Item
         key={item.id}
@@ -224,7 +227,7 @@ const Article = (props) => {
           </Select>
         </Col>
         {isSelf && <Col span={4} offset={1}>
-          <Button style={{ width: '100%'}} type="primary"><Icon type="plus" />新建</Button>
+          <Button onClick={handleNewArticleClick} style={{ width: '100%'}} type="primary"><Icon type="plus" />新建</Button>
         </Col>}
       </Row>
       <Divider />

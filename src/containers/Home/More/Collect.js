@@ -20,7 +20,7 @@ const Collect = (props) => {
     mutate,
     mutations = {},
   } = props
-  const { users = {}, categorys = [], session = {} } = store
+  const { users = {}, categorys = [], session = {}, articles: allArticles = {} } = store
   const user = users[username] || {}
   const { info = {}, status } = session
   const { username: currentUsername, token } = info
@@ -30,22 +30,28 @@ const Collect = (props) => {
 
   const [category, setCategory] = useState(-1)
   const [search, setSearch] = useState('')
-  const [filterArticles, setFilterArticles] = useState(user.articles || [])
-  const [sortArticles, setSortArticles] = useState(user.articles || [])
+  const [filterArticles, setFilterArticles] = useState([])
+  const [sortArticles, setSortArticles] = useState([])
 
 
   useEffect(() => {
-    let articles = user.articles || []
-    articles.sort((a, b) => {
-      return b.likes.length + b.collections.length - a.likes.length + a.collections.length
-    })
-    setSortArticles(articles)
-    const filterArticles = category != -1 ?
-    articles.filter(i => i.categorys.some(item => item == category))
-                      .filter(i => JSON.stringify(i).includes(search)) : articles
-    setFilterArticles(filterArticles)
-    setArticleLoading(false)
-  }, [user.articles])
+    let articleIds = user.collections.map(i => i.article_id)
+    let saleArticleIds = articleIds.filter(i => allArticles[i] === undefined)
+    if (saleArticleIds.length > 0) {
+      loadArticle(saleArticleIds)
+    } else {
+      let articles = articleIds.map(i => allArticles[i])
+      articles.sort((a, b) => {
+        return b.likes.length + b.collections.length - a.likes.length + a.collections.length
+      })
+      setSortArticles(articles)
+      const filterArticles = category != -1 ?
+      articles.filter(i => i.categorys.some(item => item == category))
+                        .filter(i => JSON.stringify(i).includes(search)) : articles
+      setFilterArticles(filterArticles)
+      setArticleLoading(false)
+    }
+  }, [user.collections, allArticles])
 
   useEffect(() => {
     let filterArticles = (category != -1 ? sortArticles.filter(i => i.categorys.some(item => item == category)) : sortArticles).filter(i => JSON.stringify(i).includes(search))
@@ -60,8 +66,6 @@ const Collect = (props) => {
   const handleSearchChange = (e) => {
     setSearch(e.target.value)
   }
-
-
 
   const handleStarClick = (article) => {
     if (status) {
@@ -150,6 +154,27 @@ const Collect = (props) => {
     }
   }
 
+  const loadArticle = async (idList, fetchPolicy) => {
+    const data = await query(
+      querys.QueryArticles,
+      {
+        idList: idList.map(i => Number(i))
+      },
+      {
+        fetchPolicy
+      }
+    )
+    let { articles: { isSuccess, articles, extension = {} } = {} } = data
+
+    if (isSuccess) {
+      handlers.setArticles({ articles })
+    } else {
+      const { errors = [{}] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据下载失败: ${messStr}`)
+    }
+  }
+
   const renderItem2 = (item) => {
     const isLiked = item.likes ? item.likes.some(item => item.user_id == currentUser.id) : false
     const isCollected = item.collections ? item.collections.some(item => item.user_id == currentUser.id) : false
@@ -158,11 +183,11 @@ const Collect = (props) => {
         key={item.id}
         actions={[
           <span>发布于{moment(item.release_time, 'x').fromNow()}</span>
-,                       <IconText onClick={() => handleStarClick(item)} theme={isCollected ? 'filled' : 'outlined'} type="star" text={item.collections.length} />,
+,         <IconText onClick={() => handleStarClick(item)} theme={isCollected ? 'filled' : 'outlined'} type="star" text={item.collections.length} />,
           <IconText onClick={() => handleLikeClick(item)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
           <IconText type="message" text={item.comments.length} />
         ]}
-        extra={currentUsername === username && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
+        extra={Number(currentUser.id) === Number(item.user.id) && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
         className={Less['article-row']}
       >
 
@@ -186,10 +211,10 @@ const Collect = (props) => {
   return (
     <React.Fragment>
       <Row type="flex" justify="space-between">
-        <Col span={12}>
+        <Col span={14}>
           <Search onChange={handleSearchChange} placeholder="搜索文章..." />
         </Col>
-        <Col span={5} offset={2}>
+        <Col span={7} offset={2}>
           <Select onChange={handleCategoryChange} style={{ width: '100%'}} value={category}>
             <Option key={-1} value={-1}>全部</Option>
             {categorys.map((item, index) => (
@@ -197,9 +222,6 @@ const Collect = (props) => {
             ))}
           </Select>
         </Col>
-        {isSelf && <Col span={4} offset={1}>
-          <Button style={{ width: '100%'}} type="primary"><Icon type="plus" />新建</Button>
-        </Col>}
       </Row>
       <Divider />
       {articlesLoading ?

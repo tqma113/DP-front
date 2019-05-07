@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Tabs } from 'antd'
 
+import Collect from './Collect'
+import Like from './Like'
+import Concern from './Concern'
+
 const TabPane = Tabs.TabPane
 
 const tabs = {
@@ -54,13 +58,13 @@ const More = (props) => {
   return (
     <Tabs activeKey={tabKey} onTabClick={handleTabClick} onChange={handleChangeTab}>
       <TabPane tab="收藏" key={'1'}>
-
+        <Collect {...props} />
       </TabPane>
       <TabPane tab="关注" key={'2'}>
-
+        <Concern {...props} />
       </TabPane>
       <TabPane tab="点赞" key={'3'}>
-
+        <Like {...props} />
       </TabPane>
     </Tabs>
   )
