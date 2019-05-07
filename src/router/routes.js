@@ -6,7 +6,6 @@ const Login = AsyncComponent(() => import('@containers/Login'))
 const Register = AsyncComponent(() => import('@containers/Register'))
 const PasswordSetting = AsyncComponent(() => import('@containers/PasswordSetting'))
 const Home = AsyncComponent(() => import('@containers/Home'))
-const PersonalEdit = AsyncComponent(() => import('@containers/PersonalEdit'))
 const Article = AsyncComponent(() => import('@containers/Article'))
 const ArticleCreate = AsyncComponent(() => import('@containers/ArticleCreate'))
 const ArticleEdit = AsyncComponent(() => import('@containers/ArticleEdit'))
@@ -50,14 +49,6 @@ export default [
     auth: permissions.none,
     module: 'PasswordSetting',
     documentTitle: '设置密码 - Now'
-  },
-  {
-    path: '/edit',
-    component: PersonalEdit,
-    exact: true,
-    auth: permissions.isLogged,
-    module: 'PersonalEdit',
-    documentTitle: '编辑个人信息 - Now'
   },
   {
     path: '/article/create',

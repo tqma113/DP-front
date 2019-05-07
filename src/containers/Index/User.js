@@ -43,17 +43,18 @@ const User = props => {
 
   const filterUser = () => {
     let filterUsers = sortUsers || []
-    filterUsers = (userType != 1 ? filterUsers.filter(item => {
+    filterUsers = (userType !== '1' ? filterUsers.filter(item => {
       let isConcerned = status && currentUser.categorys && currentUser.categorys.some(i => i == item.id)
-      if (isConcerned && userType == 2) {
+      if (isConcerned && userType === '2') {
         return false
       }
-      if (!isConcerned && userType == 3) {
+      if (!isConcerned && userType === '3') {
         return false
       }
       return true
     }) : filterUsers)
     .filter(item => JSON.stringify(item).includes(userSearch))
+    .filter(item => item.id !== currentUser.id)
     if (userCategorys && userCategorys.length !== 0) {
       filterUsers = filterUsers.filter(item => item.categorys.some(i => userCategorys.some(a => a == i)))
     }
@@ -154,6 +155,10 @@ const User = props => {
 
   const userRenderItem = item => {
     const isConcerned = currentUser && currentUser.concerned ? currentUser.concerned.some(i => i.concerned_user_id == item.id) : false
+
+    const handleClick = () => {
+      handlers.go('/' + item.username)
+    }
     return (
       <List.Item
         key={item.id}
@@ -171,8 +176,8 @@ const User = props => {
       >
         <List.Item.Meta
           className={Less['user-item']}
-          avatar={<Avatar size={50} src={api.dev.static + item.avatar} />}
-          title={<a>{item.nickname}</a>}
+          avatar={<Avatar onClikc={handleClick} size={50} src={api.dev.static + item.avatar} />}
+          title={<botton onClick={handleClick} className="link-button">{item.nickname}</botton>}
           description={<span>{item.statement}</span>}
         />
         <Row>

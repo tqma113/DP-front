@@ -74,7 +74,7 @@ const Loader = (props) => {
         if (networkStatus === 4) return null;
         if (loading) return null;
         if (error) {
-          message.error(error)
+          message.error('数据初始化失败,请重试', error)
           return null;
         }
 

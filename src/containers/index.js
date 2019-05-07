@@ -7,7 +7,7 @@ import PasswordSetting from './PasswordSetting'
 import Article from './Article'
 import ArticleCreate from './ArticleCreate'
 import ArticleEdit from './ArticleEdit'
-import PersonalEdit from './PersonalEdit'
+import Home from './Home'
 import Layout from './Layout'
 
 export {
@@ -20,6 +20,6 @@ export {
   Article,
   ArticleCreate,
   ArticleEdit,
-  PersonalEdit,
+  Home,
   Layout
 }

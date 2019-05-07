@@ -36,6 +36,7 @@ const QueryInitData = gql`
           id
           title
           abstract
+          image
           release_time
           last_modify_time
           categorys
@@ -175,6 +176,7 @@ const QueryUsers = gql`
           id
           title
           abstract
+          image
           release_time
           last_modify_time
           categorys
