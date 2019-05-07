@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Row, Avatar, List,  Empty, Card, Button, message } from 'antd'
 import BraftEditor from 'braft-editor'
 import moment from 'moment'
-import { Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import { Element,  scroller } from 'react-scroll'
 
 
 
@@ -37,6 +37,7 @@ const Chat = (props) => {
     if (messages && messageUser && messageUser.username) {
       let currentMessages = messages[messageUser.username]
       setCurrentMessages(currentMessages)
+      scrollToBottom()
     }
   }, [messages, messageUser])
 
@@ -47,6 +48,10 @@ const Chat = (props) => {
       }
     }
   }, [messageUser])
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messageLoadStatus, currentMessages])
 
   const handleMessageChange = (value) => {
     setMessageState(value)
@@ -89,6 +94,14 @@ const Chat = (props) => {
       const { message: messStr = '' } = errors[0]
       message.error(`数据更新失败: ${messStr}`)
     }
+  }
+
+  const scrollToBottom = () => {
+    scroller.scrollTo('bottomInsideContainer', {
+      containerId: 'message-box',
+      duration: '1000',
+      smooth: 'easeInOutQuart',
+    })
   }
 
   const sendMessage = async (userId, content) => {
@@ -134,11 +147,11 @@ const Chat = (props) => {
     let html = editroState.toHTML()
     return (
       <List.Item key={item.id}>
-        <div style={{ display: 'flex', flexDirection: item.s_user_id == currentUser.id ? 'row-reverse' : 'row'}}>
+        <div style={{ display: 'flex', flexDirection: Number(item.s_user_id) === Number(currentUser.id) ? 'row-reverse' : 'row'}}>
           <Avatar src={api.dev.static + item.sendUser.avatar} />
-          <div style={{ marginLeft: '5px', width: '300px' }}>
-            <p style={{color: '#888', fontSize: '10px', margin: '0'}}>{moment(item.send_time, 'x').fromNow()}</p>
-            <div style={{ width: '60%' }} className="braft-output-content" dangerouslySetInnerHTML={{ __html: html }}></div>
+          <div style={{ marginLeft: '5px', width: '300px', textAlign: Number(item.s_user_id) === Number(currentUser.id) ? 'right' : 'left' }}>
+            <div style={{ width: '100%', boxShadow: '0 2px 8px #ccc', borderRadius: '5px', padding: '10px' }} className="braft-output-content" dangerouslySetInnerHTML={{ __html: html }}></div>
+            <p style={{color: '#ccc', fontSize: '8px', margin: '0'}}>{moment(item.send_time, 'x').fromNow()}</p>
           </div>
         </div>
       </List.Item>
@@ -150,12 +163,13 @@ const Chat = (props) => {
   return (
     <React.Fragment>
       <Element
+        id="message-box"
         style={{
           position: 'relative',
-          height: '500px',
+          height: '450px',
           overflow: 'scroll',
-          border: '1px solid #e8e8e8',
-          padding: '0 10px'
+          padding: '0 10px',
+          boxShadow: '0 0 1px 1px #eee inset'
         }}
       >
         {messageUser ?
@@ -171,6 +185,7 @@ const Chat = (props) => {
           :
           <Empty description="您还未选择用户,请先选择用户" style={{ height: '400px'}} />
         }
+        <Element name="bottomInsideContainer"></Element>
       </Element>
       <Row style={{marginTop: '10px'}}>
         <BraftEditor
