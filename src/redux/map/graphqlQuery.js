@@ -31,7 +31,9 @@ export const mutations = {
     ChangeUserInfoMutation: 'ChangeUserInfoMutation',
     ArticleStarMutation: 'ArticleStarMutation',
     ArticleLikeMutation: 'ArticleLikeMutation',
-    UserConcernMutation: 'UserConcernMutation'
+    UserConcernMutation: 'UserConcernMutation',
+    categoryStarMutation: 'categoryStarMutation',
+    industryStarMutation: 'industryStarMutation',
   },
   Article: {
     SendCommentMutation: 'SendCommentMutation',
@@ -63,7 +65,8 @@ export const mutations = {
 
 export const querys = {
   Home: {
-    QueryUsers: 'QueryUsers'
+    QueryUsers: 'QueryUsers',
+    QueryArticles: 'QueryArticles'
   },
   Article: {
     QueryArticles: 'QueryArticles'
@@ -80,6 +83,7 @@ export const querys = {
   },
   Message: {
     QueryMessages: 'QueryMessages',
+    QueryUsers: 'QueryUsers'
   },
   CommentList: {
     QueryArticles: 'QueryArticles'

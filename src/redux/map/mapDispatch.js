@@ -8,7 +8,7 @@ const {
 } = actions.articles
 const {
   getSetSessionInfoAction,
-  getClearSessionInfoAction
+  getClearSessionInfoAction,
 } = actions.session
 const {
   getInitAction,

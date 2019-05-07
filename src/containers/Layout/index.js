@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Affix } from 'antd'
 
 import map from '@map'
 
@@ -44,26 +44,28 @@ const NativeLayout = (props) => {
 
   return (
     <Layout className="layout">
-      <Header style={{ backgroundColor: '#24292e' }}>
-        <div className={Less['logo']}>Now</div>
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          selectedKeys={['10']}
-          onClick={handleClick}
-          style={{ lineHeight: '64px', backgroundColor: '#24292e' }}
-        >
-          <Menu.Item key={0}>首页</Menu.Item>
-          {status && <Menu.Item key={2}>写文章</Menu.Item>}
-          {status && <Menu.Item key={3}>私信</Menu.Item>}
-          {status && <Menu.Item className={Less['right-head']} key={1}>{currentUser.nickname}</Menu.Item>}
-          {status ?
-            <Menu.Item className={Less['right-head']} key={4}>注销</Menu.Item> :
-            <Menu.Item className={Less['right-head']} key={5}>登录</Menu.Item>
-          }
-          <Menu.Item className={Less['right-head']} key={6}>注册</Menu.Item>
-        </Menu>
-      </Header>
+      <Affix>
+        <Header style={{ backgroundColor: '#24292e' }}>
+          <div className={Less['logo']}>Now</div>
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            selectedKeys={['10']}
+            onClick={handleClick}
+            style={{ lineHeight: '64px', backgroundColor: '#24292e' }}
+          >
+            <Menu.Item key={0}>首页</Menu.Item>
+            {status && <Menu.Item key={2}>写文章</Menu.Item>}
+            {status && <Menu.Item key={3}>私信</Menu.Item>}
+            {status && <Menu.Item className={Less['right-head']} key={1}>{currentUser.nickname}</Menu.Item>}
+            {status ?
+              <Menu.Item className={Less['right-head']} key={4}>注销</Menu.Item> :
+              <Menu.Item className={Less['right-head']} key={5}>登录</Menu.Item>
+            }
+            <Menu.Item className={Less['right-head']} key={6}>注册</Menu.Item>
+          </Menu>
+        </Header>
+      </Affix>
       <Content style={{ background: '#fff', minHeight: 680 }}>{{...children}}</Content>
       <Footer style={{ textAlign: 'center' }}>
         Now Blog ©2019 Create by M.TQ

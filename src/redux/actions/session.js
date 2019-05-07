@@ -13,8 +13,7 @@ const getClearSessionInfoAction = () => {
   }
 }
 
-
 export {
   getSetSessionInfoAction,
-  getClearSessionInfoAction
+  getClearSessionInfoAction,
 }

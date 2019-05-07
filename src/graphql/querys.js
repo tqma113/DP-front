@@ -39,73 +39,29 @@ const QueryInitData = gql`
           image
           release_time
           last_modify_time
-          categorys
-          comments {
-            id
-            content
-            user_id
-          }
-          likes {
-            id
-          }
-          collections {
-            id
-          }
         }
         categorys
         concerned {
           id
           user_id
           concerned_user_id
-          user {
-            id
-            username
-            nickname
-            avatar
-            categorys
-            industrys
-            statement
-          }
         }
         concern {
           id
           user_id
           concerned_user_id
-          user {
-            id
-            username
-            nickname
-            avatar
-            categorys
-            industrys
-            statement
-          }
         }
         likes {
           id
           article_id
           user_id
           create_time
-          article {
-            id
-            title
-            abstract
-            release_time
-            last_modify_time
-          }
         }
         collections {
           id
           article_id
           user_id
           create_time
-          article {
-            id
-            title
-            abstract
-            release_time
-            last_modify_time
-          }
         }
       }
       isSuccess
@@ -179,78 +135,29 @@ const QueryUsers = gql`
           image
           release_time
           last_modify_time
-          categorys
-          comments {
-            id
-            user_id
-          }
-          likes {
-            id
-            article_id
-            user_id
-            create_time
-          }
-          collections {
-            id
-            article_id
-            user_id
-            create_time
-          }
         }
         categorys
         concerned {
           id
           user_id
           concerned_user_id
-          user {
-            id
-            username
-            nickname
-            avatar
-            categorys
-            industrys
-            statement
-          }
         }
         concern {
           id
           user_id
           concerned_user_id
-          user {
-            id
-            username
-            nickname
-            avatar
-            categorys
-            industrys
-            statement
-          }
         }
         likes  {
           id
           article_id
           user_id
           create_time
-          article {
-            id
-            title
-            abstract
-            release_time
-            last_modify_time
-          }
         }
         collections  {
           id
           article_id
           user_id
           create_time
-          article {
-            id
-            title
-            abstract
-            release_time
-            last_modify_time
-          }
         }
       }
       isSuccess

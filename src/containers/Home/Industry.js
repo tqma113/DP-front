@@ -8,15 +8,25 @@ const Search = Input.Search
 const Option = Select.Option
 
 const Industry = props => {
-  const { handlers = {}, store = {}, mutate, mutations = {}, query, querys = {} } = props
-  const { industrys = [], static: { api } = {}, session = {}, users = {} } = store
-  const { status, info = {} } = session
-  const { username, token } = info
-  const user = users[username]
+  const {
+    store = {},
+    handlers = {},
+    static: { api },
+    username = '',
+    query,
+    querys = {},
+    mutate,
+    mutations = {},
+  } = props
+  const { users = {}, industrys = [], session = {} } = store
+  const user = users[username] || {}
+  const { info = {}, status } = session
+  const { username: currentUsername, token } = info
+  const currentUser = users[currentUsername] || {}
 
 
   const [industrySearch, setIndustrySearch] = useState('')
-  const [industryType, setIndustryType] = useState(1)
+  const [industryType, setIndustryType] = useState('1')
   const [sortIndustrys, setSortIndustrys] = useState([])
   const [filterIndustrys, setFilterIndustrys] = useState([])
 
@@ -36,12 +46,13 @@ const Industry = props => {
 
   const filterIndustry = () => {
     let filterIndustrys = sortIndustrys || []
-    filterIndustrys = (industryType != 1 ? filterIndustrys.filter(item => {
-      let isLiked = status && user.industrys && user.industrys.some(i => i == item.id)
-      if (isLiked && industryType == 2) {
+    filterIndustrys = filterIndustrys.filter(item => user.industrys.some(i => Number(item.id) === Number(i)))
+    filterIndustrys = (industryType !== '1' ? filterIndustrys.filter(item => {
+      let isLiked = status && currentUser.industrys && currentUser.industrys.some(i => Number(i) === Number(item.id))
+      if (isLiked && industryType === '2') {
         return false
       }
-      if (!isLiked && industryType == 3) {
+      if (!isLiked && industryType === '3') {
         return false
       }
       return true
@@ -68,7 +79,7 @@ const Industry = props => {
     let data = await mutate(
       mutations.industryStarMutation,
       {
-        username: username,
+        username: currentUsername,
         token,
         industryId: Number(industryId),
         status
@@ -93,7 +104,7 @@ const Industry = props => {
     const data = await query(
       querys.QueryUsers,
       {
-        usernames: [username]
+        usernames: [currentUsername]
       },
       {
         fetchPolicy
@@ -107,7 +118,7 @@ const Industry = props => {
   }
 
   const industryRenderItem = item => {
-    const isStared = status && user.industrys && user.industrys.some(i => i == item.id)
+    const isStared = status && currentUser.industrys && currentUser.industrys.some(i => i == item.id)
     return (
       <List.Item
         key={item.id}
@@ -120,7 +131,7 @@ const Industry = props => {
               )
             }
             {
-              item.image && <img src={api.dev.static + item.image} />
+              item.image && <img alt="industry" src={api.dev.static + item.image} />
             }
           </div>
         }
@@ -143,10 +154,10 @@ const Industry = props => {
         </Col>
         <Col span={6}>
           {status &&
-            <Select onChange={handleIndustryTypeChange} defaultValue={1} style={{ width: '100%'}}>
-              <Option key={1} value={1}>全部</Option>
-              <Option key={2} value={2}>未加入</Option>
-              <Option key={3} value={3}>已加入</Option>
+            <Select onChange={handleIndustryTypeChange} defaultValue={'1'} style={{ width: '100%'}}>
+              <Option key={1} value={'1'}>全部</Option>
+              <Option key={2} value={'2'}>未加入</Option>
+              <Option key={3} value={'3'}>已加入</Option>
             </Select>
           }
         </Col>

@@ -77,7 +77,7 @@ export default [
     path: '/:username',
     component: Home,
     auth: permissions.home,
-    module: 'home',
+    module: 'Home',
     documentTitle: ' - Now'
   }
 ]

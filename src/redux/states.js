@@ -1,6 +1,6 @@
 export const Session = {
   setSessionInfo: 'SET_SESSION_INFO',
-  clearSessionInfo: 'CLEAR_SESSION_INFO'
+  clearSessionInfo: 'CLEAR_SESSION_INFO',
 }
 
 export const LoadStatus = {

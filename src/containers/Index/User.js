@@ -54,7 +54,7 @@ const User = props => {
       return true
     }) : filterUsers)
     .filter(item => JSON.stringify(item).includes(userSearch))
-    .filter(item => item.id !== currentUser.id)
+    .filter(item => currentUser && currentUser.id ? item.id !== currentUser.id : true)
     if (userCategorys && userCategorys.length !== 0) {
       filterUsers = filterUsers.filter(item => item.categorys.some(i => userCategorys.some(a => a == i)))
     }
@@ -176,8 +176,8 @@ const User = props => {
       >
         <List.Item.Meta
           className={Less['user-item']}
-          avatar={<Avatar onClikc={handleClick} size={50} src={api.dev.static + item.avatar} />}
-          title={<botton onClick={handleClick} className="link-button">{item.nickname}</botton>}
+          avatar={<Avatar onClick={handleClick} size={50} src={api.dev.static + item.avatar} />}
+          title={<button onClick={handleClick} className="link-button">{item.nickname}</button>}
           description={<span>{item.statement}</span>}
         />
         <Row>
