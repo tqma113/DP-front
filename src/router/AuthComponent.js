@@ -18,12 +18,13 @@ const AuthComponent = (props) => {
     module = '',
     documentTitle = ''
   } = props
-  const { session, loadStatus } = store
+  const { session, loadStatus, users = {} } = store
   const { status = false, info = {} } = session
   const { username: currentUsername } = info
   const { pathname = '' } = location
   const { params = {} } = match
   const { username, id } = params
+  const currentUser = users[currentUsername]
 
   const [authStatus, setAuthStatus] = useState(false)
   const [subProps, setSubProps] = useState({ module })
@@ -93,6 +94,28 @@ const AuthComponent = (props) => {
         setAuthStatus(true)
 
         break;
+      }
+      case permissions.editArticle: {
+        if (!currentUser) {
+          handlers.go('/login?from=/article/edit/' + id)
+        }
+        data = await mutate(
+          mutations.checkArticleValidMutation,
+          {
+            id: Number(id),
+            userId: currentUser.id
+          }
+        )
+        const { checkArticleIdValid } = data
+        let { isSuccess = false } = checkArticleIdValid
+
+        if (!isSuccess) {
+          handlers.go('/notmatch')
+        }
+
+        setSubProps({...subProps, id: Number(id) })
+        setAuthStatus(true)
+        break
       }
       case permissions.none:
         setAuthStatus(true)

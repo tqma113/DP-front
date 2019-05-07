@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Query } from 'react-apollo'
 import { message } from 'antd'
 

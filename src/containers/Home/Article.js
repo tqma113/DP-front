@@ -191,7 +191,7 @@ const Article = (props) => {
           <IconText onClick={() => handleLikeClick(item)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
           <IconText type="message" text={item.comments.length} />
         ]}
-        extra={currentUsername === username && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
+        extra={currentUsername === username && <a href={'/article/edit/' + item.id}><Button>编辑</Button></a>}
         className={Less['article-row']}
       >
 

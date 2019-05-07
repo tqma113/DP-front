@@ -62,7 +62,7 @@ export default [
     path: '/article/edit/:id',
     component: ArticleEdit,
     exact: true,
-    auth: permissions.isSelfArticle,
+    auth: permissions.editArticle,
     module: 'ArticleEdit',
     documentTitle: '编辑文章 - Now'
   },

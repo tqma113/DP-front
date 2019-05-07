@@ -30,7 +30,6 @@ const Article = (props) => {
     } else {
       document.title = article.title + documentTitle
       handlers.onload({ loadStatus })
-
       loadContent()
     }
   })

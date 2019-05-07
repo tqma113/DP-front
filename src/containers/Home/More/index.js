@@ -15,21 +15,8 @@ const tabs = {
 
 const More = (props) => {
   const {
-    store = {},
-    handlers = {},
-    isSelf = false,
-    username = '',
-    query,
-    querys = {},
-    mutate,
-    mutations = {},
     tabName = ''
   } = props
-  const { users = {}, categorys = [], session = {} } = store
-  const user = users[username] || {}
-  const { info = {}, status } = session
-  const { username: currentUsername, token } = info
-  const currentUser = users[currentUsername] || {}
 
   const [tabKey, setTabKey] = useState('1')
 

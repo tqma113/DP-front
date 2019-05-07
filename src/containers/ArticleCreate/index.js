@@ -83,7 +83,7 @@ const ArticleCreate = (props) => {
   }
 
   return (
-    <section className={Less['create']}>
+    <section className={Less['create'] + ' create'}>
       <SingleLargeUpload onLoad={handleUpload}  style={{ width: '100%' }} uploadStyle={{ width: '100%', display: 'block' }} />
       <Input
         className={Less['title']}

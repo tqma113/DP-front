@@ -66,6 +66,9 @@ export const mutations = {
   },
   Loading: {
     LogoutMutation: 'LogoutMutation'
+  },
+  ArticleEdit: {
+    EditArticleMutation: 'EditArticleMutation'
   }
 }
 
@@ -92,6 +95,9 @@ export const querys = {
     QueryUsers: 'QueryUsers'
   },
   CommentList: {
+    QueryArticles: 'QueryArticles'
+  },
+  ArticleEdit: {
     QueryArticles: 'QueryArticles'
   }
 }

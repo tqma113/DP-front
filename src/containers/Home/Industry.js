@@ -118,7 +118,7 @@ const Industry = props => {
   }
 
   const industryRenderItem = item => {
-    const isStared = status && currentUser.industrys && currentUser.industrys.some(i => i == item.id)
+    const isStared = status && currentUser.industrys && currentUser.industrys.some(i => Number(i) === Number(item.id))
     return (
       <List.Item
         key={item.id}

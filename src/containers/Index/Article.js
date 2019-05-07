@@ -227,7 +227,7 @@ const Article = (props) => {
           <IconText onClick={() => handleLikeClick(item.id, isLiked)} theme={isLiked ? 'filled' : 'outlined'} type="like" text={item.likes.length} />,
           <IconText type="message" text={item.comments.length} />
         ]}
-        extra={currentUsername === item.user.username && <a href={'/article/' + item.id}><Button>编辑</Button></a>}
+        extra={currentUsername === item.user.username && <a href={'/article/edit/' + item.id}><Button>编辑</Button></a>}
       >
 
         <List.Item.Meta

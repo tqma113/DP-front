@@ -189,57 +189,6 @@ const CreateArticleMutation = gql`
         content
         release_time
         last_modify_time
-        user {
-          id
-          username
-          nickname
-          statement
-          avatar
-        }
-        project_link
-        categorys
-        comments {
-          id
-          content
-          create_time
-          likes  {
-            id
-            user_id
-            create_time
-            user {
-              id
-              username
-            }
-          }
-          user {
-            id
-            avatar
-            username
-            nickname
-          }
-          comments
-        }
-        likes {
-          id
-          article_id
-          user_id
-          create_time
-          user {
-            id
-            username
-          }
-
-        }
-        collections {
-          id
-          article_id
-          user_id
-          create_time
-          user {
-            id
-            username
-          }
-        }
       }
       isSuccess
       extension {
@@ -446,6 +395,29 @@ const LogoutMutation = gql`
   }
 `
 
+const EditArticleMutation = gql`
+  mutation ($id: Int!, $title: String!, $abstract: String!, $content: String!, $categoryIds: [Int]!, $image: String!) {
+    createArticle(id: $id, title: $title, abstract: $abstract, content: $content, categoryIds: $categoryIds, image: $image) {
+      article {
+        id
+        title
+        abstract
+        content
+        release_time
+        last_modify_time
+      }
+      isSuccess
+      extension {
+        operator
+        errors{
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export const names = {
   LoginMutation: 'login',
   RegisterMutation: 'register',
@@ -467,7 +439,8 @@ export const names = {
   categoryStarMutation: 'categoryStarMutation',
   industryStarMutation: 'industryStarMutation',
   SendMessageMutation: 'SendMessageMutation',
-  CommentLikeMutation: 'CommentLikeMutation'
+  CommentLikeMutation: 'CommentLikeMutation',
+  EditArticleMutation: 'EditArticleMutation'
 }
 
 export {
@@ -492,5 +465,6 @@ export {
   industryStarMutation,
   SendMessageMutation,
   CommentLikeMutation,
-  LogoutMutation
+  LogoutMutation,
+  EditArticleMutation
 }

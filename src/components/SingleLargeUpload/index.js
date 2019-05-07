@@ -7,8 +7,8 @@ import getBase64 from '@utils/getBase64'
 import Less from './index.module.less'
 import './index.less'
 
-const SingleUplaod = (props) => {
-  const { className = '', style = {}, uploadStyle = {}, onLoad, mutate, mutations = {}, static: { api } } = props
+const SingleLargeUplaod = (props) => {
+  const { className = '', style = {}, uploadStyle = {}, onLoad, mutate, mutations = {}, static: { api }, img = '' } = props
 
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -81,7 +81,7 @@ const SingleUplaod = (props) => {
   }
 
   return (
-    <div className={`${Less['single-large-upload']} single-upload ${className}`} style={style}>
+    <div className={`${Less['single-large-upload']} single-large-upload ${className}`} style={style}>
       <Upload
         style={uploadStyle}
         accept="image/*"
@@ -106,4 +106,4 @@ const SingleUplaod = (props) => {
   )
 }
 
-export default connect(SingleUplaod, 'UploadImage')
+export default connect(SingleLargeUplaod, 'UploadImage')

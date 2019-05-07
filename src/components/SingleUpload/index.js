@@ -21,7 +21,7 @@ const SingleUplaod = (props) => {
     if (img && !imageUrl) {
       setImageUrl(img)
     }
-  })
+  }, img)
 
   const beforeUpload = (file) => {
     setLoading(true)

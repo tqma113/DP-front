@@ -11,7 +11,6 @@ const Concern = props => {
   const {
     store = {},
     handlers = {},
-    isSelf = false,
     username = '',
     query,
     querys = {},
@@ -64,7 +63,7 @@ const Concern = props => {
   const filterUser = () => {
     let filterUsers = sortUsers || []
     filterUsers = (userType !== '1' ? filterUsers.filter(item => {
-      let isConcerned = status && currentUser.categorys && currentUser.categorys.some(i => i == item.id)
+      let isConcerned = status && currentUser.categorys && currentUser.categorys.some(i => Number(i) === Number(item.id))
       if (isConcerned && userType === '2') {
         return false
       }
@@ -76,10 +75,10 @@ const Concern = props => {
     .filter(item => JSON.stringify(item).includes(userSearch))
     .filter(item => currentUser && currentUser.id ? item.id !== currentUser.id : true)
     if (userCategorys && userCategorys.length !== 0) {
-      filterUsers = filterUsers.filter(item => item.categorys.some(i => userCategorys.some(a => a == i)))
+      filterUsers = filterUsers.filter(item => item.categorys.some(i => userCategorys.some(a => Number(a) === Number(i))))
     }
     if (userIndustrys && userIndustrys.length !== 0) {
-      filterUsers = filterUsers.filter(item => item.industrys.some(i => userIndustrys.some(a => a == i)))
+      filterUsers = filterUsers.filter(item => item.industrys.some(i => userIndustrys.some(a => Number(a) === Number(i))))
     }
     setFilterUsers(filterUsers)
   }
@@ -174,7 +173,7 @@ const Concern = props => {
   }
 
   const userRenderItem = item => {
-    const isConcerned = currentUser && currentUser.concerned ? currentUser.concerned.some(i => i.concerned_user_id == item.id) : false
+    const isConcerned = currentUser && currentUser.concerned ? currentUser.concerned.some(i => Number(i.concerned_user_id) === Number(item.id)) : false
 
     const handleClick = () => {
       handlers.go('/' + item.username)
@@ -201,13 +200,13 @@ const Concern = props => {
           description={<span>{item.statement}</span>}
         />
         <Row>
-          {item.categorys && item.categorys.length > 0 ? categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
+          {item.categorys && item.categorys.length > 0 ? categorys.filter(a => item.categorys.some(i => Number(i) === Number(a.id))).map(item => (
               <Tag key={item.id} color="geekblue">{item.subject}</Tag>
             )) : []
           }
         </Row>
         <Row style={{marginTop: '10px'}}>
-          {item.industrys.length > 0 ? industrys.filter(a => item.industrys.some(i => i == a.id)).map(item => (
+          {item.industrys.length > 0 ? industrys.filter(a => item.industrys.some(i => Number(i) === Number(a.id))).map(item => (
               <Tag key={item.id} color="purple">{item.name}</Tag>
             )) : []
           }

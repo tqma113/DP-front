@@ -9,7 +9,7 @@ const { Header, Content, Footer } = Layout
 
 const NativeLayout = (props) => {
   const { children, handlers = {}, store = {}, mutate, mutations = {} } = props
-  const { session = {}, users= {}, loadStatus } = store
+  const { session = {}, users= {} } = store
   const { status, info = {} } = session
   const { username } = info
   const currentUser = users[username] || {}
