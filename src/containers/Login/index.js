@@ -60,6 +60,14 @@ const Login = (props) => {
     })
   }
 
+  const handleCreateAccountClick = () => {
+    handlers.go('/register')
+  }
+
+  const handleForgetPasswordClick = () => {
+    handlers.go('/password_setting?from=/login')
+  }
+
   const sendLoginMutation = async ({ username, password }) => {
     handlers.turnToLoginLoading()
     const data = await mutate(
@@ -159,13 +167,13 @@ const Login = (props) => {
                         )}
                       </Col>
                       <Col span={12}>
-                        <a href="#" className={Less['login-form-forgot']}>忘记密码</a>
+                        <button onClick={handleForgetPasswordClick} className={Less['login-form-forgot'] + ' ' + Less['link-button']}>忘记密码</button>
                       </Col>
                     </Row>
                     <Button type="primary" htmlType="submit" className={Less['login-form-button']}>
                       登录
                     </Button>
-                    或者 <a>创建账户</a>
+                    或者 <button onClick={handleCreateAccountClick} className={Less['link-button']}>创建账户</button>
                   </Form.Item>
                 </Form>
               </TabPane>
@@ -210,7 +218,7 @@ const Login = (props) => {
                     <Button type="primary" htmlType="submit" className={Less['login-form-button']}>
                       登录
                     </Button>
-                    或者 <a>创建账户</a>
+                    或者 <button onClick={handleCreateAccountClick} className={Less['link-button']}>创建账户</button>
                   </Form.Item>
                 </Form>
               </TabPane>

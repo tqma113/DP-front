@@ -47,7 +47,7 @@ export default [
     path: '/password_setting',
     component: PasswordSetting,
     exact: true,
-    auth: permissions.isLogged,
+    auth: permissions.none,
     module: 'PasswordSetting',
     documentTitle: '设置密码 - Now'
   },
