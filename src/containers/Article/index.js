@@ -158,6 +158,9 @@ const Article = (props) => {
 
   return (
     <section className={Less['article']}>
+      {article.image && <Row className={Less['image-container']}>
+        <img className={Less['image']} alt="title" src={api.dev.static + article.image} />
+      </Row>}
       <Row className={Less['title']}>{article.title}</Row>
       <Row className={Less['user']} type="flex" justify="start">
         <Col>

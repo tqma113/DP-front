@@ -271,6 +271,7 @@ const QueryArticles = gql`
         title
         abstract
         content
+        image
         release_time
         last_modify_time
         user {
