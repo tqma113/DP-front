@@ -4,11 +4,8 @@ import BraftEditor from 'braft-editor'
 import moment from 'moment'
 import { Element,  scroller } from 'react-scroll'
 
-
-
 import Less from './index.module.less'
 import 'braft-editor/dist/output.css'
-
 
 const Chat = (props) => {
   const { store = {}, handlers = {}, static:{ api }, mutate, mutations, query, querys, messageUsername = '' } = props
@@ -20,7 +17,7 @@ const Chat = (props) => {
   const [messageLoadStatus, setMessageLoadStatus] = useState(true)
   const [messageUser, setMessageUser] = useState()
 
-  const [messageState, setMessageState] = useState(BraftEditor.createEditorState(null))
+  const [messageState, setMessageState] = useState(BraftEditor.createEditorState(''))
   const [currentMessages, setCurrentMessages] = useState([])
 
   useEffect(() => {
@@ -161,7 +158,7 @@ const Chat = (props) => {
   const controls = ['emoji', 'font-family']
 
   return (
-    <React.Fragment>
+    <div>
       <Element
         id="message-box"
         style={{
@@ -190,7 +187,7 @@ const Chat = (props) => {
       <Row style={{marginTop: '10px'}}>
         <BraftEditor
           onChange={handleMessageChange}
-          vlaue={messageState}
+          value={messageState}
           controls={controls}
           contentStyle={{ height: '50px', borderBottom: '1px solid #CCC'}}
         />
@@ -198,7 +195,7 @@ const Chat = (props) => {
       <Row style={{marginTop: '10px'}} type="flex" justify="end">
         <Button onClick={handleMessageSendClick} type="primary">发送</Button>
       </Row>
-    </React.Fragment>
+    </div>
   )
 }
 
