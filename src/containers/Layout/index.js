@@ -8,8 +8,8 @@ import Less from './index.module.less'
 const { Header, Content, Footer } = Layout
 
 const NativeLayout = (props) => {
-  const { children, handlers = {}, store = {} } = props
-  const { session = {}, users= {} } = store
+  const { children, handlers = {}, store = {}, mutate, mutations = {} } = props
+  const { session = {}, users= {}, loadStatus } = store
   const { status, info = {} } = session
   const { username } = info
   const currentUser = users[username] || {}
@@ -29,6 +29,7 @@ const NativeLayout = (props) => {
         handlers.openMessage()
         break;
       case '4':
+        logout()
         handlers.logout()
         break;
       case '5':
@@ -40,6 +41,10 @@ const NativeLayout = (props) => {
       default:
       break;
     }
+  }
+
+  const logout = async () => {
+    await mutate(mutations.LogoutMutation)
   }
 
   return (
@@ -74,4 +79,4 @@ const NativeLayout = (props) => {
   )
 }
 
-export default map(NativeLayout)
+export default map(NativeLayout, 'Layout')

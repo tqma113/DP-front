@@ -1,14 +1,41 @@
-import React from 'react'
-import { Row, Col, Avatar, Tag, Skeleton } from 'antd'
+import React, { useEffect } from 'react'
+import { Row, Col, Avatar, Tag, Skeleton, message } from 'antd'
 
 import Less from './index.module.less'
 
 const User = (props) => {
-  const { store = {}, static:{ api } } = props
+  const { store = {}, static:{ api }, query, querys = {}, handlers } = props
   const { users = {}, session = {}, categorys = [], industrys = [] } = store
   const { status, info = {} } = session
   const { username : currentUsername } = info
-  const currentUser = users[currentUsername] || {}
+  const currentUser = users[currentUsername]
+
+  useEffect(() => {
+    if (!currentUser) {
+      loadUser(currentUsername)
+    }
+  }, [status])
+
+  const loadUser = async (username, fetchPolicy) => {
+    const data = await query(
+      querys.QueryUsers,
+      {
+        usernames: [username]
+      },
+      {
+        fetchPolicy
+      }
+    )
+    let { users: { isSuccess, users, extension = {} } = {} } = data
+
+    if (isSuccess) {
+      handlers.setUsers({ users })
+    } else {
+      const { errors = [] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据更新失败: ${messStr}`)
+    }
+  }
 
   return (
     status && currentUser ?

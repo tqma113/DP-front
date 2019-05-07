@@ -60,6 +60,12 @@ export const mutations = {
   },
   Message: {
     SendMessageMutation: 'SendMessageMutation'
+  },
+  Layout: {
+    LogoutMutation: 'LogoutMutation'
+  },
+  Loading: {
+    LogoutMutation: 'LogoutMutation'
   }
 }
 

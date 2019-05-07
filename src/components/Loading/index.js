@@ -19,8 +19,8 @@ const iconStyle = {
 }
 
 const Loading = (props) => {
-  const { store, handlers } = props
-  const { floatStatus = 0, session = {} } = store
+  const { store, handlers, mutate, mutations = {} } = props
+  const { floatStatus = 0, session = {}, loadStatus } = store
   const { info = {} } = session
   const { username } = info
 
@@ -60,14 +60,19 @@ const Loading = (props) => {
 
   const handleNewArticleClick = () => {
     if (floatStatus) {
-      console.log('go to new article')
+      handlers.go('/article/create')
     }
   }
 
   const handleLogoutClick = () => {
     if (floatStatus) {
+      logout()
       handlers.logout()
     }
+  }
+
+  const logout = async () => {
+    await mutate(mutations.LogoutMutation)
   }
 
   return (
@@ -94,4 +99,4 @@ const Loading = (props) => {
   )
 }
 
-export default map(Loading)
+export default map(Loading, 'Loading')

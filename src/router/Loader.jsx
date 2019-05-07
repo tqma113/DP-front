@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Query } from 'react-apollo'
 import { message } from 'antd'
 
@@ -12,7 +12,7 @@ let token = getCookie('token') || sessionStorage.getItem('token') || localStorag
 
 const Loader = (props) => {
   const { children, handlers, store } = props
-  const { session: { status, refresh }, loadStatus } = store
+  const { session: { status }, loadStatus } = store
 
   const initVariables = {
     username,
@@ -57,8 +57,6 @@ const Loader = (props) => {
   }
 
   const setInit = ({ init = {}, categorys = {}, industrys = {} }) => {
-    if (refresh) clearRefresh()
-
     setLoginState(init)
 
     const ctg = getCategorysData(categorys)
@@ -67,32 +65,27 @@ const Loader = (props) => {
     handlers.init({ categorys: ctg, loadStatus, industrys: idy })
   }
 
-  const clearRefresh = () => {
-    handlers.setSessionRefresh({ refresh: false })
+  const render = ({ loading, error, data = {}, refetch, networkStatus}) => {
+    if (networkStatus === 4) return null;
+    if (loading) return null;
+    if (error) {
+      message.error('数据初始化失败,请重试', error)
+      return null;
+    }
+    const { init, categorys, industrys } = data
+
+
+    setInit({ init, categorys, industrys })
+
+    return loadStatus > 0 ? ({...children}) : null
   }
 
   return (
     <Query
       query={QueryInitData}
       variables={initVariables}
-      partialRefetch={refresh}
-    >
-      {({ loading, error, data = {}, refetch, networkStatus}) => {
-        if (networkStatus === 4) return null;
-        if (loading) return null;
-        if (error) {
-          if (refresh) clearRefresh()
-          message.error('数据初始化失败,请重试', error)
-          return null;
-        }
-
-        const { init, categorys, industrys } = data
-
-        setInit({ init, categorys, industrys })
-
-        return loadStatus > 0 ? ({...children}) : null
-      }}
-    </Query>
+      children={render}
+    />
   )
 }
 

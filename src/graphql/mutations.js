@@ -431,6 +431,21 @@ const CommentLikeMutation = gql`
   }
 `
 
+const LogoutMutation = gql`
+  mutation {
+    logout {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export const names = {
   LoginMutation: 'login',
   RegisterMutation: 'register',
@@ -476,5 +491,6 @@ export {
   categoryStarMutation,
   industryStarMutation,
   SendMessageMutation,
-  CommentLikeMutation
+  CommentLikeMutation,
+  LogoutMutation
 }
