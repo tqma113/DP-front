@@ -203,8 +203,8 @@ const CreateArticleMutation = gql`
 `
 
 const checkArticleValidMutation = gql`
-  mutation($id: Int!) {
-    checkArticleIdValid(id: $id) {
+  mutation($id: Int!, $userId: Int) {
+    checkArticleIdValid(id: $id, userId: $userId) {
       isSuccess
       extension {
         operator
@@ -397,7 +397,7 @@ const LogoutMutation = gql`
 
 const EditArticleMutation = gql`
   mutation ($id: Int!, $title: String!, $abstract: String!, $content: String!, $categoryIds: [Int]!, $image: String!) {
-    createArticle(id: $id, title: $title, abstract: $abstract, content: $content, categoryIds: $categoryIds, image: $image) {
+    editArticle(id: $id, title: $title, abstract: $abstract, content: $content, categoryIds: $categoryIds, image: $image) {
       article {
         id
         title

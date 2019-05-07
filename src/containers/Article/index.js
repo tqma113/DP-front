@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Avatar, Icon, Card, Skeleton, Comment, message, Tooltip } from 'antd'
+import { Row, Col, Avatar, Icon, Card, Skeleton, Comment, message, Tooltip, Tag } from 'antd'
 import BraftEditor from 'braft-editor'
 import moment from 'moment'
 
@@ -10,7 +10,7 @@ import 'braft-editor/dist/output.css'
 
 const Article = (props) => {
   const { store = {}, handlers = {}, query, querys = {}, id, static: { api }, mutate, mutations } = props
-  const { loadStatus, session = {}, articles = {}, documentTitle, users = {} } = store
+  const { loadStatus, session = {}, articles = {}, documentTitle, users = {}, categorys = [] } = store
   const { info = {} } = session
   const { username: currentUsername, token } = info
   const article = articles[id] || {}
@@ -176,6 +176,13 @@ const Article = (props) => {
       <Row className={Less['content']}><div className="braft-output-content" dangerouslySetInnerHTML={{ __html: content }}></div></Row>
       <Row className={Less['time']} type="flex">
         <p>创建于 {moment(article.release_time).format('YYYY-MM-DD')}</p>
+      </Row>
+      <Row>
+        {
+          categorys.filter(a => article.categorys.some(i => i == a.id)).map(item => (
+            <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+          ))
+        }
       </Row>
       <Row className={Less['info']} type="flex">
         <Tooltip title="star"><Icon onClick={handleArticleStarClick} type="star" theme={isCollected ? 'twoTone' : 'outlined'} /> {article.collections && article.collections.length}</Tooltip>

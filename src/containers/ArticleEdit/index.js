@@ -12,13 +12,9 @@ const { TextArea } = Input
 const Option = Select.Option
 
 const ArticleEdit = (props) => {
-  const { store = {}, handlers = {}, query, querys = {}, id, static: { api }, mutate, mutations } = props
-  const { loadStatus, session = {}, articles = {}, documentTitle, users = {}, categorys = [] } = store
-  const { info = {} } = session
-  const { username: currentUsername, token } = info
+  const { store = {}, handlers = {}, query, querys = {}, id, mutate, mutations } = props
+  const { loadStatus, articles = {}, documentTitle, categorys = [] } = store
   const article = articles[id] || {}
-  const { user: { username } = {} } = article
-  const currentUser = users[currentUsername]
 
 
   const [title, setTitle] = useState()
@@ -121,7 +117,7 @@ const ArticleEdit = (props) => {
     if (isSuccess) {
       handlers.go('/article/' + article.id)
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr = '' } = errors[0]
       message.error(`上传失败: ${messStr}`)
       handlers.onload({ loadStatus })

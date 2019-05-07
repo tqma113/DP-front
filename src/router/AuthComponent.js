@@ -103,7 +103,7 @@ const AuthComponent = (props) => {
           mutations.checkArticleValidMutation,
           {
             id: Number(id),
-            userId: currentUser.id
+            userId: Number(currentUser.id)
           }
         )
         const { checkArticleIdValid } = data

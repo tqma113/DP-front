@@ -16,6 +16,13 @@ const SingleLargeUplaod = (props) => {
   const [imageUrl, setImageUrl] = useState('')
   const [imageBase64, setImageBase64] = useState('')
 
+
+  useEffect(() => {
+    if (img) {
+      setImageUrl(img)
+    }
+  }, [])
+
   useEffect(() => {
     if (image) {
       handleUploadClick()
