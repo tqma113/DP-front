@@ -6,8 +6,6 @@ import map from '@map'
 
 import Less from './index.module.less'
 
-moment.locale('zh-cn')
-
 const ArticleRow = (props) => {
   const { article, store = {}, handlers = {}, mutate, mutations = {}, query, querys = {}, username } = props
   const { categorys = [] } = store

@@ -3,7 +3,11 @@ import { Drawer, Row, Avatar, Tabs, Icon, message, notification } from 'antd'
 import BraftEditor from 'braft-editor'
 import { Subscription } from 'react-apollo'
 
-import { NewMessageSubScription } from '@graphql/subscriptions'
+import {
+  NewMessageSubScription,
+  NewArticleSubScription,
+  NewUserLoginSubScription,
+  UserLogoutSubScription } from '@graphql/subscriptions'
 
 import map from '@map'
 
@@ -48,7 +52,7 @@ const Message = (props) => {
     } else {
       handlers.pushMessage({ message: newMessage, username: sendUser.username })
     }
-    if (messageStatus == 0) {
+    if (messageStatus === 0) {
       notification.open({
         message: <Row><Avatar src={api.dev.static + sendUser.avatar} />{sendUser.nickname}</Row>,
         description: <div className="braft-output-content" dangerouslySetInnerHTML={{ __html: html }}></div>,
@@ -59,6 +63,18 @@ const Message = (props) => {
         },
       });
     }
+  }
+
+  const newArticle = (article) => {
+
+  }
+
+  const newUserLogin = (user) => {
+
+  }
+
+  const userLoginout = (user) => {
+
   }
 
   const loadMessages = async (userId, username) => {
@@ -98,6 +114,51 @@ const Message = (props) => {
     acceptNewMessage(newMessage)
   }
 
+  const newArticleRender = ({ data = {}, loading = true, error }) => {
+    if (loading) return null
+    if (error) {
+      message.error(error)
+      return null
+    }
+    return null
+  }
+
+  const newArticleSubscribe = ({ client, subscriptionData, error }) => {
+    const { data = {} } = subscriptionData
+    const { newMessage } = data
+    newArticle(newMessage)
+  }
+
+  const newUserLoginRender = ({ data = {}, loading = true, error }) => {
+    if (loading) return null
+    if (error) {
+      message.error(error)
+      return null
+    }
+    return null
+  }
+
+  const newUserLoginSubscribe = ({ client, subscriptionData, error }) => {
+    const { data = {} } = subscriptionData
+    const { newMessage } = data
+    newUserLogin(newMessage)
+  }
+
+  const userLogoutRender = ({ data = {}, loading = true, error }) => {
+    if (loading) return null
+    if (error) {
+      message.error(error)
+      return null
+    }
+    return null
+  }
+
+  const userLogoutSubscribe = ({ client, subscriptionData, error }) => {
+    const { data = {} } = subscriptionData
+    const { newMessage } = data
+    userLoginout(newMessage)
+  }
+
   return (
     <Drawer
       width={450}
@@ -121,6 +182,27 @@ const Message = (props) => {
           subscription={NewMessageSubScription}
           children={render}
           onSubscriptionData={subscribe}
+        />
+      }
+      {status && currentUser &&
+        <Subscription
+          subscription={NewArticleSubScription}
+          children={newArticleRender}
+          onSubscriptionData={newArticleSubscribe}
+        />
+      }
+      {status && currentUser &&
+        <Subscription
+          subscription={NewUserLoginSubScription}
+          children={newUserLoginRender}
+          onSubscriptionData={newUserLoginSubscribe}
+        />
+      }
+      {status && currentUser &&
+        <Subscription
+          subscription={UserLogoutSubScription}
+          children={userLogoutRender}
+          onSubscriptionData={userLogoutSubscribe}
         />
       }
     </Drawer>

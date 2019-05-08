@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Avatar, Button, Skeleton, message, Icon } from 'antd'
+import { Row, Avatar, Button, Skeleton, message, Icon, Tag } from 'antd'
 
 import Less from './index.module.less'
 import './index.less'
@@ -17,7 +17,7 @@ const Article = (props) => {
     querys = {},
     onEditClick
   } = props
-  const { users = {}, categorys = [], industry = [], session = {} } = store
+  const { users = {}, categorys = [], industrys = [], session = {} } = store
   const user = users[username] || {}
   const { info = {}, status } = session
   const { username: currentUsername, token } = info
@@ -91,11 +91,22 @@ const Article = (props) => {
           </Row>
         }
         {user.location && <Row className={Less['address']}>
-            <p style={{display: 'inlne-block'}}><Icon type="environment" /> {user.location}</p>
+            <p style={{display: 'inlne-block', margin: '0'}}><Icon type="environment" /> {user.location}</p>
         </Row>}
         {user.statement &&
           <p className={Less['statement']}>{user.statement}</p>
         }
+        <Row style={{ paddingBottom: '10px'}}>
+          {categorys.filter(item => user.categorys.some(i => Number(i) === Number(item.id))).map(item => (
+            <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+          ))}
+        </Row>
+        <Row style={{ paddingBottom: '20px'}}>
+          {user.industrys.length > 0 ? industrys.filter(a => user.industrys.some(i => Number(i) === Number(a.id))).map(item => (
+              <Tag key={item.id} color="purple">{item.name}</Tag>
+            )) : []
+          }
+        </Row>
         {
           isSelf ?
           <Button onClick={onEditClick} style={{ width: '100%'}} size="small">编辑</Button> :

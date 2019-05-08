@@ -3,6 +3,7 @@ import { Row, Col, Avatar, Icon, Card, Skeleton, Comment, message, Tooltip, Tag 
 import BraftEditor from 'braft-editor'
 import moment from 'moment'
 
+
 import { Editor, CommentList } from '@components'
 
 import Less from './index.module.less'
@@ -185,11 +186,12 @@ const Article = (props) => {
       <Row className={Less['abstract']}>{article.abstract}</Row>
       <Row className={Less['content']}><div className="braft-output-content" dangerouslySetInnerHTML={{ __html: content }}></div></Row>
       <Row className={Less['time']} type="flex">
-        <p>创建于 {moment(article.release_time).format('YYYY-MM-DD')}</p>
+        <p>创建于 {moment(article.release_time).fromNow()}</p>
+        <p style={{ marginLeft: '20px'}}>最后编辑于 {moment(article.last_modify_time).fromNow()}</p>
       </Row>
       <Row>
         {
-          categorys.filter(a => article.categorys.some(i => i == a.id)).map(item => (
+          categorys.filter(a => article.categorys.some(i => Number(i) === Number(a.id))).map(item => (
             <Tag key={item.id} color="geekblue">{item.subject}</Tag>
           ))
         }

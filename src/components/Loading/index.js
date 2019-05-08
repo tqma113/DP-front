@@ -20,7 +20,7 @@ const iconStyle = {
 
 const Loading = (props) => {
   const { store, handlers, mutate, mutations = {} } = props
-  const { floatStatus = 0, session = {}, loadStatus } = store
+  const { floatStatus = 0, session = {} } = store
   const { info = {} } = session
   const { username } = info
 

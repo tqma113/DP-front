@@ -5,9 +5,10 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
+
 import client from '@graphql/client'
 import store from '@redux';
-// import './plugins/fontAwesome';
+import './plugins';
 
 import Router from '@router/index.jsx';
 import { Controller, Layout } from '@containers'
