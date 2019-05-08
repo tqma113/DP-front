@@ -15,8 +15,15 @@ import { split } from 'apollo-link';
 const isToken = localStorage.getItem('token') || '';
 const username = localStorage.getItem('username') || '';
 
+const urlConfig = {
+  develoment: 'localhost:4000',
+  production: 'www.matianqi.com'
+}
+
+const env = process.env.NODE_ENV
+
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:4000/subscriptions',
+  uri: `ws://${urlConfig[env]}/subscriptions`,
   options: {
     reconnect: true,
     connectionParams: () => ({
@@ -114,7 +121,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 // })
 
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:4000/graphql'
+  uri: `http://${urlConfig[env]}/graphql`
 })
 
 const link = split(
