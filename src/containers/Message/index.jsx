@@ -65,16 +65,36 @@ const Message = (props) => {
     }
   }
 
-  const newArticle = (article) => {
-
+  const setNewArticle = (article) => {
+    const { user_id } = article
+    let user = Object.values(users).filter(item => Number(item.id) === user_id)[0]
+    notification.open({
+      message: <Row><Avatar src={api.dev.static + user.avatar} />{user.nickname}</Row>,
+      description: <div>发布了新的文章{article.title}</div>,
+      icon: <Icon type="message" />,
+      onClick: () => {
+        handlers.go('/article/'+article.id)
+      },
+    });
   }
 
-  const newUserLogin = (user) => {
-
+  const setNewUserLogin = (user) => {
+    if (messageStatus === 0) {
+      handlers.setUsers({ users: [user] })
+      notification.open({
+        message: <Row><Avatar src={api.dev.static + user.avatar} />{user.nickname}</Row>,
+        description: <div>上线了</div>,
+        icon: <Icon type="message" />,
+        onClick: () => {
+          handlers.openMessage()
+          handleUserClick(user.username)
+        },
+      });
+    }
   }
 
-  const userLoginout = (user) => {
-
+  const setUserLogout = (user) => {
+    handlers.setUsers({ users: [user] })
   }
 
   const loadMessages = async (userId, username) => {
@@ -125,8 +145,8 @@ const Message = (props) => {
 
   const newArticleSubscribe = ({ client, subscriptionData, error }) => {
     const { data = {} } = subscriptionData
-    const { newMessage } = data
-    newArticle(newMessage)
+    const { newArticle } = data
+    setNewArticle(newArticle)
   }
 
   const newUserLoginRender = ({ data = {}, loading = true, error }) => {
@@ -140,8 +160,8 @@ const Message = (props) => {
 
   const newUserLoginSubscribe = ({ client, subscriptionData, error }) => {
     const { data = {} } = subscriptionData
-    const { newMessage } = data
-    newUserLogin(newMessage)
+    const { newUserLogin } = data
+    setNewUserLogin(newUserLogin)
   }
 
   const userLogoutRender = ({ data = {}, loading = true, error }) => {
@@ -155,8 +175,8 @@ const Message = (props) => {
 
   const userLogoutSubscribe = ({ client, subscriptionData, error }) => {
     const { data = {} } = subscriptionData
-    const { newMessage } = data
-    userLoginout(newMessage)
+    const { userLogout } = data
+    setUserLogout(userLogout)
   }
 
   return (

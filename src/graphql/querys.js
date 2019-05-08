@@ -185,6 +185,7 @@ const QueryArticles = gql`
         image
         release_time
         last_modify_time
+        user_id
         user {
           id
           username
