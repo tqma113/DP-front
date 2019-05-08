@@ -16,11 +16,11 @@ const isToken = localStorage.getItem('token') || '';
 const username = localStorage.getItem('username') || '';
 
 const urlConfig = {
-  develoment: 'localhost:4000',
+  development: 'localhost:4000',
   production: 'www.matianqi.com'
 }
 
-const env = process.env.NODE_ENV
+const env = process.env.NODE_ENV || 'production'
 
 const wsLink = new WebSocketLink({
   uri: `ws://${urlConfig[env]}/subscriptions`,

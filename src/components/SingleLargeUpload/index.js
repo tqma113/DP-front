@@ -60,8 +60,6 @@ const SingleLargeUplaod = (props) => {
   }
 
   const handleUploadClick = async () => {
-    console.log('a')
-
     if (loading || uploading) {
       return
     }

@@ -20,6 +20,7 @@ const QueryInitData = gql`
         last_login_at
         avatar
         statement
+        status
         email
         eduBG {
           id
@@ -115,6 +116,7 @@ const QueryUsers = gql`
         industrys
         register_at
         last_login_at
+        status
         avatar
         statement
         email

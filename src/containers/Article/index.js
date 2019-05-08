@@ -13,26 +13,31 @@ const Article = (props) => {
   const { loadStatus, session = {}, articles = {}, documentTitle, users = {}, categorys = [] } = store
   const { info = {} } = session
   const { username: currentUsername, token } = info
-  const article = articles[id] || {}
-  const { user: { username } = {} } = article
+  const article = articles[id]
+  const { user: { username } = {} } = article || {}
   const currentUser = users[currentUsername]
 
-  const isLiked = article.likes ? article.likes.some(item => item.user && item.user.username === currentUsername) : false
-  const isCollected = article.collections ? article.collections.some(item => item.user && item.user.username === currentUsername) : false
+  const isLiked = article && article.likes ? article.likes.some(item => item.user && item.user.username === currentUsername) : false
+  const isCollected =article &&  article.collections ? article.collections.some(item => item.user && item.user.username === currentUsername) : false
 
   const [content, setContent] = useState()
   const [submitting, setSubmitting] = useState()
   const [comment, setComment] = useState()
+  const [loading, setLoading] = useState(true)
+
 
   useEffect(() => {
-    if (!articles[id]) {
+    if (!article || !article.id) {
       loadArticle(id)
     } else {
-      document.title = article.title + documentTitle
-      handlers.onload({ loadStatus })
-      loadContent()
+      if (loading) {
+        document.title = article.title + documentTitle
+        loadContent()
+        handlers.onload({ loadStatus })
+        setLoading(false)
+      }
     }
-  })
+  }, [id, article])
 
   const loadArticle = async (id, fetchPolicy) => {
     const data = await query(
@@ -149,9 +154,14 @@ const Article = (props) => {
     }
   }
 
-  if (loadStatus === 2) {
+  if (loading) {
     return (
-      <Skeleton active />
+      <section className={Less['article']}>
+        <Skeleton paragraph={{ rows: 0 }} title={{ rows: 1 }} active />
+        <Skeleton paragraph={{ rows: 2 }} avatar={{ size: 'large' }} active />
+        <Skeleton paragraph={{ rows: 15 }} active />
+
+      </section>
     )
   }
 

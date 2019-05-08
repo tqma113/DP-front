@@ -74,7 +74,7 @@ const ArticleCreate = (props) => {
     if (isSuccess) {
       handlers.go('/article/' + article.id)
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr = '' } = errors[0]
       message.error(`上传失败: ${messStr}`)
       handlers.onload({ loadStatus })

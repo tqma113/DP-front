@@ -189,6 +189,7 @@ const CreateArticleMutation = gql`
         content
         release_time
         last_modify_time
+        categorys
       }
       isSuccess
       extension {
