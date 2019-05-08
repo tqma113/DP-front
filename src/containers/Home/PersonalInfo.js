@@ -11,16 +11,16 @@ const Option = Select.Option
 
 const degrees = [{
   title: '学士',
-  value: 'bachelor'
+  value: 'BACHELOR'
 }, {
   title: '硕士',
-  value: 'master'
+  value: 'MASTER'
 }, {
   title: '博士',
-  value: 'doctor'
+  value: 'DOCTOR'
 }, {
   title: '其他',
-  value: 'other'
+  value: 'OTHER'
 }]
 
 const genderOptions = [{
@@ -272,6 +272,11 @@ const PersonalInfo = (props) => {
 
     if (isSuccess) {
       loadUser(username)
+      setEmailCodeKey()
+      setEmailCodeKeyTimer()
+      setEmailCodeSendKey()
+      setEmailCodeTimer()
+      message.success('更新成功')
     } else {
       message.info('更新失败请重试')
       setSpinning(false)
@@ -290,7 +295,7 @@ const PersonalInfo = (props) => {
       handlers.setUsers({ users })
       resetFields()
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr = '' } = errors[0]
       message.error(`数据更新失败: ${messStr}`)
     }
