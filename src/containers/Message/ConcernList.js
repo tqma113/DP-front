@@ -59,7 +59,7 @@ const ConcernList = (props) => {
       key={item.user_id}
     >
       <List.Item.Meta
-        avatar={<Avatar onDoubleClick={() => handleUserClick(item.username)} size={40} src={api.dev.static + item.avatar} />}
+        avatar={<Avatar onDoubleClick={() => handleUserClick(item.username)} size={40} src={api.static + item.avatar} />}
         title={<a href={'/' + item.username}>{item.nickname}</a>}
         description={item.statement}
       />

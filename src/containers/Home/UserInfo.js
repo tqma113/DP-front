@@ -80,7 +80,7 @@ const Article = (props) => {
   return user && user.id ?
     <React.Fragment>
       <Row>
-        <Avatar className={Less['avatar']} src={user.avatar ? api.dev.static + user.avatar : ''} title="avatar" />
+        <Avatar className={Less['avatar']} src={user.avatar ? api.static + user.avatar : ''} title="avatar" />
       </Row>
       <Row>
         <p className={Less['nickname']}>{user.nickname}</p>

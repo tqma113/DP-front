@@ -169,12 +169,12 @@ const Article = (props) => {
   return (
     <section className={Less['article']}>
       {article.image && <Row className={Less['image-container']}>
-        <img className={Less['image']} alt="title" src={api.dev.static + article.image} />
+        <img className={Less['image']} alt="title" src={api.static + article.image} />
       </Row>}
       <Row className={Less['title']}>{article.title}</Row>
       <Row className={Less['user']} type="flex" justify="start">
         <Col>
-          <Avatar size={50} src={article.user && article.user.avatar ? api.dev.static + article.user.avatar : ''} />
+          <Avatar size={50} src={article.user && article.user.avatar ? api.static + article.user.avatar : ''} />
         </Col>
         <Col offset={1}>
           <div className={Less['user']}>
@@ -206,7 +206,7 @@ const Article = (props) => {
         <Comment
           avatar={(
             <Avatar
-              src={currentUser && currentUser.avatar ? api.dev.static + currentUser.avatar : ''}
+              src={currentUser && currentUser.avatar ? api.static + currentUser.avatar : ''}
               alt={currentUser && currentUser.nickname ? currentUser.nickname : ''}
               onClick={() => handleAvatarClick(currentUser ? currentUser.username : false)}
             />

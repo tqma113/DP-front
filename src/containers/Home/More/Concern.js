@@ -195,7 +195,7 @@ const Concern = props => {
       >
         <List.Item.Meta
           className={Less['user-item']}
-          avatar={<Avatar onClick={handleClick} size={50} src={api.dev.static + item.avatar} />}
+          avatar={<Avatar onClick={handleClick} size={50} src={api.static + item.avatar} />}
           title={<button onClick={handleClick} className="link-button">{item.nickname}</button>}
           description={<span>{item.statement}</span>}
         />

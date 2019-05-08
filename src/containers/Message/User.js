@@ -41,7 +41,7 @@ const User = (props) => {
     status && currentUser ?
     <React.Fragment>
       <Row type="flex">
-        <Col><Avatar size={60} src={api.dev.static + currentUser.avatar} /></Col>
+        <Col><Avatar size={60} src={api.static + currentUser.avatar} /></Col>
         <Col offset={1}><p className={Less['nickname']}>{currentUser.nickname}</p></Col>
       </Row>
       <Row><p>{currentUser.statement}</p></Row>

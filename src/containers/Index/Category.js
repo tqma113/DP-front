@@ -119,7 +119,7 @@ const Category = props => {
               )
             }
             {
-              item.image && <img src={api.dev.static + item.image} />
+              item.image && <img src={api.static + item.image} />
             }
           </div>
         }

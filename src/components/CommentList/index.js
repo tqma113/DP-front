@@ -76,7 +76,7 @@ const CommentList = ({ comments, currentUserId, articleId, ...props }) => {
         author={<a href={'/' + user.username}>{user.nickname}</a>}
         avatar={(
           <Avatar
-            src={api.dev.static + user.avatar}
+            src={api.static + user.avatar}
             alt={user.nickname}
             onClick={handleAvatarClick}
           />

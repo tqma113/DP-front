@@ -91,7 +91,7 @@ const SingleUplaod = (props) => {
         onChange={handleUploadChange}
       >
         {imageUrl ?
-          <img className={Less['image']} src={api.dev.static + imageUrl} alt="avatar" /> :
+          <img className={Less['image']} src={api.static + imageUrl} alt="avatar" /> :
           imageBase64 ?
           <img className={Less['image']} src={imageBase64} alt="avatar" /> :
           <div>

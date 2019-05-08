@@ -54,7 +54,7 @@ const Message = (props) => {
     }
     if (messageStatus === 0) {
       notification.open({
-        message: <Row><Avatar src={api.dev.static + sendUser.avatar} />{sendUser.nickname}</Row>,
+        message: <Row><Avatar src={api.static + sendUser.avatar} />{sendUser.nickname}</Row>,
         description: <div className="braft-output-content" dangerouslySetInnerHTML={{ __html: html }}></div>,
         icon: <Icon type="message" />,
         onClick: () => {
@@ -69,7 +69,7 @@ const Message = (props) => {
     const { user_id } = article
     let user = Object.values(users).filter(item => Number(item.id) === user_id)[0]
     notification.open({
-      message: <Row><Avatar src={api.dev.static + user.avatar} />{user.nickname}</Row>,
+      message: <Row><Avatar src={api.static + user.avatar} />{user.nickname}</Row>,
       description: <div>发布了新的文章{article.title}</div>,
       icon: <Icon type="message" />,
       onClick: () => {
@@ -82,7 +82,7 @@ const Message = (props) => {
     if (messageStatus === 0) {
       handlers.setUsers({ users: [user] })
       notification.open({
-        message: <Row><Avatar src={api.dev.static + user.avatar} />{user.nickname}</Row>,
+        message: <Row><Avatar src={api.static + user.avatar} />{user.nickname}</Row>,
         description: <div>上线了</div>,
         icon: <Icon type="message" />,
         onClick: () => {

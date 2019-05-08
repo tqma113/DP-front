@@ -145,7 +145,7 @@ const Chat = (props) => {
     return (
       <List.Item key={item.id}>
         <div style={{ display: 'flex', flexDirection: Number(item.s_user_id) === Number(currentUser.id) ? 'row-reverse' : 'row'}}>
-          <Avatar src={api.dev.static + item.sendUser.avatar} />
+          <Avatar src={api.static + item.sendUser.avatar} />
           <div style={{ marginLeft: '5px', width: '300px', textAlign: Number(item.s_user_id) === Number(currentUser.id) ? 'right' : 'left' }}>
             <div style={{ width: '100%', boxShadow: '0 2px 8px #ccc', borderRadius: '5px', padding: '10px' }} className="braft-output-content" dangerouslySetInnerHTML={{ __html: html }}></div>
             <p style={{color: '#ccc', fontSize: '8px', margin: '0'}}>{moment(item.send_time, 'x').fromNow()}</p>

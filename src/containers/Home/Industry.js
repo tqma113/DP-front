@@ -131,7 +131,7 @@ const Industry = props => {
               )
             }
             {
-              item.image && <img alt="industry" src={api.dev.static + item.image} />
+              item.image && <img alt="industry" src={api.static + item.image} />
             }
           </div>
         }
