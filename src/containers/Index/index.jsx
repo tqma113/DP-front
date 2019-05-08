@@ -40,7 +40,7 @@ const Index = (props) => {
 
   return (
     <section className={Less['index']}>
-      <Tabs onTabClick={handleTabClick} activeKey={tabKey}>
+      <Tabs className={Less['main']} onTabClick={handleTabClick} activeKey={tabKey}>
         <TabPane tab="文章" key={1}>
           <Article {...props} />
         </TabPane>
