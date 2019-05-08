@@ -2,6 +2,7 @@
   "name": "dp-front",
   "version": "0.1.0",
   "private": true,
+  "homepage" : "http://Monsooon.github.io/blog",
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
     "@babel/runtime": "^7.4.3",
