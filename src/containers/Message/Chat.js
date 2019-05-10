@@ -154,7 +154,7 @@ const Chat = (props) => {
     )
   }
 
-  const controls = ['emoji', 'font-family']
+  const controls = ['emoji', 'font-family', 'link']
 
   return (
     <div>

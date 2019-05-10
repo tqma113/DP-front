@@ -1,14 +1,22 @@
 import React from 'react'
-import { Input, Form, Button } from 'antd'
+import { Form, Button } from 'antd'
+import BraftEditor from 'braft-editor'
 
-const TextArea = Input.TextArea
+import 'braft-editor/dist/index.css'
+
+const controls = ['emoji', 'font-family', 'link']
 
 const Editor = ({
   onChange, onSubmit, submitting, value,
 }) => (
   <div>
     <Form.Item>
-      <TextArea rows={4} onChange={onChange} value={value} />
+      <BraftEditor
+        onChange={onChange}
+        value={value}
+        controls={controls}
+        contentStyle={{ height: '100px', border: '1px solid #CCC', borderTop: '0'}}
+      />
     </Form.Item>
     <Form.Item>
       <Button

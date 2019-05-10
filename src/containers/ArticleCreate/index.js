@@ -5,7 +5,6 @@ import BraftEditor from 'braft-editor'
 import { SingleLargeUpload } from '@components'
 
 import Less from './index.module.less'
-import 'braft-editor/dist/index.css'
 import './index.less'
 
 const { TextArea } = Input

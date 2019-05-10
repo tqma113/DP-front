@@ -69,12 +69,13 @@ const Article = (props) => {
     setContent(content)
   }
 
-  const handleCommentChange = (e) => {
-    setComment(e.target.value)
+  const handleCommentChange = (editorState) => {
+    setComment(editorState)
   }
 
   const handleCommentSubmit = () => {
-    if (!comment) {
+    let c = comment.toHTML()
+    if (!c) {
       message.info('请先填写评论内容')
       return
     }
@@ -95,7 +96,7 @@ const Article = (props) => {
         username,
         token,
         articleId: Number(article.id),
-        content: comment
+        content: comment.toRAW()
       }
     )
     const { sendComment: { isSuccess } = {} } = data
@@ -202,10 +203,13 @@ const Article = (props) => {
       </Row>
       <Card
         title="评论"
+        bodyStyle={{ padding: '0 24px' }}
       >
         <Comment
           avatar={(
             <Avatar
+              style={{ margin: '10px 0'}}
+              size="large"
               src={currentUser && currentUser.avatar ? api.static + currentUser.avatar : ''}
               alt={currentUser && currentUser.nickname ? currentUser.nickname : ''}
               onClick={() => handleAvatarClick(currentUser ? currentUser.username : false)}

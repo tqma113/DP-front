@@ -1,13 +1,17 @@
 import React from 'react'
 import { List, Comment, Tooltip, Icon, Avatar, message } from 'antd'
+import BraftEditor from 'braft-editor'
+import moment from 'moment'
+import 'braft-editor/dist/output.css'
 
 import map from '@map'
 
 const CommentList = ({ comments, currentUserId, articleId, ...props }) => {
   const { mutate, mutations = {}, static: { api }, query, querys, handlers = {} } = props
 
-  const renderItem = ({ content, likes, user, id }) => {
+  const renderItem = ({ content, likes, user, id, create_time }) => {
     const isLiked = likes.some(item => item.user_id === currentUserId)
+    let contentStr = BraftEditor.createEditorState(JSON.parse(content)).toHTML()
 
     const handlelikeClick = () => {
       articleLike()
@@ -68,6 +72,7 @@ const CommentList = ({ comments, currentUserId, articleId, ...props }) => {
         </span>
       </span>,
       <span>回复</span>,
+      <span>评论于{moment(create_time, 'x').fromNow()}</span>
     ];
 
     return (
@@ -82,7 +87,7 @@ const CommentList = ({ comments, currentUserId, articleId, ...props }) => {
           />
         )}
         content={(
-          <p>{content}</p>
+          <div className="braft-output-content" dangerouslySetInnerHTML={{ __html: contentStr }}></div>
         )}
       />
     )
