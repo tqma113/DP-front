@@ -112,9 +112,10 @@ const ArticleEdit = (props) => {
     setImageUrl(url)
   }
 
-  const setEdit = (createArticle) => {
-    const { isSuccess, article, extension = {} } = createArticle
+  const setEdit = (editArticle) => {
+    const { isSuccess, article, extension = {} } = editArticle
     if (isSuccess) {
+      loadArticle(article.id, 'no-cache')
       handlers.go('/article/' + article.id)
     } else {
       const { errors = [{}] } = extension

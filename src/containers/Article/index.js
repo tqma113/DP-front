@@ -57,7 +57,7 @@ const Article = (props) => {
       setComment('')
       setSubmitting(false)
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr = '' } = errors[0]
       message.error(`数据下载失败: ${messStr}`)
     }
