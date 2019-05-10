@@ -4,6 +4,8 @@ import BraftEditor from 'braft-editor'
 import moment from 'moment'
 import { Element,  scroller } from 'react-scroll'
 
+import 'braft-editor/dist/index.css'
+
 const Chat = (props) => {
   const { store = {}, handlers = {}, static:{ api }, mutate, mutations, query, querys, messageUsername = '' } = props
   const { users = {}, session = {}, messages = {} } = store
