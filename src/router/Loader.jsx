@@ -3,7 +3,7 @@ import { Query } from 'react-apollo'
 import { message } from 'antd'
 
 import getCookie from '@utils/getCookie'
-import { QueryInitData } from '@graphql/querys'
+import { QueryInitData } from '@graphql/querys/index'
 
 import map from '@map'
 

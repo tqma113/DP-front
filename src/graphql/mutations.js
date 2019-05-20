@@ -419,6 +419,36 @@ const EditArticleMutation = gql`
   }
 `
 
+const ApplyAdminMutation = gql`
+  mutation($reason: String!) {
+    logout(reason: $reason) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
+const ApplyAddCategoryMutation = gql`
+  mutation($subject: String!, $description: String!, $image: String) {
+    logout(subject: $subject, description: $description, image: $image) {
+      isSuccess
+      extension {
+        operator
+        errors {
+          path
+          message
+        }
+      }
+    }
+  }
+`
+
 export const names = {
   LoginMutation: 'login',
   RegisterMutation: 'register',
@@ -441,7 +471,9 @@ export const names = {
   industryStarMutation: 'industryStarMutation',
   SendMessageMutation: 'SendMessageMutation',
   CommentLikeMutation: 'CommentLikeMutation',
-  EditArticleMutation: 'EditArticleMutation'
+  EditArticleMutation: 'EditArticleMutation',
+  ApplyAdminMutation: 'ApplyAdminMutation',
+  ApplyAddCategoryMutation: 'ApplyAddCategoryMutation'
 }
 
 export {
@@ -467,5 +499,7 @@ export {
   SendMessageMutation,
   CommentLikeMutation,
   LogoutMutation,
-  EditArticleMutation
+  EditArticleMutation,
+  ApplyAdminMutation,
+  ApplyAddCategoryMutation
 }

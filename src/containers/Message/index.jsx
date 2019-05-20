@@ -7,7 +7,7 @@ import {
   NewMessageSubScription,
   NewArticleSubScription,
   NewUserLoginSubScription,
-  UserLogoutSubScription } from '@graphql/subscriptions'
+  UserLogoutSubScription } from '@graphql/subscriptions/index'
 
 import map from '@map'
 

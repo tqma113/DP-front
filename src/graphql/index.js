@@ -1,8 +1,8 @@
 import client from './client'
 
 import { names } from './mutations'
-import * as mutations from './mutations'
-import * as querys from './querys'
+import * as mutations from './mutations/index'
+import * as querys from './querys/index'
 
 import {
 

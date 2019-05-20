@@ -14,6 +14,7 @@ const QueryInitData = gql`
         nickname
         location
         gender
+        user_type
         birthday
         industrys
         register_at
@@ -112,6 +113,7 @@ const QueryUsers = gql`
         nickname
         location
         gender
+        user_type
         birthday
         industrys
         register_at
