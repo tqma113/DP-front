@@ -7,14 +7,21 @@ import getBase64 from '@utils/getBase64'
 import Less from './index.module.less'
 import './index.less'
 
-const SingleUplaod = (props) => {
-  const { className = '', style = {}, uploadStyle = {}, onLoad, mutate, mutations = {}, static: { api } } = props
+const SingleLargeUplaod = (props) => {
+  const { className = '', style = {}, uploadStyle = {}, onLoad, mutate, mutations = {}, static: { api }, img = '' } = props
 
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
-  const [image, setImage] = useState()
+  const [image, setImage] = useState(null)
   const [imageUrl, setImageUrl] = useState('')
   const [imageBase64, setImageBase64] = useState('')
+
+
+  useEffect(() => {
+    if (img) {
+      setImageUrl(img)
+    }
+  }, [])
 
   useEffect(() => {
     if (image) {
@@ -37,8 +44,8 @@ const SingleUplaod = (props) => {
       setImage(file)
       try {
         getBase64(file).then(base64 => {
-          setImageBase64(base64)
           setLoading(false)
+          setImageBase64(base64)
         })
       } catch (err) {
         setLoading(false)
@@ -71,7 +78,7 @@ const SingleUplaod = (props) => {
       if (onLoad) onLoad(image, url, imageBase64)
       message.success('上传成功!')
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr } = errors[0]
       message.error(`上传失败: ${messStr}`)
     }
@@ -79,7 +86,7 @@ const SingleUplaod = (props) => {
   }
 
   return (
-    <div className={`${Less['single-auto-upload']} single-upload ${className}`} style={style}>
+    <div className={`${Less['single-auto-upload']} single-auto-upload ${className}`} style={style}>
       <Upload
         style={uploadStyle}
         accept="image/*"
@@ -94,7 +101,7 @@ const SingleUplaod = (props) => {
           <img className={Less['image']} src={api.static + imageUrl} alt="avatar" /> :
           imageBase64 ?
           <img className={Less['image']} src={imageBase64} alt="avatar" /> :
-          <div>
+          <div style={{ padding: '80px 0'}}>
             <Icon type={loading ? 'loading' : 'plus'} />
             <div className="ant-upload-text">选择图片</div>
           </div>
@@ -104,4 +111,4 @@ const SingleUplaod = (props) => {
   )
 }
 
-export default connect(SingleUplaod, 'UploadImage')
+export default connect(SingleLargeUplaod, 'UploadImage')

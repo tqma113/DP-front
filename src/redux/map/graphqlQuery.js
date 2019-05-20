@@ -73,10 +73,18 @@ export const mutations = {
   Apply: {
     ApplyAdminMutation: 'ApplyAdminMutation',
     ApplyAddCategoryMutation: 'ApplyAddCategoryMutation',
-    ApplyAddIndustryMutation: 'ApplyAddIndustryMutation'
+    ApplyAddIndustryMutation: 'ApplyAddIndustryMutation',
+    ChangeAdminMutation: 'ChangeAdminMutation',
+    ChangeAddCategoryMutation: 'ChangeAddCategoryMutation',
+    ChangeAddIndustryMutation: 'ChangeAddIndustryMutation',
   },
   Admin: {
-
+    DealApplyAdminMutation: 'DealApplyAdminMutation',
+    DealApplyCategoryMutation: 'DealApplyCategoryMutation',
+    DealApplyIndustryMutation: 'DealApplyIndustryMutation',
+    AddAdminMutation: 'AddAdminMutation',
+    AddCategoryMutation: 'AddCategoryMutation',
+    AddIndustryMutation: 'AddIndustryMutation'
   }
 }
 

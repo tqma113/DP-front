@@ -43,6 +43,26 @@ const AdminApply = (props) => {
     loadApplications()
   }, [])
 
+  const handleSubmitClick = () => {
+    if (reason) {
+      if (application) {
+        changeApplyAdmin()
+      } else {
+        applyAdmin()
+      }
+    } else {
+      message.info('请填写申请原因')
+    }
+  }
+
+  const handleReasonChange = (e) => {
+    setReason(e.target.value)
+  }
+
+  const handleEditClick = () => {
+    setEditStatus(true)
+  }
+
   const loadApplications = async (fetchPolicy) => {
     const data = await query(
       querys.QueryAdminApply,
@@ -63,22 +83,6 @@ const AdminApply = (props) => {
     }
   }
 
-  const handleSubmitClick = () => {
-    if (reason) {
-      applyAdmin()
-    } else {
-      message.info('请填写申请原因')
-    }
-  }
-
-  const handleReasonChange = (e) => {
-    setReason(e.target.value)
-  }
-
-  const handleEditClick = () => {
-    setEditStatus(true)
-  }
-
   const applyAdmin = async (user) => {
     setLoading(true)
 
@@ -88,7 +92,7 @@ const AdminApply = (props) => {
         reason
       }
     )
-    const { changeUserInfo: { isSuccess } = {} } = data
+    const { applyAdmin: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadApplications()
@@ -100,17 +104,17 @@ const AdminApply = (props) => {
     }
   }
 
-  const changeApplyAdmin =  async (user) => {
+  const changeApplyAdmin =  async () => {
     setLoading(true)
 
     const data = await mutate(
-      mutations.ApplyAdminMutation,
+      mutations.ChangeAdminMutation,
       {
-        id: application.id,
+        id: Number(application.id),
         reason
       }
     )
-    const { changeUserInfo: { isSuccess } = {} } = data
+    const { changeApplyAdmin: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadApplications()
@@ -128,7 +132,7 @@ const AdminApply = (props) => {
         <Steps
           size="small"
           current={application ? application.status == 1 ? 2 : 1 : 0}
-          status={application && application.status == 2 && 'error'}
+          status={application && application.status == 2 ? 'error' : ''}
         >
           <Step title="填写" />
           <Step title="审核中" />

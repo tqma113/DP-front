@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
-const ChangeApplyCategoryMutation = gql`
+const ChangeApplyIndustryMutation = gql`
   mutation($id: Int!, $subject: String!, $description: String!, $image: String!) {
-    changeApplyAddCategory(id: $id, subject: $subject, description: $description, image: $image) {
+    changeApplyAddIndustry(id: $id, subject: $subject, description: $description, image: $image) {
       isSuccess
       extension {
         operator
@@ -15,4 +15,4 @@ const ChangeApplyCategoryMutation = gql`
   }
 `
 
-export default ChangeApplyCategoryMutation
+export default ChangeApplyIndustryMutation

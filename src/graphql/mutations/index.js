@@ -24,6 +24,15 @@ import EditArticleMutation from './EditArticleMutation'
 import ApplyAdminMutation from './ApplyAdminMutation'
 import ApplyAddCategoryMutation from './ApplyAddCategoryMutation'
 import ApplyAddIndustryMutation from './ApplyAddIndustryMutation'
+import ChangeAdminMutation from './ChangeApplyAdminMutation'
+import ChangeAddCategoryMutation from './ChangeApplyAddCategoryMutation'
+import ChangeAddIndustryMutation from './ChangeAddApplyIndustryMutation'
+import DealApplyAdminMutation from './DealApplyAdminMutation'
+import DealApplyCategoryMutation from './DealApplyCategoryMutation'
+import DealApplyIndustryMutation from './DealApplyIndustryMutation'
+import AddAdminMutation from './AddAdminMutation'
+import AddCategoryMutation from './AddCategory'
+import AddIndustryMutation from './AddIndustryMutation'
 
 export {
   LoginMutation,
@@ -51,5 +60,14 @@ export {
   EditArticleMutation,
   ApplyAdminMutation,
   ApplyAddCategoryMutation,
-  ApplyAddIndustryMutation
+  ApplyAddIndustryMutation,
+  ChangeAdminMutation,
+  ChangeAddCategoryMutation,
+  ChangeAddIndustryMutation,
+  DealApplyAdminMutation,
+  DealApplyCategoryMutation,
+  DealApplyIndustryMutation,
+  AddAdminMutation,
+  AddCategoryMutation,
+  AddIndustryMutation
 }
