@@ -1,12 +1,7 @@
 import client from './client'
 
-import { names } from './mutations'
 import * as mutations from './mutations/index'
 import * as querys from './querys/index'
-
-import {
-
-} from './subscriptions'
 
 export const mutate = (mutationName, variables, options) => new Promise((resolve, reject) => {
   client.mutate({
