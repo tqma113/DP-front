@@ -64,7 +64,7 @@ const CategoryApply = (props) => {
         fetchPolicy
       }
     )
-    let { adminApply: { isSuccess, applications, extension = {} } = {} } = data
+    let { categoryApply: { isSuccess, applications, extension = {} } = {} } = data
 
     if (isSuccess) {
       handlers.setAdminApplications({ adminApplications: applications })
