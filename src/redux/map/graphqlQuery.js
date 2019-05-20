@@ -69,6 +69,14 @@ export const mutations = {
   },
   ArticleEdit: {
     EditArticleMutation: 'EditArticleMutation'
+  },
+  Apply: {
+    ApplyAdminMutation: 'ApplyAdminMutation',
+    ApplyAddCategoryMutation: 'ApplyAddCategoryMutation',
+    ApplyAddIndustryMutation: 'ApplyAddIndustryMutation'
+  },
+  Admin: {
+
   }
 }
 
@@ -99,5 +107,15 @@ export const querys = {
   },
   ArticleEdit: {
     QueryArticles: 'QueryArticles'
+  },
+  Apply: {
+    QueryAdminApply: 'QueryAdminApply',
+    QueryCategoryApply: 'QueryCategoryApply',
+    QueryIndustryApply: 'QueryIndustryApply'
+  },
+  Admin: {
+    QueryAdminApply: 'QueryAdminApply',
+    QueryCategoryApply: 'QueryCategoryApply',
+    QueryIndustryApply: 'QueryIndustryApply'
   }
 }

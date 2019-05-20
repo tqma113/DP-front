@@ -38,6 +38,15 @@ const {
   getSetMessagesAction,
   getPushMessageAction
 } = actions.messages
+const {
+  getSetAdminApplicationsAction
+} = actions.adminApplications
+const {
+  getSetCategoryApplicationsAction
+} = actions.categoryApplications
+const {
+  getSetIndustryApplicationsAction
+} = actions.industryApplications
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   handlers: {
@@ -75,6 +84,15 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     setMessages: ({ messages = [], username = '' }) => {
       dispatch(getSetMessagesAction(messages, username))
+    },
+    setAdminApplications: ({ adminApplications = [] }) => {
+      dispatch(getSetAdminApplicationsAction(adminApplications))
+    },
+    setCategoryApplications: ({ categoryApplications = [] }) => {
+      dispatch(getSetCategoryApplicationsAction(categoryApplications))
+    },
+    setIndustryApplications: ({ industryApplications = [] }) => {
+      dispatch(getSetIndustryApplicationsAction(industryApplications))
     },
     pushMessage: ({ message = {}, username = ''}) => {
       dispatch(getPushMessageAction(message, username))

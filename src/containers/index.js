@@ -9,6 +9,8 @@ import ArticleCreate from './ArticleCreate'
 import ArticleEdit from './ArticleEdit'
 import Home from './Home'
 import Layout from './Layout'
+import Apply from './Apply'
+import Admin from './Admin'
 
 export {
   Page,
@@ -21,5 +23,7 @@ export {
   ArticleCreate,
   ArticleEdit,
   Home,
-  Layout
+  Layout,
+  Apply,
+  Admin
 }

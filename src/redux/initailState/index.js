@@ -14,5 +14,9 @@ export default {
   messages: {},
 
   categorys: [],
-  industrys: []
+  industrys: [],
+
+  adminApplications: [],
+  categoryApplications: [],
+  industryApplications: []
 }

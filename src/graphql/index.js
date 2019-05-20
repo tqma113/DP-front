@@ -54,3 +54,11 @@ export const query = (queryName, variables, options) => new Promise((resolve, re
     resolve(networwErrorRes)
   })
 })
+
+export const getMutate = () => {
+  return mutate
+}
+
+export const getQuery = () => {
+  return query
+}

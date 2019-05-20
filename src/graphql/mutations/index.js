@@ -23,6 +23,7 @@ import LogoutMutation from './LogoutMutation'
 import EditArticleMutation from './EditArticleMutation'
 import ApplyAdminMutation from './ApplyAdminMutation'
 import ApplyAddCategoryMutation from './ApplyAddCategoryMutation'
+import ApplyAddIndustryMutation from './ApplyAddIndustryMutation'
 
 export {
   LoginMutation,
@@ -49,5 +50,6 @@ export {
   LogoutMutation,
   EditArticleMutation,
   ApplyAdminMutation,
-  ApplyAddCategoryMutation
+  ApplyAddCategoryMutation,
+  ApplyAddIndustryMutation
 }

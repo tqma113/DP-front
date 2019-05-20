@@ -9,6 +9,8 @@ const Home = AsyncComponent(() => import('@containers/Home'))
 const Article = AsyncComponent(() => import('@containers/Article'))
 const ArticleCreate = AsyncComponent(() => import('@containers/ArticleCreate'))
 const ArticleEdit = AsyncComponent(() => import('@containers/ArticleEdit'))
+const Apply = AsyncComponent(() => import('@containers/Apply'))
+const Admin = AsyncComponent(() => import('@containers/Admin'))
 
 const NoMatch = AsyncComponent(() => import('@containers/NoMatch'))
 
@@ -65,6 +67,22 @@ export default [
     auth: permissions.editArticle,
     module: 'ArticleEdit',
     documentTitle: '编辑文章 - Now'
+  },
+  {
+    path: '/apply',
+    component: Apply,
+    exact: true,
+    auth: permissions.isLogged,
+    module: 'Apply',
+    documentTitle: '申请 - Now'
+  },
+  {
+    path: '/admin',
+    component: Admin,
+    exact: true,
+    auth: permissions.isLogged,
+    module: 'Admin',
+    documentTitle: '管理员 - Now'
   },
   {
     path: '/article/:id',

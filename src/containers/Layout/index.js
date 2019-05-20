@@ -30,7 +30,6 @@ const NativeLayout = (props) => {
         break;
       case '4':
         logout()
-        handlers.logout()
         break;
       case '5':
         handlers.go('/login')
@@ -38,13 +37,24 @@ const NativeLayout = (props) => {
       case '6':
         handlers.go('/register')
         break;
+      case '7':
+        handlers.go('/admin')
+        break;
+      case '8':
+        handlers.go('/apply')
+        break;
       default:
       break;
     }
   }
 
   const logout = async () => {
-    await mutate(mutations.LogoutMutation)
+    const res = await mutate(mutations.LogoutMutation)
+    const { logout = {} } = res;
+    const { isSuccess = false } = logout
+    if (isSuccess) {
+      handlers.logout()
+    }
   }
 
   return (
@@ -62,6 +72,7 @@ const NativeLayout = (props) => {
             <Menu.Item key={0}>首页</Menu.Item>
             {status && <Menu.Item key={2}>写文章</Menu.Item>}
             {status && <Menu.Item key={3}>私信</Menu.Item>}
+            {status && (currentUser.user_type == '1' ? <Menu.Item key={7}>管理员</Menu.Item> : <Menu.Item key={8}>申请</Menu.Item>)}
             {status && <Menu.Item className={Less['right-head']} key={1}>{currentUser.nickname}</Menu.Item>}
             {status ?
               <Menu.Item className={Less['right-head']} key={4}>注销</Menu.Item> :

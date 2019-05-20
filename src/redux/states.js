@@ -46,3 +46,15 @@ export const Messages = {
   setMessages: 'SET_MESSAGES',
   pushMessage: 'PUSH_MESSAGE'
 }
+
+export const AdminApplications = {
+  setAdminApplications: 'SET_ADMIN_APPLICATIONS'
+}
+
+export const CategoryApplications = {
+  setCategoryApplications: 'SET_CATEGORY_APPLICATIONS'
+}
+
+export const IndustryApplications = {
+  setIndustryApplications: 'SET_INDUSTRY_APPLICATIONS'
+}

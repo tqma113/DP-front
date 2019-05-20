@@ -112,7 +112,7 @@ const Login = (props) => {
       setCodeKey(key)
       setTimer(60)
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr } = errors[0]
       message.error(`发送失败: ${messStr}`)
     }
@@ -127,7 +127,7 @@ const Login = (props) => {
       })
       handlers.goBack()
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr } = errors[0]
       message.error(`登录失败: ${messStr}`)
       handlers.turnToLogin()

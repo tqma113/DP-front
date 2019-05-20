@@ -11,6 +11,9 @@ import documentTitle from './documentTitle'
 import articles from './articles'
 import industrys from './industrys'
 import messages from './messages'
+import adminApplications from './adminApplications'
+import categoryApplications from './categoryApplications'
+import industryApplications from './industryApplications'
 
 export default combineReducers({
   users,
@@ -22,5 +25,8 @@ export default combineReducers({
   documentTitle,
   articles,
   industrys,
-  messages
+  messages,
+  adminApplications,
+  categoryApplications,
+  industryApplications
 })

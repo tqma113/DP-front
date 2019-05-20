@@ -78,7 +78,7 @@ const SingleLargeUplaod = (props) => {
       if (onLoad) onLoad(image, url, imageBase64)
       message.success('上传成功!')
     } else {
-      const { errors = [] } = extension
+      const { errors = [{}] } = extension
       const { message: messStr } = errors[0]
       message.error(`上传失败: ${messStr}`)
     }

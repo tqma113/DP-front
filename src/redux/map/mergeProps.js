@@ -1,6 +1,9 @@
-import { mutate, query } from '@graphql'
+import { getMutate, getQuery } from '@graphql'
 import { mutations, querys } from './graphqlQuery'
 import staticState from './static'
+
+const mutate = getMutate()
+const query = getQuery()
 
 const getMergeProps = (module) => (stateProps, dispatchProps, ownProps) => {
   return {

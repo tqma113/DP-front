@@ -8,6 +8,9 @@ import * as documentTitle from './documentTitle'
 import * as articles from './articles'
 import * as industrys from './industrys'
 import * as messages from './messages'
+import * as adminApplications from './adminApplications'
+import * as categoryApplications from './categoryApplications'
+import * as industryApplications from './industryApplications'
 
 export default {
   users,
@@ -19,5 +22,8 @@ export default {
   documentTitle,
   articles,
   industrys,
-  messages
+  messages,
+  adminApplications,
+  categoryApplications,
+  industryApplications,
 }
