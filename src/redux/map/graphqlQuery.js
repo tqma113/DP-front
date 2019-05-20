@@ -77,6 +77,9 @@ export const mutations = {
     ChangeAdminMutation: 'ChangeAdminMutation',
     ChangeAddCategoryMutation: 'ChangeAddCategoryMutation',
     ChangeAddIndustryMutation: 'ChangeAddIndustryMutation',
+    CancelApplyAdminMutation: 'CancelApplyAdminMutation',
+    CancelApplyCategoryMutation: 'CancelApplyCategoryMutation',
+    CancelApplyIndustryMutation: 'CancelApplyIndustryMutation'
   },
   Admin: {
     DealApplyAdminMutation: 'DealApplyAdminMutation',

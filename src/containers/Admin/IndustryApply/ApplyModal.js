@@ -54,7 +54,7 @@ const ApplyModal = (props) => {
     let { industryApply: { isSuccess, applications, extension = {} } = {} } = data
 
     if (isSuccess) {
-      handlers.setIndustryApplications({ industryApplications: applications })
+      handlers.setAdminApplications({ adminApplications: applications })
       setLoading(false)
     } else {
       const { errors = [{}] } = extension
@@ -91,7 +91,7 @@ const ApplyModal = (props) => {
         image
       }
     )
-    const { applyAddIndustry: { isSuccess } = {} } = data
+    const { applyAddCategory: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadApplications()
@@ -115,7 +115,7 @@ const ApplyModal = (props) => {
         image
       }
     )
-    const { changeApplyAddIndustry: { isSuccess } = {} } = data
+    const { changeApplyAddCategory: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadApplications()
@@ -146,21 +146,19 @@ const ApplyModal = (props) => {
               rules: [{
                 required: true,
                 message: '请输入主题'
-              }],
-              initialValue: application ? application.name : ''
+              }]
             })(
               <Input />
             )}
           </Form.Item>
           <Form.Item
-            label="描述"
+            label="主题"
           >
             {getFieldDecorator('description', {
               rules: [{
                 required: true,
                 message: '请输入描述'
-              }],
-              initialValue: application ? application.description : ''
+              }]
             })(
               <TextArea autosize={{ maxRows: 4, minRows: 4 }} />
             )}
@@ -174,7 +172,7 @@ const ApplyModal = (props) => {
                 message: '请上传图片'
               }]
             })(
-              <SingleAutoUpload onLoad={handleUpload} img={application ? application.image : undefined} />
+              <SingleAutoUpload onLoad={handleUpload} />
             )}
           </Form.Item>
         </Form>

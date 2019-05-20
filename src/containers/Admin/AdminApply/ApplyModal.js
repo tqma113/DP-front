@@ -45,16 +45,16 @@ const ApplyModal = (props) => {
 
   const loadApplications = async (fetchPolicy) => {
     const data = await query(
-      querys.QueryIndustryApply,
+      querys.QueryCategoryApply,
       {},
       {
         fetchPolicy
       }
     )
-    let { industryApply: { isSuccess, applications, extension = {} } = {} } = data
+    let { categoryApply: { isSuccess, applications, extension = {} } = {} } = data
 
     if (isSuccess) {
-      handlers.setIndustryApplications({ industryApplications: applications })
+      handlers.setAdminApplications({ adminApplications: applications })
       setLoading(false)
     } else {
       const { errors = [{}] } = extension
@@ -64,7 +64,7 @@ const ApplyModal = (props) => {
   }
 
   const handleSubmitClick = (props) => {
-    validateFields((err, { name, description }) => {
+    validateFields((err, { subject, description }) => {
       if (err) return
       if (!image) {
         message.info('请上传图片')
@@ -72,26 +72,26 @@ const ApplyModal = (props) => {
       }
 
       if (application) {
-        changeApplyAdmin(name, description)
+        changeApplyAdmin(subject, description)
       } else {
-        applyAdmin(name, description)
+        applyAdmin(subject, description)
       }
     })
 
   }
 
-  const applyAdmin = async (name, description) => {
+  const applyAdmin = async (subject, description) => {
     setLoading(true)
 
     const data = await mutate(
-      mutations.ApplyAddIndustryMutation,
+      mutations.ApplyAddCategoryMutation,
       {
-        name,
+        subject,
         description,
         image
       }
     )
-    const { applyAddIndustry: { isSuccess } = {} } = data
+    const { applyAddCategory: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadApplications()
@@ -103,19 +103,19 @@ const ApplyModal = (props) => {
     }
   }
 
-  const changeApplyAdmin =  async (name, description) => {
+  const changeApplyAdmin =  async (subject, description) => {
     setLoading(true)
 
     const data = await mutate(
-      mutations.ChangeAddIndustryMutation,
+      mutations.ChangeAdminMutation,
       {
         id: Number(application.id),
-        name,
+        subject,
         description,
         image
       }
     )
-    const { changeApplyAddIndustry: { isSuccess } = {} } = data
+    const { changeApplyAddCategory: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadApplications()
@@ -142,25 +142,23 @@ const ApplyModal = (props) => {
           <Form.Item
             label="主题"
           >
-            {getFieldDecorator('name', {
+            {getFieldDecorator('subject', {
               rules: [{
                 required: true,
                 message: '请输入主题'
-              }],
-              initialValue: application ? application.name : ''
+              }]
             })(
               <Input />
             )}
           </Form.Item>
           <Form.Item
-            label="描述"
+            label="主题"
           >
             {getFieldDecorator('description', {
               rules: [{
                 required: true,
                 message: '请输入描述'
-              }],
-              initialValue: application ? application.description : ''
+              }]
             })(
               <TextArea autosize={{ maxRows: 4, minRows: 4 }} />
             )}
@@ -174,7 +172,7 @@ const ApplyModal = (props) => {
                 message: '请上传图片'
               }]
             })(
-              <SingleAutoUpload onLoad={handleUpload} img={application ? application.image : undefined} />
+              <SingleAutoUpload onLoad={handleUpload} />
             )}
           </Form.Item>
         </Form>

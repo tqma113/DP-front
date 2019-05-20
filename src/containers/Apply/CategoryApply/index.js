@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Spin, message, List, Row, Col, Input, Select, Button, Divider } from 'antd'
+import { Spin, message, Table, Row, Col, Input, Select, Button, Divider, Tag } from 'antd'
+import moment from 'moment'
 
 import ApplyModal from './ApplyModal'
 
@@ -21,6 +22,26 @@ const types =[{
   value: 4,
   title: '全部'
 }]
+
+const getTag = (status) => {
+  switch(status) {
+    case 0: {
+      return <Tag color="blue">审核中</Tag>
+    }
+    case 1: {
+      return <Tag color="green">审核通过</Tag>
+    }
+    case 2: {
+      return <Tag color="red">审核未通过</Tag>
+    }
+    case -1: {
+      return <Tag color="purple">已取消</Tag>
+    }
+    default: {
+      return ''
+    }
+  }
+}
 
 const CategoryApply = (props) => {
   const {
@@ -67,7 +88,7 @@ const CategoryApply = (props) => {
     let { categoryApply: { isSuccess, applications, extension = {} } = {} } = data
 
     if (isSuccess) {
-      handlers.setAdminApplications({ adminApplications: applications })
+      handlers.setCategoryApplications({ categoryApplications: applications })
       setLoading(false)
     } else {
       const { errors = [{}] } = extension
@@ -75,10 +96,82 @@ const CategoryApply = (props) => {
       message.error(`数据下载失败: ${messStr}`)
     }
   }
+  const cancelApplyAdmin =  async (id) => {
+    setLoading(true)
 
-  const renderItem = (item) => {
-    return item.id
+    const data = await mutate(
+      mutations.CancelApplyIndustryMutation,
+      {
+        id: Number(id)
+      }
+    )
+    const { cancelApplyAddIndustry: { isSuccess } = {} } = data
+
+    if (isSuccess) {
+      loadApplications('no-cache')
+      message.success('更新成功')
+    } else {
+      message.info('更新失败请重试')
+      setLoading(false)
+    }
   }
+
+  const imageRender = (item, record) => {
+    return <img style={{ width: '100px', height: '100px' }} src={api.static + item} />
+  }
+  const timeRender = (item, record) => {
+    return item ? moment(item).fromNow() : ''
+  }
+  const statusRender = (item) => {
+    return getTag(item)
+  }
+  const operatorRender = (item, record) => {
+    const handleEditClick = () => {
+      setApplication(record)
+      setModalStatus(true)
+    }
+    const handleCancelClick = () => {
+      cancelApplyAdmin(record.id)
+    }
+    return (
+      <span>
+        <button className={Less['link-button']} onClick={handleEditClick}>编辑</button>
+        <button className={Less['link-button']} onClick={handleCancelClick}>取消</button>
+      </span>
+    )
+  }
+  const columns = [{
+    title: 'ID',
+    dataIndex: 'id',
+  }, {
+    title: '主题',
+    dataIndex: 'subject'
+  }, {
+    title: '描述',
+    dataIndex: 'description'
+  }, {
+    title: '图片',
+    dataIndex: 'image',
+    render: imageRender
+  }, {
+    title: '申请时间',
+    dataIndex: 'apply_time',
+    render: timeRender
+  }, {
+    title: '处理人',
+    dataIndex: 'deal_user_id'
+  }, {
+    title: '处理时间',
+    dataIndex: 'deal_time',
+    render: timeRender
+  }, {
+    title: '申请状态',
+    dataIndex: 'status',
+    render: statusRender
+  }, {
+    title: '操作',
+    render: operatorRender
+  }]
 
   return (
     <div className={Less['category-apply']}>
@@ -101,9 +194,10 @@ const CategoryApply = (props) => {
       </Row>
       <Divider />
       <Spin spinning={loading}>
-        <List
+        <Table
           dataSource={categoryApplications}
-          renderItem={renderItem}
+          columns={columns}
+          rowKey="id"
         />
       </Spin>
       <ApplyModal

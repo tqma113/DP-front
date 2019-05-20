@@ -54,7 +54,7 @@ const ApplyModal = (props) => {
     let { categoryApply: { isSuccess, applications, extension = {} } = {} } = data
 
     if (isSuccess) {
-      handlers.setAdminApplications({ adminApplications: applications })
+      handlers.setCategoryApplications({ categoryApplications: applications })
       setLoading(false)
     } else {
       const { errors = [{}] } = extension
@@ -152,7 +152,7 @@ const ApplyModal = (props) => {
             )}
           </Form.Item>
           <Form.Item
-            label="主题"
+            label="描述"
           >
             {getFieldDecorator('description', {
               rules: [{
