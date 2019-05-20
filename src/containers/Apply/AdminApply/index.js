@@ -100,6 +100,28 @@ const AdminApply = (props) => {
     }
   }
 
+  const changeApplyAdmin =  async (user) => {
+    setLoading(true)
+
+    const data = await mutate(
+      mutations.ApplyAdminMutation,
+      {
+        id: application.id,
+        reason
+      }
+    )
+    const { changeUserInfo: { isSuccess } = {} } = data
+
+    if (isSuccess) {
+      loadApplications()
+      setReason('')
+      message.success('更新成功')
+    } else {
+      message.info('更新失败请重试')
+      setLoading(false)
+    }
+  }
+
   return (
     <div className={Less['admin-apply']}>
       <Spin spinning={loading}>

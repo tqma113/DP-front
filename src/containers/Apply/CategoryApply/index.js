@@ -3,7 +3,7 @@ import { Spin, message } from 'antd'
 
 import Less from './index.module.less'
 
-const Overview = (props) => {
+const CategoryApply = (props) => {
   const {
     store = {},
     handlers = {},
@@ -54,4 +54,4 @@ const Overview = (props) => {
   )
 }
 
-export default Overview
+export default CategoryApply
