@@ -1,20 +1,12 @@
 import React, { useState } from 'react'
-import { Modal, Spin, Form, Input, message, Button } from 'antd'
-import { SingleAutoUpload } from '@components'
+import { Modal, Spin, Form, Input, message, Avatar, List } from 'antd'
 
-const TextArea = Input.TextArea
+const Search = Input.Search
 
 const formItemLayout = {
-  labelCol: { span:4 },
-  wrapperCol: { span: 16 },
+  wrapperCol: { span: 16, offset: 4 },
 }
 
-const tailFormItemLayout = {
-  wrapperCol: {
-    span: 16,
-    offset: 4,
-  },
-}
 
 const ApplyModal = (props) => {
   const {
@@ -37,21 +29,25 @@ const ApplyModal = (props) => {
   const { getFieldDecorator, validateFields } = form
 
   const [loading, setLoading] = useState(false)
-  const [image, setImage] = useState()
+  const [searchUsers, setSearchUsers] = useState([])
 
-  const handleUpload = (image, url, imageBase64) => {
-    setImage(url)
+  const handleSearchClick = (value) => {
+    let userArr = Object.values(users)
+    let searchUsers = userArr.filter((item) => {
+      return item.id == value || item.username == value || item.nickname == value || item.email == value
+    })
+    setSearchUsers(searchUsers)
   }
 
   const loadApplications = async (fetchPolicy) => {
     const data = await query(
-      querys.QueryCategoryApply,
+      querys.QueryAdminApply,
       {},
       {
         fetchPolicy
       }
     )
-    let { categoryApply: { isSuccess, applications, extension = {} } = {} } = data
+    let { adminApply: { isSuccess, applications, extension = {} } = {} } = data
 
     if (isSuccess) {
       handlers.setAdminApplications({ adminApplications: applications })
@@ -63,35 +59,20 @@ const ApplyModal = (props) => {
     }
   }
 
-  const handleSubmitClick = (props) => {
-    validateFields((err, { subject, description }) => {
-      if (err) return
-      if (!image) {
-        message.info('请上传图片')
-        return
-      }
-
-      if (application) {
-        changeApplyAdmin(subject, description)
-      } else {
-        applyAdmin(subject, description)
-      }
-    })
-
+  const handleSetClick = (id) => {
+    applyAdmin(id)
   }
 
-  const applyAdmin = async (subject, description) => {
+  const applyAdmin = async (id) => {
     setLoading(true)
 
     const data = await mutate(
-      mutations.ApplyAddCategoryMutation,
+      mutations.AddAdminMutation,
       {
-        subject,
-        description,
-        image
+        id: Number(id)
       }
     )
-    const { applyAddCategory: { isSuccess } = {} } = data
+    const { addAdmin: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadApplications()
@@ -103,35 +84,30 @@ const ApplyModal = (props) => {
     }
   }
 
-  const changeApplyAdmin =  async (subject, description) => {
-    setLoading(true)
-
-    const data = await mutate(
-      mutations.ChangeAdminMutation,
-      {
-        id: Number(application.id),
-        subject,
-        description,
-        image
-      }
+  const renderItem = (item) => {
+    return (
+      <List.Item key={item.id} actions={[item.user_type == 1 ? <span>已经是管理员</span> : <a onClick={() => handleSetClick(item.id)}>设置为管理员</a>]}>
+        <List.Item.Meta
+          avatar={
+            <Avatar src={api.static + item.avatar} />
+          }
+          title={<a>{item.nickname}</a>}
+          description={item.statement}
+        />
+        <span>
+          {item.email}
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          {item.username}
+        </span>
+      </List.Item>
     )
-    const { changeApplyAddCategory: { isSuccess } = {} } = data
-
-    if (isSuccess) {
-      loadApplications()
-      message.success('更新成功')
-      onClose()
-    } else {
-      message.info('更新失败请重试')
-      setLoading(false)
-    }
   }
 
   return (
     <Modal
       visible={visible}
       onCancel={onClose}
-      onOk={handleSubmitClick}
+      footer={null}
       title="申请添加"
       width={800}
     >
@@ -139,43 +115,21 @@ const ApplyModal = (props) => {
         spinning={loading}
       >
         <Form {...formItemLayout}>
-          <Form.Item
-            label="主题"
-          >
-            {getFieldDecorator('subject', {
+          <Form.Item>
+            {getFieldDecorator('search', {
               rules: [{
                 required: true,
-                message: '请输入主题'
+                message: '请输入搜索内容'
               }]
             })(
-              <Input />
-            )}
-          </Form.Item>
-          <Form.Item
-            label="主题"
-          >
-            {getFieldDecorator('description', {
-              rules: [{
-                required: true,
-                message: '请输入描述'
-              }]
-            })(
-              <TextArea autosize={{ maxRows: 4, minRows: 4 }} />
-            )}
-          </Form.Item>
-          <Form.Item
-            label="图片"
-          >
-            {getFieldDecorator('description', {
-              rules: [{
-                required: true,
-                message: '请上传图片'
-              }]
-            })(
-              <SingleAutoUpload onLoad={handleUpload} />
+              <Search placeholder="搜索用户" onSearch={handleSearchClick} />
             )}
           </Form.Item>
         </Form>
+        <List
+          dataSource={searchUsers}
+          renderItem={renderItem}
+        />
       </Spin>
     </Modal>
   )

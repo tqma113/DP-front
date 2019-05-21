@@ -127,6 +127,7 @@ export const querys = {
   Admin: {
     QueryAdminApply: 'QueryAdminApply',
     QueryCategoryApply: 'QueryCategoryApply',
-    QueryIndustryApply: 'QueryIndustryApply'
+    QueryIndustryApply: 'QueryIndustryApply',
+    QueryUsers: 'QueryUsers'
   }
 }

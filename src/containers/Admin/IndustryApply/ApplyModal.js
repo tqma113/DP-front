@@ -70,12 +70,7 @@ const ApplyModal = (props) => {
         message.info('请上传图片')
         return
       }
-
-      if (application) {
-        changeApplyAdmin(name, description)
-      } else {
-        applyAdmin(name, description)
-      }
+      applyAdmin(name, description)
     })
 
   }
@@ -84,38 +79,14 @@ const ApplyModal = (props) => {
     setLoading(true)
 
     const data = await mutate(
-      mutations.ApplyAddIndustryMutation,
+      mutations.AddIndustryMutation,
       {
         name,
         description,
         image
       }
     )
-    const { applyAddCategory: { isSuccess } = {} } = data
-
-    if (isSuccess) {
-      loadApplications()
-      message.success('更新成功')
-      onClose()
-    } else {
-      message.info('更新失败请重试')
-      setLoading(false)
-    }
-  }
-
-  const changeApplyAdmin =  async (name, description) => {
-    setLoading(true)
-
-    const data = await mutate(
-      mutations.ChangeAddIndustryMutation,
-      {
-        id: Number(application.id),
-        name,
-        description,
-        image
-      }
-    )
-    const { changeApplyAddCategory: { isSuccess } = {} } = data
+    const { addIndustry: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadApplications()
@@ -132,7 +103,7 @@ const ApplyModal = (props) => {
       visible={visible}
       onCancel={onClose}
       onOk={handleSubmitClick}
-      title="申请添加"
+      title="新建"
       width={800}
     >
       <Spin

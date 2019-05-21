@@ -66,6 +66,7 @@ const CategoryApply = (props) => {
 
   useEffect(() => {
     loadApplications()
+    loadAllUser()
   }, [])
 
   const handleCloseModal = () => {
@@ -75,6 +76,26 @@ const CategoryApply = (props) => {
   const handleNewClick = () => {
     setApplication(null)
     setModalStatus(true)
+  }
+
+  const loadAllUser = async () => {
+    const data = await query(
+      querys.QueryUsers,
+      {},
+      {
+        fetchPolicy: 'no-cache'
+      }
+    )
+    let { users: { isSuccess, users, extension = {} } = {} } = data
+
+    if (isSuccess) {
+      handlers.setUsers({ users })
+      setLoading(false)
+    } else {
+      const { errors = [{}] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据更新失败: ${messStr}`)
+    }
   }
 
   const loadApplications = async (fetchPolicy) => {
@@ -167,7 +188,7 @@ const CategoryApply = (props) => {
     <div className={Less['admin-apply']}>
       <Row type="flex" justify="space-between">
         <Col span={10}>
-          <Search value={search} onChange={(e) => setSearch(e.target.value)} />
+          <Search placeholder="搜索" value={search} onChange={(e) => setSearch(e.target.value)} />
         </Col>
         <Col span={6} offset={1}>
           <Select style={{ width: '100%'}} value={type} onChange={setType}>
@@ -179,7 +200,7 @@ const CategoryApply = (props) => {
           </Select>
         </Col>
         <Col>
-          <Button type="primary" onClick={handleNewClick}>新建申请</Button>
+          <Button type="primary" onClick={handleNewClick}>添加</Button>
         </Col>
       </Row>
       <Divider />

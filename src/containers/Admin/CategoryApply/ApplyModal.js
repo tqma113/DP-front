@@ -26,7 +26,6 @@ const ApplyModal = (props) => {
     query,
     querys = {},
     visible,
-    application,
     form = {},
     onClose
   } = props
@@ -71,11 +70,7 @@ const ApplyModal = (props) => {
         return
       }
 
-      if (application) {
-        changeApplyAdmin(subject, description)
-      } else {
-        applyAdmin(subject, description)
-      }
+      applyAdmin()
     })
 
   }
@@ -84,38 +79,14 @@ const ApplyModal = (props) => {
     setLoading(true)
 
     const data = await mutate(
-      mutations.ApplyAddCategoryMutation,
+      mutations.AddCategoryMutation,
       {
         subject,
         description,
         image
       }
     )
-    const { applyAddCategory: { isSuccess } = {} } = data
-
-    if (isSuccess) {
-      loadApplications()
-      message.success('更新成功')
-      onClose()
-    } else {
-      message.info('更新失败请重试')
-      setLoading(false)
-    }
-  }
-
-  const changeApplyAdmin =  async (subject, description) => {
-    setLoading(true)
-
-    const data = await mutate(
-      mutations.ChangeAdminMutation,
-      {
-        id: Number(application.id),
-        subject,
-        description,
-        image
-      }
-    )
-    const { changeApplyAddCategory: { isSuccess } = {} } = data
+    const { addCategory: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadApplications()
@@ -132,7 +103,7 @@ const ApplyModal = (props) => {
       visible={visible}
       onCancel={onClose}
       onOk={handleSubmitClick}
-      title="申请添加"
+      title="新建"
       width={800}
     >
       <Spin

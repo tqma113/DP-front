@@ -177,7 +177,7 @@ const CategoryApply = (props) => {
     <div className={Less['category-apply']}>
       <Row type="flex" justify="space-between">
         <Col span={10}>
-          <Search value={search} onChange={(e) => setSearch(e.target.value)} />
+          <Search placeholder="搜索" value={search} onChange={(e) => setSearch(e.target.value)} />
         </Col>
         <Col span={6} offset={1}>
           <Select style={{ width: '100%'}} value={type} onChange={setType}>
