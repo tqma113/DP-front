@@ -14,6 +14,7 @@ import messages from './messages'
 import adminApplications from './adminApplications'
 import categoryApplications from './categoryApplications'
 import industryApplications from './industryApplications'
+import admin from './admin'
 
 export default combineReducers({
   users,
@@ -28,5 +29,6 @@ export default combineReducers({
   messages,
   adminApplications,
   categoryApplications,
-  industryApplications
+  industryApplications,
+  admin
 })

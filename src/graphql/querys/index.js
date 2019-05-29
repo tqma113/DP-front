@@ -5,6 +5,7 @@ import QueryMessages from './QueryMessages'
 import QueryAdminApply from './QueryAdminApply'
 import QueryIndustryApply from './QueryIndustryApply'
 import QueryCategoryApply from './QueryCategoryApply'
+import QueryAdmin from './QueryAdmin'
 
 export {
   QueryInitData,
@@ -13,5 +14,6 @@ export {
   QueryMessages,
   QueryAdminApply,
   QueryCategoryApply,
-  QueryIndustryApply
+  QueryIndustryApply,
+  QueryAdmin
 }

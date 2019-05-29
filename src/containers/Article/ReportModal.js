@@ -12,21 +12,18 @@ const formItemLayout = {
 
 const ReportModal = (props) => {
   const {
-    store = {},
-    username = '',
     mutate,
     mutations = {},
     visible,
-    onClose
+    onClose,
+    article
   } = props
-  const { users = {} } = store
-  const user = users[username] || {}
 
   const [reason, setReason] = useState()
 
   const handleSubmit = () => {
     if (reason && reason.toRAW().length > 0) {
-      reportUser(user.id, reason.toRAW())
+      reportArticle(article.id, reason.toRAW())
     }
   }
 
@@ -34,15 +31,15 @@ const ReportModal = (props) => {
     setReason(editorState)
   }
 
-  const reportUser = async (id, reason) => {
+  const reportArticle = async (id, reason) => {
     let data = await mutate(
-      mutations.ReportUserMutation,
+      mutations.ReportArticleMutation,
       {
-        userId: Number(id),
+        articleId: Number(id),
         reason
       }
     )
-    const { reportUser: { isSuccess } = {} } = data
+    const { reportArticle: { isSuccess } = {} } = data
     if (isSuccess) {
       message.success('举报成功')
       onClose()
@@ -62,9 +59,14 @@ const ReportModal = (props) => {
         {...formItemLayout}
       >
         <Form.Item
+          label="文章"
+        >
+          {article.title}
+        </Form.Item>
+        <Form.Item
           label="用户"
         >
-          {user.nickname}
+          {article.user.nickname}
         </Form.Item>
         <Form.Item
           label="原因"

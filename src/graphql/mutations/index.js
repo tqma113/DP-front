@@ -36,6 +36,11 @@ import AddIndustryMutation from './AddIndustryMutation'
 import CancelApplyAdminMutation from './CancelApplyAdminMutation'
 import CancelApplyCategoryMutation from './CancelApplyCategoryMutation'
 import CancelApplyIndustryMutation from './CancelApplyIndustryMutation'
+import ReportArticleMutation from './ReportArticleMutation'
+import ReportUserMutation from './ReportUserMutation'
+import DealReportArticleMutation from './DealReportArticleMutation'
+import DealReportUserMutation from './DealReportUserMutation'
+
 
 export {
   LoginMutation,
@@ -75,5 +80,9 @@ export {
   AddIndustryMutation,
   CancelApplyAdminMutation,
   CancelApplyCategoryMutation,
-  CancelApplyIndustryMutation
+  CancelApplyIndustryMutation,
+  ReportArticleMutation,
+  ReportUserMutation,
+  DealReportArticleMutation,
+  DealReportUserMutation
 }

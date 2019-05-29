@@ -58,3 +58,7 @@ export const CategoryApplications = {
 export const IndustryApplications = {
   setIndustryApplications: 'SET_INDUSTRY_APPLICATIONS'
 }
+
+export const Admin = {
+  setAdmin: 'SET_ADMIN'
+}

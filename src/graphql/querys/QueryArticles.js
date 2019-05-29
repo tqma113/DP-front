@@ -8,6 +8,7 @@ query ($idList: [Int]) {
       title
       abstract
       content
+      status
       image
       release_time
       last_modify_time

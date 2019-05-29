@@ -120,14 +120,20 @@ const UserInfo = (props) => {
           }
         </Row>
         {
-          isSelf ?
-          <Button onClick={onEditClick} style={{ width: '100%'}} size="small">编辑</Button> :
-          isConcerned ?
-          <Button onClick={handleConcernClick} style={{ width: '100%'}} size="small">已关注</Button> :
-          <Button onClick={handleConcernClick} style={{ width: '100%'}} size="small">关注</Button>
+          currentUser && currentUser.id && (
+            <Row>
+              {
+                isSelf ?
+                <Button onClick={onEditClick} style={{ width: '100%'}} size="small">编辑</Button> :
+                isConcerned ?
+                <Button onClick={handleConcernClick} style={{ width: '100%'}} size="small">已关注</Button> :
+                <Button onClick={handleConcernClick} style={{ width: '100%'}} size="small">关注</Button>
+              }
+              {!isSelf &&
+                <Button onClick={handleReportClick} style={{ width: '100%', marginTop: '10px'}} size="small">举报</Button>}
+            </Row>
+          )
         }
-        {!isSelf &&
-          <Button onClick={handleReportClick} style={{ width: '100%', marginTop: '10px'}} size="small">举报</Button>}
       </Row>
       <ReportModal visible={visible} onClose={handleReportClose} {...props} />
     </React.Fragment> :

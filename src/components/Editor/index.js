@@ -7,7 +7,7 @@ import 'braft-editor/dist/index.css'
 const controls = ['emoji', 'font-family', 'link']
 
 const Editor = ({
-  onChange, onSubmit, submitting, value,
+  onChange, onSubmit, submitting, value, disable
 }) => (
   <div>
     <Form.Item>
@@ -24,6 +24,7 @@ const Editor = ({
         loading={submitting}
         onClick={onSubmit}
         type="primary"
+        disabled={disable}
       >
         发表评论
       </Button>

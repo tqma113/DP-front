@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Spin, message, Table, Row, Col, Input, Select, Button, Divider, Tag } from 'antd'
 import moment from 'moment'
 
-import ApplyModal from './ApplyModal'
-
 import Less from './index.module.less'
 
 const Search = Input.Search
@@ -11,31 +9,22 @@ const Option = Select.Option
 
 const types =[{
   value: 1,
-  title: '审核中'
+  title: '普通用户'
 }, {
   value: 2,
-  title: '审核通过'
+  title: '管理员'
 }, {
-  value: 3,
-  title: '审核未通过'
-}, {
-  value: 4,
+  value:3,
   title: '全部'
 }]
 
 const getTag = (status) => {
   switch(status) {
     case 0: {
-      return <Tag color="blue">审核中</Tag>
+      return <Tag color="blue">普通用户</Tag>
     }
     case 1: {
-      return <Tag color="green">审核通过</Tag>
-    }
-    case 2: {
-      return <Tag color="red">审核未通过</Tag>
-    }
-    case -1: {
-      return <Tag color="purple">已取消</Tag>
+      return <Tag color="green">管理员</Tag>
     }
     default: {
       return ''
@@ -43,7 +32,24 @@ const getTag = (status) => {
   }
 }
 
-const IndustryApply = (props) => {
+const getUserStatus = (status) => {
+  switch(status) {
+    case 1: {
+      return <Tag color="blue">正常</Tag>
+    }
+    case 2: {
+      return <Tag color="gold">被举报</Tag>
+    }
+    case 3: {
+      return <Tag color="red">封禁</Tag>
+    }
+    default: {
+      return ''
+    }
+  }
+}
+
+const User = (props) => {
   const {
     store = {},
     handlers = {},
@@ -52,31 +58,24 @@ const IndustryApply = (props) => {
     mutations = {},
     query,
     querys = {},
+    loading,
     loadAll
   } = props
-  const { users = {}, categorys = [], industrys = [], session = {}, loadStatus, admin = {}} = store
+  const { users = {}, categorys = [], industrys = [], session = {}, loadStatus, industryApplications = [] } = store
   const { info = {}, status } = session
   const { username: currentUsername, token } = info
   const currentUser = users[currentUsername] || {}
 
-  const [loading, setLoading] = useState(true)
-  const [modalStatus, setModalStatus] = useState(false)
-  const [application, setApplication] = useState(null)
+  const [userList, setUserList] = useState(null)
   const [search, setSearch] = useState()
-  const [type, setType] = useState(4)
+  const [type, setType] = useState(3)
 
-  const handleCloseModal = () => {
-    setModalStatus(false)
-  }
-
-  const handleNewClick = () => {
-    setApplication(null)
-    setModalStatus(true)
-  }
+  useEffect(() => {
+    let userList = Object.values(users)
+    setUserList(userList)
+  }, [])
 
   const dealApplyAdmin =  async (id, status) => {
-    setLoading(true)
-
     const data = await mutate(
       mutations.DealApplyIndustryMutation,
       {
@@ -91,10 +90,15 @@ const IndustryApply = (props) => {
       message.success('更新成功')
     } else {
       message.info('更新失败请重试')
-      setLoading(false)
     }
   }
 
+  const userRender = (item, record) => {
+    const handleClick = () => {
+      handlers.go('/' + record.username)
+    }
+    return <button onClick={handleClick} className="link-button">{item}</button>
+  }
   const imageRender = (item, record) => {
     return <img style={{ width: '100px', height: '100px' }} src={api.static + item} />
   }
@@ -102,6 +106,9 @@ const IndustryApply = (props) => {
     return item ? moment(item).fromNow() : ''
   }
   const statusRender = (item) => {
+    return getUserStatus(item)
+  }
+  const typeRender = (item) => {
     return getTag(item)
   }
   const operatorRender = (item, record) => {
@@ -122,30 +129,31 @@ const IndustryApply = (props) => {
     title: 'ID',
     dataIndex: 'id',
   }, {
-    title: '主题',
-    dataIndex: 'name'
+    title: '用户名',
+    dataIndex: 'username'
   }, {
-    title: '描述',
-    dataIndex: 'description'
+    title: '昵称',
+    dataIndex: 'nickname',
+    render: userRender
   }, {
-    title: '图片',
-    dataIndex: 'image',
+    title: '邮箱',
+    dataIndex: 'email'
+  }, {
+    title: '头像',
+    dataIndex: 'avatar',
     render: imageRender
   }, {
-    title: '申请时间',
-    dataIndex: 'apply_time',
+    title: '注册时间',
+    dataIndex: 'register_at',
     render: timeRender
   }, {
-    title: '处理人',
-    dataIndex: 'deal_user_id'
-  }, {
-    title: '处理时间',
-    dataIndex: 'deal_time',
-    render: timeRender
-  }, {
-    title: '申请状态',
-    dataIndex: 'status',
+    title: '用户状态',
+    dataIndex: 'usable',
     render: statusRender
+  }, {
+    title: '用户类别',
+    dataIndex: 'user_type',
+    render: typeRender
   }, {
     title: '操作',
     render: operatorRender
@@ -166,26 +174,17 @@ const IndustryApply = (props) => {
             })}
           </Select>
         </Col>
-        <Col>
-          <Button type="primary" onClick={handleNewClick}>新建</Button>
-        </Col>
       </Row>
       <Divider />
       <Spin spinning={loading}>
         <Table
-          dataSource={admin && admin.IndustryApply}
+          dataSource={userList}
           columns={columns}
           rowKey="id"
         />
       </Spin>
-      <ApplyModal
-        {...props}
-        visible={modalStatus}
-        onClose={handleCloseModal}
-        application={application}
-      />
     </div>
   )
 }
 
-export default IndustryApply
+export default User

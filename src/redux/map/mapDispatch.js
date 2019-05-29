@@ -47,6 +47,9 @@ const {
 const {
   getSetIndustryApplicationsAction
 } = actions.industryApplications
+const {
+  getSetAdminAction
+} = actions.admin
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   handlers: {
@@ -93,6 +96,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     setIndustryApplications: ({ industryApplications = [] }) => {
       dispatch(getSetIndustryApplicationsAction(industryApplications))
+    },
+    setAdmin: ({ admin = {} }) => {
+      dispatch(getSetAdminAction(admin))
     },
     pushMessage: ({ message = {}, username = ''}) => {
       dispatch(getPushMessageAction(message, username))

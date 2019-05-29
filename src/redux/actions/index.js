@@ -11,6 +11,7 @@ import * as messages from './messages'
 import * as adminApplications from './adminApplications'
 import * as categoryApplications from './categoryApplications'
 import * as industryApplications from './industryApplications'
+import * as admin from './admin'
 
 export default {
   users,
@@ -26,4 +27,5 @@ export default {
   adminApplications,
   categoryApplications,
   industryApplications,
+  admin
 }

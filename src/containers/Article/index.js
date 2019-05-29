@@ -3,8 +3,9 @@ import { Row, Col, Avatar, Icon, Card, Skeleton, Comment, message, Tooltip, Tag 
 import BraftEditor from 'braft-editor'
 import moment from 'moment'
 
-
 import { Editor, CommentList } from '@components'
+
+import ReportModal from './ReportModal'
 
 import Less from './index.module.less'
 import 'braft-editor/dist/output.css'
@@ -12,7 +13,7 @@ import 'braft-editor/dist/output.css'
 const Article = (props) => {
   const { store = {}, handlers = {}, query, querys = {}, id, static: { api }, mutate, mutations } = props
   const { loadStatus, session = {}, articles = {}, documentTitle, users = {}, categorys = [], industrys = [] } = store
-  const { info = {} } = session
+  const { info = {}, status } = session
   const { username: currentUsername, token } = info
   const article = articles[id]
   const { user: { username } = {} } = article || {}
@@ -25,6 +26,7 @@ const Article = (props) => {
   const [submitting, setSubmitting] = useState()
   const [comment, setComment] = useState()
   const [loading, setLoading] = useState(true)
+  const [visible, setVisible] = useState(false)
 
 
   useEffect(() => {
@@ -74,15 +76,28 @@ const Article = (props) => {
   }
 
   const handleCommentSubmit = () => {
-    let c = comment.toHTML()
-    if (!c) {
-      message.info('请先填写评论内容')
-      return
+    if (status) {
+      let c = comment.toHTML()
+      if (!c) {
+        message.info('请先填写评论内容')
+        return
+      }
+
+      setSubmitting(true)
+
+      sendComment()
+    } else {
+      message.info('请先登录')
     }
 
-    setSubmitting(true)
+  }
 
-    sendComment()
+  const handleReportClick = () => {
+    if (status) {
+      setVisible(true)
+    } else {
+      message.info('请先登录')
+    }
   }
 
   const handleAvatarClick = (username) => {
@@ -109,15 +124,23 @@ const Article = (props) => {
   }
 
   const handleArticleStarClick = () => {
-    if (currentUsername) {
+    if (status) {
       articleStar()
+    } else {
+      message.info('请先登录')
     }
   }
 
   const handleArticleLikeClick = () => {
-    if (currentUsername) {
+    if (status) {
       articleLike()
+    } else {
+      message.info('请先登录')
     }
+  }
+
+  const handleReportModalClose = () => {
+    setVisible(false)
   }
 
   const articleStar = async () => {
@@ -200,8 +223,9 @@ const Article = (props) => {
         }
       </Row>
       <Row className={Less['info']} type="flex">
-        <Tooltip title="star"><Icon onClick={handleArticleStarClick} type="star" theme={isCollected ? 'twoTone' : 'outlined'} /> {article.collections && article.collections.length}</Tooltip>
-        <Tooltip title="like"><Icon onClick={handleArticleLikeClick} type="like" theme={isLiked ? 'twoTone' : 'outlined'} /> {article.likes && article.likes.length}</Tooltip>
+        <Tooltip title="收藏"><Icon onClick={handleArticleStarClick} type="star" theme={isCollected ? 'twoTone' : 'outlined'} /> {article.collections && article.collections.length}</Tooltip>
+        <Tooltip title="点赞"><Icon onClick={handleArticleLikeClick} type="like" theme={isLiked ? 'twoTone' : 'outlined'} /> {article.likes && article.likes.length}</Tooltip>
+        <Tooltip title="举报"><Icon onClick={handleReportClick} type="exclamation-circle" style={{ color: 'red'}} /> 举报</Tooltip>
       </Row>
       <Card
         title="评论"
@@ -223,11 +247,13 @@ const Article = (props) => {
               onSubmit={handleCommentSubmit}
               submitting={submitting}
               value={comment}
+              disable={!(currentUser && currentUser.id)}
             />
           )}
         />
         {article.comments.length > 0 && <CommentList articleId={id} currentUserId={Number(currentUser.id)} comments={article.comments} />}
       </Card>
+      <ReportModal {...props} onClose={handleReportModalClose} visible={visible} article={article} />
     </section>
   )
 }

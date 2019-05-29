@@ -52,8 +52,9 @@ const CategoryApply = (props) => {
     mutations = {},
     query,
     querys = {},
+    loadAll
   } = props
-  const { users = {}, categorys = [], industrys = [], session = {}, loadStatus, categoryApplications = [] } = store
+  const { users = {}, categorys = [], industrys = [], session = {}, loadStatus, admin = {} } = store
   const { info = {}, status } = session
   const { username: currentUsername, token } = info
   const currentUser = users[currentUsername] || {}
@@ -64,10 +65,6 @@ const CategoryApply = (props) => {
   const [search, setSearch] = useState()
   const [type, setType] = useState(4)
 
-  useEffect(() => {
-    loadApplications()
-  }, [])
-
   const handleCloseModal = () => {
     setModalStatus(false)
   }
@@ -77,25 +74,6 @@ const CategoryApply = (props) => {
     setModalStatus(true)
   }
 
-  const loadApplications = async (fetchPolicy) => {
-    const data = await query(
-      querys.QueryCategoryApply,
-      {},
-      {
-        fetchPolicy
-      }
-    )
-    let { categoryApply: { isSuccess, applications, extension = {} } = {} } = data
-
-    if (isSuccess) {
-      handlers.setCategoryApplications({ categoryApplications: applications })
-      setLoading(false)
-    } else {
-      const { errors = [{}] } = extension
-      const { message: messStr = '' } = errors[0]
-      message.error(`数据下载失败: ${messStr}`)
-    }
-  }
   const dealApplyAdmin =  async (id, status) => {
     setLoading(true)
 
@@ -109,7 +87,7 @@ const CategoryApply = (props) => {
     const { dealApplyAddCategory: { isSuccess } = {} } = data
 
     if (isSuccess) {
-      loadApplications('no-cache')
+      loadAll('no-cache')
       message.success('更新成功')
     } else {
       message.info('更新失败请重试')
@@ -195,7 +173,7 @@ const CategoryApply = (props) => {
       <Divider />
       <Spin spinning={loading}>
         <Table
-          dataSource={categoryApplications}
+          dataSource={admin && admin.categoryApply}
           columns={columns}
           rowKey="id"
         />

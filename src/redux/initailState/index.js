@@ -18,5 +18,7 @@ export default {
 
   adminApplications: [],
   categoryApplications: [],
-  industryApplications: []
+  industryApplications: [],
+
+  admin: null
 }

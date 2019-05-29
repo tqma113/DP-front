@@ -52,22 +52,18 @@ const CategoryApply = (props) => {
     mutations = {},
     query,
     querys = {},
+    loading,
+    loadAll
   } = props
-  const { users = {}, categorys = [], industrys = [], session = {}, loadStatus, adminApplications = [] } = store
+  const { users = {}, categorys = [], industrys = [], session = {}, loadStatus, admin = {} } = store
   const { info = {}, status } = session
   const { username: currentUsername, token } = info
   const currentUser = users[currentUsername] || {}
 
-  const [loading, setLoading] = useState(true)
   const [modalStatus, setModalStatus] = useState(false)
   const [application, setApplication] = useState(null)
   const [search, setSearch] = useState()
   const [type, setType] = useState(4)
-
-  useEffect(() => {
-    loadApplications()
-    loadAllUser()
-  }, [])
 
   const handleCloseModal = () => {
     setModalStatus(false)
@@ -78,47 +74,7 @@ const CategoryApply = (props) => {
     setModalStatus(true)
   }
 
-  const loadAllUser = async () => {
-    const data = await query(
-      querys.QueryUsers,
-      {},
-      {
-        fetchPolicy: 'no-cache'
-      }
-    )
-    let { users: { isSuccess, users, extension = {} } = {} } = data
-
-    if (isSuccess) {
-      handlers.setUsers({ users })
-      setLoading(false)
-    } else {
-      const { errors = [{}] } = extension
-      const { message: messStr = '' } = errors[0]
-      message.error(`数据更新失败: ${messStr}`)
-    }
-  }
-
-  const loadApplications = async (fetchPolicy) => {
-    const data = await query(
-      querys.QueryAdminApply,
-      {},
-      {
-        fetchPolicy
-      }
-    )
-    let { adminApply: { isSuccess, applications, extension = {} } = {} } = data
-
-    if (isSuccess) {
-      handlers.setAdminApplications({ adminApplications: applications })
-      setLoading(false)
-    } else {
-      const { errors = [{}] } = extension
-      const { message: messStr = '' } = errors[0]
-      message.error(`数据下载失败: ${messStr}`)
-    }
-  }
   const dealApplyAdmin =  async (id, status) => {
-    setLoading(true)
 
     const data = await mutate(
       mutations.DealApplyAdminMutation,
@@ -130,11 +86,10 @@ const CategoryApply = (props) => {
     const { dealApplyAdmin: { isSuccess } = {} } = data
 
     if (isSuccess) {
-      loadApplications('no-cache')
+      loadAll('no-cache')
       message.success('更新成功')
     } else {
       message.info('更新失败请重试')
-      setLoading(false)
     }
   }
 
@@ -206,7 +161,7 @@ const CategoryApply = (props) => {
       <Divider />
       <Spin spinning={loading}>
         <Table
-          dataSource={adminApplications}
+          dataSource={admin && admin.adminApply}
           columns={columns}
           rowKey="id"
         />

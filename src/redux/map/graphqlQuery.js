@@ -34,11 +34,13 @@ export const mutations = {
     UserConcernMutation: 'UserConcernMutation',
     categoryStarMutation: 'categoryStarMutation',
     industryStarMutation: 'industryStarMutation',
+    ReportUserMutation: 'ReportUserMutation'
   },
   Article: {
     SendCommentMutation: 'SendCommentMutation',
     ArticleStarMutation: 'ArticleStarMutation',
-    ArticleLikeMutation: 'ArticleLikeMutation'
+    ArticleLikeMutation: 'ArticleLikeMutation',
+    ReportArticleMutation: 'ReportArticleMutation'
   },
   CommentList: {
     CommentLikeMutation: 'CommentLikeMutation'
@@ -87,7 +89,9 @@ export const mutations = {
     DealApplyIndustryMutation: 'DealApplyIndustryMutation',
     AddAdminMutation: 'AddAdminMutation',
     AddCategoryMutation: 'AddCategoryMutation',
-    AddIndustryMutation: 'AddIndustryMutation'
+    AddIndustryMutation: 'AddIndustryMutation',
+    DealReportUserMutation: 'DealReportUserMutation',
+    DealReportArticleMutation: 'DealReportArticleMutation'
   }
 }
 
@@ -128,6 +132,7 @@ export const querys = {
     QueryAdminApply: 'QueryAdminApply',
     QueryCategoryApply: 'QueryCategoryApply',
     QueryIndustryApply: 'QueryIndustryApply',
-    QueryUsers: 'QueryUsers'
+    QueryUsers: 'QueryUsers',
+    QueryAdmin: 'QueryAdmin'
   }
 }

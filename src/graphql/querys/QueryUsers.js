@@ -15,6 +15,7 @@ const QueryUsers = gql`
         register_at
         last_login_at
         status
+        usable
         avatar
         statement
         email

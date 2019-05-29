@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Tabs, message } from 'antd'
 import Less from './index.module.less'
 
+import User from './User'
+import Article from './Article'
 import Overview from './Overview'
 import AdminApply from './AdminApply'
 import CategoryApply from './CategoryApply'
@@ -35,6 +37,7 @@ const Admin = (props) => {
 
   const [tabKey, setTabKey] = useState('1')
   const [tabName, setTabName] = useState('')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     auth()
@@ -50,6 +53,43 @@ const Admin = (props) => {
     }
   }, [])
 
+  const loadAll = async (idList, fetchPolicy) => {
+    const data = await query(
+      querys.QueryAdmin,
+      {},
+      {
+        fetchPolicy
+      }
+    )
+    let {
+      articles: { isSuccess, articles, extension = {} } = {},
+      users: { isSuccess: isSuccessUser, users } = {},
+      adminApply: { isSuccess: isSuccessA, applications: adminApply = [] } = {},
+      categoryApply: { isSuccess: isSuccessC, applications: categoryApply = [] } = {},
+      industryApply: { isSuccess: isSuccessI, applications: industryApply = [] } = {},
+      userReport: { isSuccess: isSuccessUR, reports: userReport = [] } = {},
+      articleReport: { isSuccess: isSuccessAR, reports: articleReport = [] } = {}
+    } = data
+
+    if (isSuccess && isSuccessUser && isSuccessA && isSuccessC && isSuccessI && isSuccessUR && isSuccessAR) {
+      let admin = {
+        adminApply,
+        categoryApply,
+        industryApply,
+        userReport,
+        articleReport
+      }
+      handlers.setArticles({ articles })
+      handlers.setUsers({ users })
+      handlers.setAdmin({ admin })
+      setLoading(false)
+    } else {
+      const { errors = [{}] } = extension
+      const { message: messStr = '' } = errors[0]
+      message.error(`数据下载失败: ${messStr}`)
+    }
+  }
+
   const auth = () => {
     if (currentUser) {
       if (currentUser.user_type != 1) {
@@ -57,6 +97,7 @@ const Admin = (props) => {
         handlers.go('/')
       } else {
         handlers.onload({ loadStatus })
+        loadAll()
       }
     }
   }
@@ -70,16 +111,22 @@ const Admin = (props) => {
       <div className={Less['main']}>
         <Tabs onTabClick={handleTabClick} activeKey={tabKey}>
           <TabPane tab="概述" key="1">
-            <Overview {...props} />
+            <Overview loading={loading} loadAll={loadAll} {...props} />
+          </TabPane>
+          <TabPane tab="用户" key="5">
+            <User loading={loading} loadAll={loadAll} {...props} />
+          </TabPane>
+          <TabPane tab="文章" key="6">
+            <Article loading={loading} loadAll={loadAll} {...props} />
           </TabPane>
           <TabPane tab="管理员申请" key="2">
-            <AdminApply {...props} />
+            <AdminApply loading={loading} loadAll={loadAll} {...props} />
           </TabPane>
           <TabPane tab="类别添加申请" key="3">
-            <CategoryApply {...props} />
+            <CategoryApply loading={loading} loadAll={loadAll} {...props} />
           </TabPane>
           <TabPane tab="行业添加申请" key="4">
-            <IndustryApply {...props} />
+            <IndustryApply loading={loading} loadAll={loadAll} {...props} />
           </TabPane>
         </Tabs>
       </div>
