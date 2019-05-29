@@ -211,6 +211,23 @@ query {
       user_id
       report_user_id
       report_time
+      status
+      user {
+        id
+        nickname
+        username
+        email
+        avatar
+        register_at
+      }
+      reportUser {
+        id
+        nickname
+        username
+        email
+        avatar
+        register_at
+      }
     }
     isSuccess
     extension {
@@ -228,6 +245,22 @@ query {
       user_id
       article_id
       report_time
+      status
+      user {
+        id
+        nickname
+        username
+        email
+        avatar
+        register_at
+      }
+      article {
+        id
+        title
+        abstract
+        image
+        release_time
+      }
     }
     isSuccess
     extension {

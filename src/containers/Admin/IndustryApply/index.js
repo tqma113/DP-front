@@ -52,6 +52,7 @@ const IndustryApply = (props) => {
     mutations = {},
     query,
     querys = {},
+    loading,
     loadAll
   } = props
   const { users = {}, categorys = [], industrys = [], session = {}, loadStatus, admin = {}} = store
@@ -59,7 +60,6 @@ const IndustryApply = (props) => {
   const { username: currentUsername, token } = info
   const currentUser = users[currentUsername] || {}
 
-  const [loading, setLoading] = useState(true)
   const [modalStatus, setModalStatus] = useState(false)
   const [application, setApplication] = useState(null)
   const [search, setSearch] = useState()
@@ -75,7 +75,6 @@ const IndustryApply = (props) => {
   }
 
   const dealApplyAdmin =  async (id, status) => {
-    setLoading(true)
 
     const data = await mutate(
       mutations.DealApplyIndustryMutation,
@@ -91,7 +90,6 @@ const IndustryApply = (props) => {
       message.success('更新成功')
     } else {
       message.info('更新失败请重试')
-      setLoading(false)
     }
   }
 
@@ -111,6 +109,7 @@ const IndustryApply = (props) => {
     const handleCancelClick = () => {
       dealApplyAdmin(record.id, 2)
     }
+    if (record.status != 0) return null
     return (
       <span>
         <button disabled={record.status != 0} className={Less['link-button']} onClick={handleOkClick}>通过</button>

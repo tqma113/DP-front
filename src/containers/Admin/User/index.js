@@ -113,15 +113,18 @@ const User = (props) => {
   }
   const operatorRender = (item, record) => {
     const handleOkClick = () => {
-      dealApplyAdmin(record.id, 1)
+      dealApplyAdmin(record.id, 2)
     }
     const handleCancelClick = () => {
-      dealApplyAdmin(record.id, 2)
+      dealApplyAdmin(record.id, 1)
     }
     return (
       <span>
-        <button disabled={record.status != 0} className={Less['link-button']} onClick={handleOkClick}>通过</button>
-        <button disabled={record.status != 0} className={Less['link-button']} onClick={handleCancelClick}>拒绝</button>
+        {
+          record.usable == 1 ?
+          <button disabled={record.status != 0} className={Less['link-button']} onClick={handleOkClick}>封禁</button> :
+          <button disabled={record.status != 0} className={Less['link-button']} onClick={handleCancelClick}>重置</button>
+        }
       </span>
     )
   }

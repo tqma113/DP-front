@@ -8,6 +8,8 @@ import Overview from './Overview'
 import AdminApply from './AdminApply'
 import CategoryApply from './CategoryApply'
 import IndustryApply from './IndustryApply'
+import UserReport from './UserReport'
+import ArticleReport from './ArticleReport'
 
 const TabPane = Tabs.TabPane
 
@@ -53,12 +55,12 @@ const Admin = (props) => {
     }
   }, [])
 
-  const loadAll = async (idList, fetchPolicy) => {
+  const loadAll = async () => {
     const data = await query(
       querys.QueryAdmin,
       {},
       {
-        fetchPolicy
+        fetchPolicy: 'no-cache'
       }
     )
     let {
@@ -97,7 +99,9 @@ const Admin = (props) => {
         handlers.go('/')
       } else {
         handlers.onload({ loadStatus })
-        loadAll()
+        if (loading) {
+          loadAll()
+        }
       }
     }
   }
@@ -127,6 +131,12 @@ const Admin = (props) => {
           </TabPane>
           <TabPane tab="行业添加申请" key="4">
             <IndustryApply loading={loading} loadAll={loadAll} {...props} />
+          </TabPane>
+          <TabPane tab="用户举报" key="7">
+            <UserReport loading={loading} loadAll={loadAll} {...props} />
+          </TabPane>
+          <TabPane tab="文章举报" key="8">
+            <ArticleReport loading={loading} loadAll={loadAll} {...props} />
           </TabPane>
         </Tabs>
       </div>

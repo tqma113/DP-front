@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Spin, message, Table, Row, Col, Input, Select, Button, Divider, Tag } from 'antd'
 import moment from 'moment'
-
-import ApplyModal from './ApplyModal'
+import BraftEditor from 'braft-editor'
 
 import Less from './index.module.less'
 
@@ -10,32 +9,29 @@ const Search = Input.Search
 const Option = Select.Option
 
 const types =[{
+  value: 0,
+  title: '未处理'
+}, {
   value: 1,
-  title: '审核中'
+  title: '已通过'
 }, {
   value: 2,
-  title: '审核通过'
+  title: '未通过'
 }, {
   value: 3,
-  title: '审核未通过'
-}, {
-  value: 4,
   title: '全部'
 }]
 
-const getTag = (status) => {
+const getUserStatus = (status) => {
   switch(status) {
     case 0: {
-      return <Tag color="blue">审核中</Tag>
+      return <Tag color="gold">未处理</Tag>
     }
     case 1: {
-      return <Tag color="green">审核通过</Tag>
+      return <Tag color="blue">已通过</Tag>
     }
     case 2: {
-      return <Tag color="red">审核未通过</Tag>
-    }
-    case -1: {
-      return <Tag color="purple">已取消</Tag>
+      return <Tag color="red">未通过</Tag>
     }
     default: {
       return ''
@@ -43,7 +39,7 @@ const getTag = (status) => {
   }
 }
 
-const CategoryApply = (props) => {
+const UserReport = (props) => {
   const {
     store = {},
     handlers = {},
@@ -52,7 +48,7 @@ const CategoryApply = (props) => {
     mutations = {},
     query,
     querys = {},
-    loading,
+    loading = true,
     loadAll
   } = props
   const { users = {}, categorys = [], industrys = [], session = {}, loadStatus, admin = {} } = store
@@ -60,29 +56,18 @@ const CategoryApply = (props) => {
   const { username: currentUsername, token } = info
   const currentUser = users[currentUsername] || {}
 
-  const [modalStatus, setModalStatus] = useState(false)
-  const [application, setApplication] = useState(null)
   const [search, setSearch] = useState()
-  const [type, setType] = useState(4)
+  const [type, setType] = useState(3)
 
-  const handleCloseModal = () => {
-    setModalStatus(false)
-  }
-
-  const handleNewClick = () => {
-    setApplication(null)
-    setModalStatus(true)
-  }
-
-  const dealApplyAdmin =  async (id, status) => {
+  const dealReport =  async (id, status) => {
     const data = await mutate(
-      mutations.DealApplyCategoryMutation,
+      mutations.DealReportUserMutation,
       {
         id: Number(id),
         status
       }
     )
-    const { dealApplyAddCategory: { isSuccess } = {} } = data
+    const { dealReportUser: { isSuccess } = {} } = data
 
     if (isSuccess) {
       loadAll('no-cache')
@@ -92,6 +77,17 @@ const CategoryApply = (props) => {
     }
   }
 
+  const userRender = (item, record) => {
+    const handleClick = () => {
+      handlers.go('/' + item.username)
+    }
+    return <button onClick={handleClick} className="link-button">{item.nickname}</button>
+  }
+  const reasonRender = (item, record) => {
+    let editState = BraftEditor.createEditorState(JSON.parse(item))
+    let html = editState.toHTML()
+    return <div className="braft-output-content" dangerouslySetInnerHTML={{ __html: html }}></div>
+  }
   const imageRender = (item, record) => {
     return <img style={{ width: '100px', height: '100px' }} src={api.static + item} />
   }
@@ -99,14 +95,14 @@ const CategoryApply = (props) => {
     return item ? moment(item).fromNow() : ''
   }
   const statusRender = (item) => {
-    return getTag(item)
+    return getUserStatus(item)
   }
   const operatorRender = (item, record) => {
     const handleOkClick = () => {
-      dealApplyAdmin(record.id, 1)
+      dealReport(record.id, 1)
     }
     const handleCancelClick = () => {
-      dealApplyAdmin(record.id, 2)
+      dealReport(record.id, 2)
     }
     if (record.status != 0) return null
     return (
@@ -120,28 +116,23 @@ const CategoryApply = (props) => {
     title: 'ID',
     dataIndex: 'id',
   }, {
-    title: '主题',
-    dataIndex: 'subject'
+    title: '举报人',
+    dataIndex: 'user',
+    render: userRender
   }, {
-    title: '描述',
-    dataIndex: 'description'
+    title: '被举报人',
+    dataIndex: 'reportUser',
+    render: userRender
   }, {
-    title: '图片',
-    dataIndex: 'image',
-    render: imageRender
+    title: '举报原因',
+    dataIndex: 'reason',
+    render: reasonRender
   }, {
-    title: '申请时间',
-    dataIndex: 'apply_time',
+    title: '举报时间',
+    dataIndex: 'report_time',
     render: timeRender
   }, {
-    title: '处理人',
-    dataIndex: 'deal_user_id'
-  }, {
-    title: '处理时间',
-    dataIndex: 'deal_time',
-    render: timeRender
-  }, {
-    title: '申请状态',
+    title: '状态',
     dataIndex: 'status',
     render: statusRender
   }, {
@@ -150,7 +141,7 @@ const CategoryApply = (props) => {
   }]
 
   return (
-    <div className={Less['category-apply']}>
+    <div className={Less['industry-apply']}>
       <Row type="flex" justify="space-between">
         <Col span={10}>
           <Search placeholder="搜索" value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -164,26 +155,17 @@ const CategoryApply = (props) => {
             })}
           </Select>
         </Col>
-        <Col>
-          <Button type="primary" onClick={handleNewClick}>新建</Button>
-        </Col>
       </Row>
       <Divider />
       <Spin spinning={loading}>
         <Table
-          dataSource={admin && admin.categoryApply}
+          dataSource={admin && admin.userReport}
           columns={columns}
           rowKey="id"
         />
       </Spin>
-      <ApplyModal
-        {...props}
-        visible={modalStatus}
-        onClose={handleCloseModal}
-        application={application}
-      />
     </div>
   )
 }
 
-export default CategoryApply
+export default UserReport

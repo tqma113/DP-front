@@ -106,6 +106,7 @@ const CategoryApply = (props) => {
     const handleCancelClick = () => {
       dealApplyAdmin(record.id, 2)
     }
+    if (record.status != 0) return null
     return (
       <span>
         <button disabled={record.status != 0} className={Less['link-button']} onClick={handleOkClick}>通过</button>

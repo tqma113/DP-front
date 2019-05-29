@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 const DealReportUserMutation = gql`
   mutation($id: Int!, $status: Int!) {
-    reportUser(id: $id, status: $status) {
+    dealReportUser(id: $id, status: $status) {
       isSuccess
       extension {
         operator

@@ -16,6 +16,9 @@ const types =[{
 }, {
   value: 2,
   title: '封禁'
+}, {
+  value: 3,
+  title: '全部'
 }]
 
 const getUserStatus = (status) => {
@@ -54,7 +57,7 @@ const Article = (props) => {
 
   const [articleList, setUserList] = useState(null)
   const [search, setSearch] = useState()
-  const [type, setType] = useState(4)
+  const [type, setType] = useState(3)
 
   useEffect(() => {
     let articleList = Object.values(articles)
@@ -107,8 +110,11 @@ const Article = (props) => {
     }
     return (
       <span>
-        <button disabled={record.status != 0} className={Less['link-button']} onClick={handleOkClick}>通过</button>
-        <button disabled={record.status != 0} className={Less['link-button']} onClick={handleCancelClick}>拒绝</button>
+        {
+          record.status == 0 ?
+          <button disabled={record.status != 0} className={Less['link-button']} onClick={handleOkClick}>封禁</button> :
+          <button disabled={record.status != 0} className={Less['link-button']} onClick={handleCancelClick}>重置</button>
+        }
       </span>
     )
   }
