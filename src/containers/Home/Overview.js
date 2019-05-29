@@ -35,6 +35,7 @@ const Overview = (props) => {
 
 
   useEffect(() => {
+    if (!user.articles) return
     let articleIds = user.articles.map(i => i.id)
     let saleArticleIds = articleIds.filter(i => allArticles[i] === undefined)
     if (saleArticleIds.length > 0) {

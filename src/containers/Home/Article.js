@@ -20,7 +20,7 @@ const Article = (props) => {
     mutate,
     mutations = {},
   } = props
-  const { users = {}, categorys = [], session = {}, articles: allArticles = {} } = store
+  const { users = {}, categorys = [], industrys = [], session = {}, articles: allArticles = {} } = store
   const user = users[username] || {}
   const { info = {}, status } = session
   const { username: currentUsername, token } = info
@@ -202,6 +202,11 @@ const Article = (props) => {
               {
                 categorys.filter(a => item.categorys.some(i => i == a.id)).map(item => (
                   <Tag key={item.id} color="geekblue">{item.subject}</Tag>
+                ))
+              }
+              {
+                industrys.filter(a => item.industrys.some(i => i == a.id)).map(item => (
+                  <Tag key={item.id} color="purple">{item.name}</Tag>
                 ))
               }
             </div>

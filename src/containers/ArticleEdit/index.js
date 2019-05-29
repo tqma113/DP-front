@@ -13,7 +13,7 @@ const Option = Select.Option
 
 const ArticleEdit = (props) => {
   const { store = {}, handlers = {}, query, querys = {}, id, mutate, mutations } = props
-  const { loadStatus, articles = {}, documentTitle, categorys = [] } = store
+  const { loadStatus, articles = {}, documentTitle, categorys = [], industrys = [] } = store
   const article = articles[id] || {}
 
 
@@ -21,6 +21,7 @@ const ArticleEdit = (props) => {
   const [abstract, setAbstract] = useState()
   const [content, setContent] = useState()
   const [categoryIds, setCategoryIds] = useState([])
+  const [industryIds, setIndustryIds] = useState([])
   const [sending, setSending] = useState()
   const [imageUrl, setImageUrl] = useState()
 
@@ -43,6 +44,7 @@ const ArticleEdit = (props) => {
     setTitle(article.title)
     setAbstract(article.abstract)
     setCategoryIds(article.categorys.map(i => i+''))
+    setIndustryIds(article.industrys.map(i => i+''))
     setImageUrl(article.image)
   }
 
@@ -50,7 +52,7 @@ const ArticleEdit = (props) => {
     const data = await query(
       querys.QueryArticles,
       {
-        idList: [id]
+        idList: [Number(id)]
       },
       {
         fetchPolicy
@@ -74,6 +76,7 @@ const ArticleEdit = (props) => {
 
     let contentStr = content.toRAW()
     let categoryIdsN = categoryIds.map(i => parseInt(i))
+    let industryIdsN = industryIds.map(i => parseInt(i))
 
     const data = await mutate(
       mutations.EditArticleMutation,
@@ -82,6 +85,7 @@ const ArticleEdit = (props) => {
         abstract,
         content: contentStr,
         categoryIds: categoryIdsN,
+        industryIds: industryIdsN,
         image: imageUrl,
         id: Number(id)
       }
@@ -106,6 +110,10 @@ const ArticleEdit = (props) => {
 
   const handleCategorysChange = (categoryIds) => {
     setCategoryIds(categoryIds)
+  }
+
+  const handleIndustrysChange = (industryIds) => {
+    setIndustryIds(industryIds)
   }
 
   const handleUpload = (image, url, imageBase64) => {
@@ -167,6 +175,20 @@ const ArticleEdit = (props) => {
         >
           {categorys && categorys.map && categorys.map(item => (
             <Option key={item.id} value={item.id}>{item.subject}</Option>
+          ))}
+        </Select>
+      </Row>
+      <Row>
+        <Select
+          value={industryIds}
+          mode="tags"
+          className={Less['categorys'] + ' category'}
+          placeholder="请选择行业"
+          onChange={handleIndustrysChange}
+          disabled={sending}
+        >
+          {industrys && industrys.map && industrys.map(item => (
+            <Option key={item.id} value={item.id}>{item.name}</Option>
           ))}
         </Select>
       </Row>

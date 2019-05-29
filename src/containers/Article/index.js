@@ -11,7 +11,7 @@ import 'braft-editor/dist/output.css'
 
 const Article = (props) => {
   const { store = {}, handlers = {}, query, querys = {}, id, static: { api }, mutate, mutations } = props
-  const { loadStatus, session = {}, articles = {}, documentTitle, users = {}, categorys = [] } = store
+  const { loadStatus, session = {}, articles = {}, documentTitle, users = {}, categorys = [], industrys = [] } = store
   const { info = {} } = session
   const { username: currentUsername, token } = info
   const article = articles[id]
@@ -194,7 +194,9 @@ const Article = (props) => {
         {
           categorys.filter(a => article.categorys.some(i => Number(i) === Number(a.id))).map(item => (
             <Tag key={item.id} color="geekblue">{item.subject}</Tag>
-          ))
+          )).concat(industrys.filter(a => article.industrys.some(i => Number(i) === Number(a.id))).map(item => (
+            <Tag key={item.id} color="purple">{item.name}</Tag>
+          )))
         }
       </Row>
       <Row className={Less['info']} type="flex">

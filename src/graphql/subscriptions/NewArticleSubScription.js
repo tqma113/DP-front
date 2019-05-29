@@ -20,6 +20,7 @@ const NewArticleSubScription = gql`
       }
       project_link
       categorys
+      industrys
       comments {
         id
         content

@@ -21,6 +21,7 @@ query ($idList: [Int]) {
       }
       project_link
       categorys
+      industrys
       comments {
         id
         content

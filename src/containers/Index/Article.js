@@ -239,6 +239,11 @@ const Article = (props) => {
                   <Tag key={item.id} color="geekblue">{item.subject}</Tag>
                 ))
               }
+              {
+                industrys.filter(a => item.industrys.some(i => i == a.id)).map(item => (
+                  <Tag key={item.id} color="purple">{item.name}</Tag>
+                ))
+              }
             </div>
           }
         />

@@ -12,12 +12,13 @@ const Option = Select.Option
 
 const ArticleCreate = (props) => {
   const { store = {}, handlers = {}, mutate, mutations = {} } = props
-  const { loadStatus, categorys = [] } = store
+  const { loadStatus, categorys = [], industrys = [] } = store
 
   const [title, setTitle] = useState()
   const [abstract, setAbstract] = useState()
   const [content, setContent] = useState()
   const [categoryIds, setCategoryIds] = useState([])
+  const [industryIds, setIndustryIds] = useState([])
   const [sending, setSending] = useState()
   const [imageUrl, setImageUrl] = useState()
 
@@ -31,6 +32,7 @@ const ArticleCreate = (props) => {
 
     let contentStr = content.toRAW()
     let categoryIdsN = categoryIds.map(i => parseInt(i))
+    let industryIdsN = industryIds.map(i => parseInt(i))
 
     const data = await mutate(
       mutations.CreateArticleMutation,
@@ -39,6 +41,7 @@ const ArticleCreate = (props) => {
         abstract,
         content: contentStr,
         categoryIds: categoryIdsN,
+        industryIds: industryIdsN,
         image: imageUrl
       }
     )
@@ -62,6 +65,10 @@ const ArticleCreate = (props) => {
 
   const handleCategorysChange = (categoryIds) => {
     setCategoryIds(categoryIds)
+  }
+
+  const handleIndustrysChange = (industryIds) => {
+    setIndustryIds(industryIds)
   }
 
   const handleUpload = (image, url, imageBase64) => {
@@ -117,6 +124,20 @@ const ArticleCreate = (props) => {
         >
           {categorys && categorys.map && categorys.map(item => (
             <Option key={item.id} value={item.id}>{item.subject}</Option>
+          ))}
+        </Select>
+      </Row>
+      <Row>
+        <Select
+          value={industryIds}
+          mode="tags"
+          className={Less['categorys'] + ' category'}
+          placeholder="请选择行业"
+          onChange={handleIndustrysChange}
+          disabled={sending}
+        >
+          {industrys && industrys.map && industrys.map(item => (
+            <Option key={item.id} value={item.id}>{item.name}</Option>
           ))}
         </Select>
       </Row>
