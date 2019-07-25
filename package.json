@@ -11,9 +11,11 @@
     "@types/react-dom": "16.8.5",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
+    "antd": "^3.20.6",
     "babel-eslint": "10.0.1",
     "babel-jest": "^24.8.0",
     "babel-loader": "8.0.5",
+    "babel-plugin-import": "^1.12.0",
     "babel-plugin-named-asset-import": "^0.3.2",
     "babel-preset-react-app": "^9.0.0",
     "camelcase": "^5.2.0",
@@ -131,11 +133,17 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      ["import", { "libraryName": "antd", "libraryDirectory": "lib"}, "ant"],
+      ["import", { "libraryName": "antd-mobile", "libraryDirectory": "lib"}, "antd-mobile"]
     ]
   },
   "devDependencies": {
     "@types/react-router": "^5.0.3",
     "@types/react-router-dom": "^4.3.4",
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0",
     "react-router": "^5.0.1"
   }
 }
