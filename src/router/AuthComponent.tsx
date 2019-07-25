@@ -26,7 +26,7 @@ interface State {
 
 }
 
-const AuthComponent: React.FC<Props> = (props: Props) => {
+const AuthComponent: React.FC<Props> = (props: React.ComponentProps<typeof AuthComponent>) => {
 
   return <props.component />
 }
