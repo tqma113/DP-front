@@ -21,7 +21,7 @@ interface IRoute {
   routes?: IRoute[]
 }
 
-const GlobalRouter: React.FC<Props> = (props) => {
+const GlobalRouter: React.FC<Props> = (props: React.ComponentProps<typeof GlobalRouter>) => {
   return (
     <Loader>
       <Switch>

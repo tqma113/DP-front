@@ -4,12 +4,12 @@ interface Props {
   children?: React.ReactNode
 }
 
-const Loader: React.FC = (props: Props) => {
+const Loader: React.FC<{}> = (props: React.ComponentProps<typeof Loader>) => {
 
   return (
-    <div>
+    <React.Fragment>
       {props.children}
-    </div>
+    </React.Fragment>
   )
 }
 
