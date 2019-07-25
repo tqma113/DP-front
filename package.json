@@ -9,9 +9,11 @@
     "@types/node": "12.6.8",
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.5",
+    "@types/react-redux": "^7.1.1",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
     "antd": "^3.20.6",
+    "apollo-client": "^2.6.3",
     "babel-eslint": "10.0.1",
     "babel-jest": "^24.8.0",
     "babel-loader": "8.0.5",
@@ -49,9 +51,13 @@
     "postcss-preset-env": "6.6.0",
     "postcss-safe-parser": "4.0.1",
     "react": "^16.8.6",
+    "react-apollo": "^2.5.8",
     "react-app-polyfill": "^1.0.1",
     "react-dev-utils": "^9.0.1",
     "react-dom": "^16.8.6",
+    "react-redux": "^7.1.0",
+    "redux": "^4.0.4",
+    "redux-devtools-extension": "^2.13.8",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "semver": "6.0.0",
@@ -160,5 +166,9 @@
     "less-loader": "^5.0.0",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1"
-  }
+  },
+  "main": "index.js",
+  "repository": "git@github.com:Monsooon/DP-front.git",
+  "author": "matianqi <mtq1997@126.com>",
+  "license": "MIT"
 }

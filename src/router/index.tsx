@@ -6,19 +6,10 @@ import routes from './routes'
 import Loader from './Loader'
 import AuthComponent from './AuthComponent'
 
+import { IRoute } from './types'
+
 interface Props {
 
-}
-
-interface IRoute {
-  path: string,
-  component: (p: any) => React.ReactElement,
-  exact: boolean,
-  auth: Permission,
-  module: string,
-
-  documentTitle?: string,
-  routes?: IRoute[]
 }
 
 const GlobalRouter: React.FC<Props> = (props: React.ComponentProps<typeof GlobalRouter>) => {
@@ -33,13 +24,13 @@ const GlobalRouter: React.FC<Props> = (props: React.ComponentProps<typeof Global
 
 export default GlobalRouter
 
-interface RouteProps {
+interface MapRouteProps {
   route: IRoute,
   i: number
 }
 
 const getRoute: (value: any, i: number) => React.ReactElement | null = (route, i) => {
-  const RouteRender: React.FC<RouteProps> = ({route, i}) => {
+  const RouteRender: React.FC<MapRouteProps> = ({route, i}) => {
     return (
       <Route key={i} path={route.path} exact={route.exact} render={props =>
         // pass the sub-routes down to keep nesting

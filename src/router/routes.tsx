@@ -1,17 +1,9 @@
+
 import Permission from './permission'
 
 import Home from '../containers/Home'
 
-interface IRoute {
-  path: string,
-  component: React.ComponentClass,
-  exact: boolean,
-  auth: Permission,
-  module: string,
-
-  documentTitle?: string,
-  routes?: IRoute[] | undefined
-}
+import { IRoute } from './types'
 
 const routes: IRoute[] = [
   {
