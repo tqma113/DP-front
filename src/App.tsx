@@ -5,12 +5,13 @@ import zhCN from 'antd/es/locale-provider/zh_CN'
 import { Provider } from 'react-redux'
 
 import Router from './router'
+import store from './redux'
 
 import './App.less';
 
 const App: React.FC = () => {
   return (
-    <Provider>
+    <Provider store={store}>
       <LocaleProvider locale={zhCN}>
         <BrowserRouter>
           <Router />

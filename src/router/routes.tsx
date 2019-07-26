@@ -10,7 +10,7 @@ const routes: IRoute[] = [
     path: '/',
     component: Home,
     exact: true,
-    auth: Permission.none,
+    permission: Permission.none,
 
     module: 'Home',
     documentTitle: '首页 - Now'

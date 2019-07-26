@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface Props {
-
+  [propName: string]: any
 }
 
 interface State {

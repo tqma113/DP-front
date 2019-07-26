@@ -1,21 +1,20 @@
 import React from 'react'
-
-import Permission from './permission'
+import { RouteComponentProps } from 'react-router'
 import { IRoute } from './types'
-interface Props extends IRoute {
+
+interface Props extends RouteComponentProps {
 }
 
 interface State {
 
 }
 
-const AuthComponent: React.FC<Props> = (props: React.ComponentProps<typeof AuthComponent>) => {
+const AuthComponent = (props: Props & IRoute) => {
   let C = props.component
-
   if (typeof C === 'undefined') {
     return null;
   }
-  return <C />
+  return <C {...props} />
 }
 
 export default AuthComponent

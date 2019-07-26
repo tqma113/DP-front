@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import Permission from './permission'
 import routes from './routes'
 import Loader from './Loader'
 import AuthComponent from './AuthComponent'
@@ -29,22 +28,19 @@ interface MapRouteProps {
   i: number
 }
 
-const getRoute: (value: any, i: number) => React.ReactElement | null = (route, i) => {
-  const RouteRender: React.FC<MapRouteProps> = ({route, i}) => {
-    return (
-      <Route key={i} path={route.path} exact={route.exact} render={props =>
-        // pass the sub-routes down to keep nesting
-        <AuthComponent
-          documentTitle={route.documentTitle}
-          component={route.component}
-          auth={route.auth}
-          module={route.module}
-          {...props}
-          routes={route.routes}
-        />
-      } />
-    )
-  }
+const getRoute: (value: any, i: number) => React.ReactElement | null = (route, i) =>  RouteRender({ route, i })
 
-  return RouteRender({ route, i })
+const RouteRender: React.FC<MapRouteProps> = ({route, i}) => {
+  return (
+    <Route key={i} path={route.path} exact={route.exact} render={props =>
+      // pass the sub-routes down to keep nesting
+      <AuthComponent
+        component={route.component}
+        permission={route.permission}
+        module={route.module}
+        {...props}
+        routes={route.routes}
+      />
+    } />
+  )
 }
