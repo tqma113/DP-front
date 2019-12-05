@@ -17,7 +17,7 @@ const username = localStorage.getItem('username') || '';
 
 const urlConfig = {
   development: 'localhost:4000',
-  production: 'www.matianqi.com'
+  production: 'dp-front.now.sh'
 }
 
 const env = process.env.NODE_ENV || 'production'

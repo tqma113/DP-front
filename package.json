@@ -2,7 +2,7 @@
   "name": "dp-front",
   "version": "0.1.0",
   "private": true,
-  "homepage" : "http://www.matianqi.com",
+  "homepage": "http://www.matianqi.com",
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
     "@babel/runtime": "^7.4.3",
