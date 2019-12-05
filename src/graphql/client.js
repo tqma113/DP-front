@@ -17,7 +17,7 @@ const username = localStorage.getItem('username') || '';
 
 const urlConfig = {
   development: 'localhost:4000',
-  production: 'dp-front.now.sh'
+  production: window.location.hostname
 }
 
 const env = process.env.NODE_ENV || 'production'
